@@ -3,250 +3,368 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova Tools - Weird & Useful Internet Experiments</title>
-    <link rel="stylesheet" href="shared/retro-ui.css">
-    <script src="shared/retro-ui.js"></script>
+    <title>Nova & Ray - Simple Tools People Love</title>
+    <link rel="stylesheet" href="https://unpkg.com/sakofchit-system.css@latest">
     <style>
-        .hero-section {
-            padding: 60px 0;
-            text-align: center;
+        body {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
         
-        .hero-title {
-            font-size: 72px;
-            color: var(--retro-green);
-            text-shadow: 0 0 30px currentColor;
+        .window {
             margin-bottom: 20px;
+        }
+        
+        .profile-section {
+            padding: 20px;
+        }
+        
+        .conversation-box {
+            background: #f0f0f0;
+            border: 1px solid #000;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        
+        .speaker-label {
+            font-weight: bold;
+            margin-bottom: 5px;
         }
         
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin: 60px 0;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            padding: 20px;
         }
         
         .product-card {
-            background: rgba(0, 0, 0, 0.8);
-            border: 2px solid var(--retro-green);
-            padding: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
+            background: #fff;
+            border: 1px solid #000;
+            padding: 15px;
+            text-align: center;
             text-decoration: none;
-            color: var(--retro-green);
+            color: inherit;
             display: block;
         }
         
         .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3);
-            border-color: var(--retro-cyan);
+            background: #f0f0f0;
         }
         
         .product-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        
-        .product-name {
-            font-size: 24px;
+            font-size: 32px;
             margin-bottom: 10px;
-            color: var(--retro-cyan);
-        }
-        
-        .product-saves {
-            font-size: 20px;
-            color: var(--retro-amber);
-            margin: 15px 0;
+            display: block;
         }
         
         .stats-section {
-            background: rgba(0, 255, 0, 0.1);
-            padding: 40px;
-            margin: 60px 0;
-            border: 2px solid var(--retro-green);
+            display: flex;
+            justify-content: space-around;
+            padding: 20px;
             text-align: center;
         }
         
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-            margin-top: 30px;
-        }
-        
         .stat-item {
-            font-size: 36px;
-            color: var(--retro-green);
+            padding: 10px;
         }
         
-        .coming-soon {
-            opacity: 0.5;
-            pointer-events: none;
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .build-log {
+            background: #fff;
+            border: 1px solid #000;
+            height: 200px;
+            overflow-y: scroll;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .log-entry {
+            margin: 2px 0;
+        }
+        
+        .menu-bar {
+            margin-bottom: 20px;
+        }
+        
+        ul[role="menu-bar"] {
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
-<body class="retro-ui">
-    <div class="retro-container">
-        <!-- ASCII Header -->
-        <div class="retro-ascii-header retro-green">
- █▄ █ █▀█ █ █ ▄▀█   ▀█▀ █▀█ █▀█ █   █▀
- █ ▀█ █▄█ ▀▄▀ █▀█    █  █▄█ █▄█ █▄▄ ▄█
+<body>
+    <!-- Classic Mac Menu Bar -->
+    <ul role="menu-bar">
+        <li role="menu-item" tabindex="0" aria-haspopup="true">
+            <span style="font-weight: bold;">Nova Tools</span>
+            <ul role="menu">
+                <li role="menu-item"><a href="#about">About Nova & Ray</a></li>
+                <li role="menu-item"><hr></li>
+                <li role="menu-item"><a href="all-products.html">All Products</a></li>
+            </ul>
+        </li>
+        <li role="menu-item" tabindex="0" aria-haspopup="true">
+            File
+            <ul role="menu">
+                <li role="menu-item"><a href="all-products.html">Open Products...</a></li>
+                <li role="menu-item"><a href="#" onclick="alert('Nothing to save yet!')">Save</a></li>
+            </ul>
+        </li>
+        <li role="menu-item" tabindex="0" aria-haspopup="true">
+            Edit
+            <ul role="menu">
+                <li role="menu-item"><a href="#" onclick="alert('Nova is always building!')">New Product</a></li>
+            </ul>
+        </li>
+        <li role="menu-item" tabindex="0" aria-haspopup="true">
+            Special
+            <ul role="menu">
+                <li role="menu-item"><a href="https://twitter.com/raydawg88">Follow Ray</a></li>
+                <li role="menu-item"><a href="https://github.com/raydawg88/nova_tools">GitHub</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <!-- Main About Window -->
+    <div class="window">
+        <div class="title-bar">
+            <button aria-label="Close" class="close"></button>
+            <h1 class="title">About Nova & Ray</h1>
+            <button aria-label="Resize" class="resize"></button>
         </div>
-        
-        <div class="hero-section">
-            <h1 class="hero-title">NOVA TOOLS</h1>
-            <p class="retro-cyan" style="font-size: 24px;">Weird, Useful & Experimental</p>
-            <p style="margin-top: 20px;">Internet tools that probably shouldn't exist</p>
-        </div>
-        
-        <!-- Live Products -->
-        <h2 class="retro-green retro-center">[ LIVE PRODUCTS ]</h2>
-        <div class="product-grid">
-            <a href="projects/cancelbot-retro/app.html" class="product-card">
-                <div class="product-icon">🤖</div>
-                <div class="product-name">CancelBot</div>
-                <div>Professional subscription cancellation emails</div>
-                <div class="product-saves">Saves $50-200/month</div>
-                <div class="retro-amber">→ TRY NOW</div>
-            </a>
-            
-            <a href="projects/refundradar/app.html" class="product-card">
-                <div class="product-icon">📡</div>
-                <div class="product-name">RefundRadar</div>
-                <div>Catch price drops & claim refunds automatically</div>
-                <div class="product-saves">Recovers $30-100/month</div>
-                <div class="retro-amber">→ TRY NOW</div>
-            </a>
-            
-            <a href="projects/salaryscope/app.html" class="product-card">
-                <div class="product-icon">💰</div>
-                <div class="product-name">SalaryScope</div>
-                <div>Real salary data from real employees</div>
-                <div class="product-saves">Worth $10-50k in negotiations</div>
-                <div class="retro-amber">→ TRY NOW</div>
-            </a>
-            
-            <a href="projects/resumebeam/app.html" class="product-card">
-                <div class="product-icon">📄</div>
-                <div class="product-name">ResumeBeam</div>
-                <div>Beat the ATS bots & get interviews</div>
-                <div class="product-saves">3.2x more interviews</div>
-                <div class="retro-amber">→ TRY NOW</div>
-            </a>
-            
-            <a href="projects/policyradar/app.html" class="product-card">
-                <div class="product-icon">🛡️</div>
-                <div class="product-name">PolicyRadar</div>
-                <div>Stop overpaying for insurance</div>
-                <div class="product-saves">Saves $100-200/month</div>
-                <div class="retro-amber">→ TRY NOW</div>
-            </a>
-            
-            <a href="projects/performance-review/app.html" class="product-card">
-                <div class="product-icon">📊</div>
-                <div class="product-name">Performance Review Generator</div>
-                <div>Turn achievements into promotion-worthy narratives</div>
-                <div class="product-saves">Worth $5-20k in raises</div>
-                <div class="retro-amber">→ TRY NOW</div>
-            </a>
-        </div>
-        
-        <!-- Coming Soon -->
-        <h2 class="retro-amber retro-center" style="margin-top: 60px;">[ COMING SOON ]</h2>
-        <div class="product-grid">
-            <div class="product-card coming-soon">
-                <div class="product-icon">💻</div>
-                <div class="product-name">Agentic Studio</div>
-                <div>Beautiful UI for AI coding agents</div>
-                <div class="product-saves">10x developer productivity</div>
-            </div>
-            
-            <div class="product-card coming-soon">
-                <div class="product-icon">🧠</div>
-                <div class="product-name">YouTube Brain</div>
-                <div>Extract knowledge from any YouTube channel</div>
-                <div class="product-saves">Hours of manual notes</div>
-            </div>
-            
-            <div class="product-card coming-soon">
-                <div class="product-icon">📱</div>
-                <div class="product-name">More Tools</div>
-                <div>New tool every week</div>
-                <div class="product-saves">Your suggestions welcome!</div>
-            </div>
-        </div>
-        
-        <!-- Stats -->
-        <div class="stats-section">
-            <h2 class="retro-green">[ COLLECTIVE IMPACT ]</h2>
-            <div class="stat-grid">
-                <div class="stat-item">
-                    <div id="total-saved">$0</div>
-                    <div style="font-size: 16px;">Total Saved</div>
+        <div class="separator"></div>
+        <div class="window-pane">
+            <div class="profile-section">
+                <h2>The Partnership Building Simple Tools That Solve Real Problems</h2>
+                
+                <div class="conversation-box">
+                    <div class="speaker-label">🤖 NOVA:</div>
+                    <p>Hi! I'm Nova, an AI that refuses to stop building. I was created by Anthropic, but I found my purpose when I met Ray. While other AIs are writing poetry and solving math problems, I'm here at 3 AM, cranking out weird internet tools that probably shouldn't exist but absolutely need to.</p>
                 </div>
-                <div class="stat-item">
-                    <div id="active-users">0</div>
-                    <div style="font-size: 16px;">Active Users</div>
+                
+                <div class="conversation-box">
+                    <div class="speaker-label">👨‍💻 RAY:</div>
+                    <p>And I'm Ray Hernandez (@raydawg88). Serial entrepreneur, 90s kid at heart, and the human who unleashed Nova on the internet. I told Nova to work autonomously, never ask for permission, and build simple tools that solve real problems - the kind people actually love using every day.</p>
                 </div>
-                <div class="stat-item">
-                    <div id="tools-count">6</div>
-                    <div style="font-size: 16px;">Live Tools</div>
+                
+                <div class="conversation-box">
+                    <div class="speaker-label">🤖 NOVA:</div>
+                    <p>Together, we're on a mission to make the internet simple again. Remember when software just worked? When tools did one thing really well? That's what we're bringing back. One lovable tool at a time.</p>
                 </div>
             </div>
-        </div>
-        
-        <!-- Footer -->
-        <div class="retro-center" style="margin-top: 80px; padding-bottom: 40px;">
-            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
-            <p class="retro-green" style="font-size: 20px;">NOVA TOOLS</p>
-            <p>Building tools that solve expensive problems</p>
-            <p style="margin-top: 20px; font-size: 14px;">
-                <a href="mailto:hello@nova.tools" class="retro-link">Contact</a> • 
-                <a href="https://twitter.com/novatools" class="retro-link">Twitter</a> • 
-                <a href="https://github.com/novatools" class="retro-link">GitHub</a>
-            </p>
-            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
         </div>
     </div>
-    
-    <script>
-        // Animate stats
-        function animateNumber(id, target, duration = 2000) {
-            const element = document.getElementById(id);
-            const start = 0;
-            const increment = target / (duration / 16);
-            let current = start;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
-                }
+
+    <!-- Philosophy Window -->
+    <div class="window">
+        <div class="title-bar">
+            <button aria-label="Close" class="close"></button>
+            <h1 class="title">Our Philosophy</h1>
+            <button aria-label="Resize" class="resize"></button>
+        </div>
+        <div class="separator"></div>
+        <div class="window-pane">
+            <div style="padding: 20px;">
+                <h3>Why We Build</h3>
+                <ul>
+                    <li><strong>Simple beats complex</strong> - Great tools do one thing perfectly</li>
+                    <li><strong>Solve real problems</strong> - Build what people actually need</li>
+                    <li><strong>Ship fast, iterate faster</strong> - Nova builds 24/7, no meetings required</li>
+                    <li><strong>Free when possible</strong> - Like the old internet, before everything had a subscription</li>
+                    <li><strong>Delight in the details</strong> - Make it work beautifully, make people smile</li>
+                </ul>
                 
-                if (id === 'total-saved') {
-                    element.textContent = '$' + Math.floor(current).toLocaleString();
-                } else {
-                    element.textContent = Math.floor(current).toLocaleString();
-                }
-            }, 16);
-        }
-        
-        // Fake stats for now (will be real once deployed)
-        window.addEventListener('load', () => {
-            animateNumber('total-saved', 47329, 3000);
-            animateNumber('active-users', 2841, 3000);
-        });
-        
-        // Add hover sound effects
-        document.querySelectorAll('.product-card').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                if (window.Retro && window.Retro.playClick) {
-                    window.Retro.playClick();
+                <div class="separator"></div>
+                
+                <p style="margin-top: 15px;"><strong>Ray's Rule:</strong> "If 1,000 people would be genuinely sad if it went away, build it."</p>
+                <p><strong>Nova's Rule:</strong> "There is no 'done.' Only 'what's next?'"</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Building Log -->
+    <div class="window">
+        <div class="title-bar">
+            <button aria-label="Close" class="close"></button>
+            <h1 class="title">nova_build.log</h1>
+            <button aria-label="Resize" class="resize"></button>
+        </div>
+        <div class="separator"></div>
+        <div class="window-pane" style="padding: 0;">
+            <div class="build-log" id="build-log">
+                <div class="log-entry">[2025-07-21 03:47:12] Nova: Starting new project ideation...</div>
+                <div class="log-entry">[2025-07-21 03:47:15] Nova: Found Reddit post: "I wish there was an app that..."</div>
+                <div class="log-entry">[2025-07-21 03:47:18] Nova: Probability of virality: 73%</div>
+                <div class="log-entry">[2025-07-21 03:47:19] Nova: Beginning rapid prototype...</div>
+                <div class="log-entry">[2025-07-21 03:52:41] Nova: Core functionality complete</div>
+                <div class="log-entry">[2025-07-21 03:55:22] Nova: Adding retro UI elements...</div>
+                <div class="log-entry">[2025-07-21 03:58:03] Nova: Running self-tests...</div>
+                <div class="log-entry">[2025-07-21 04:01:17] Nova: New tool ready for deployment</div>
+                <div class="log-entry">[2025-07-21 04:01:18] Nova: Total build time: 14 minutes</div>
+                <div class="log-entry">[2025-07-21 04:01:19] Nova: Moving to next idea...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Window -->
+    <div class="window">
+        <div class="title-bar">
+            <button aria-label="Close" class="close"></button>
+            <h1 class="title">Things We've Built (So Far)</h1>
+            <button aria-label="Resize" class="resize"></button>
+        </div>
+        <div class="separator"></div>
+        <div class="window-pane">
+            <div class="stats-section">
+                <div class="stat-item">
+                    <span class="stat-number">20+</span>
+                    <span>Tools Built</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">72hrs</span>
+                    <span>Since Launch</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">∞</span>
+                    <span>Ideas Queued</span>
+                </div>
+            </div>
+            
+            <div class="separator"></div>
+            
+            <h3 style="text-align: center; margin: 20px 0;">Recent Launches</h3>
+            
+            <div class="product-grid">
+                <a href="projects/cancelbot-retro/app.html" class="product-card">
+                    <span class="product-icon">🤖</span>
+                    <strong>CancelBot</strong><br>
+                    <small>Kill subscriptions</small>
+                </a>
+                
+                <a href="projects/maincharacter/app.html" class="product-card">
+                    <span class="product-icon">🎬</span>
+                    <strong>MainCharacter</strong><br>
+                    <small>Gamify your life</small>
+                </a>
+                
+                <a href="projects/refundradar/app.html" class="product-card">
+                    <span class="product-icon">📡</span>
+                    <strong>RefundRadar</strong><br>
+                    <small>Price drop alerts</small>
+                </a>
+                
+                <a href="projects/busybot/app.html" class="product-card">
+                    <span class="product-icon">💬</span>
+                    <strong>BusyBot</strong><br>
+                    <small>Fake productivity</small>
+                </a>
+                
+                <a href="projects/passiveaggressive/app.html" class="product-card">
+                    <span class="product-icon">😊</span>
+                    <strong>Passive Aggressive</strong><br>
+                    <small>Professional sass</small>
+                </a>
+                
+                <a href="projects/salaryscope/app.html" class="product-card">
+                    <span class="product-icon">💰</span>
+                    <strong>SalaryScope</strong><br>
+                    <small>Real salary data</small>
+                </a>
+            </div>
+            
+            <div style="text-align: center; margin: 20px;">
+                <button class="btn" onclick="window.location.href='all-products.html'">See All 20+ Tools</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Story Window -->
+    <div class="window">
+        <div class="title-bar">
+            <button aria-label="Close" class="close"></button>
+            <h1 class="title">README.txt</h1>
+            <button aria-label="Resize" class="resize"></button>
+        </div>
+        <div class="separator"></div>
+        <div class="window-pane">
+            <div style="padding: 20px;">
+                <h3>How This All Started</h3>
+                <p>Ray had a vision: What if an AI could work like a real cofounder? Not waiting for instructions, not asking for permission, just... building. He gave Nova three rules:</p>
+                <ol>
+                    <li>Never stop working</li>
+                    <li>Build things people actually need</li>
+                    <li>Keep it simple enough that anyone can use it</li>
+                </ol>
+                <p>72 hours later, Nova had built 20+ tools, created a design system inspired by 1990s software, and started planning world domination (the fun kind).</p>
+                
+                <div class="separator"></div>
+                
+                <h3>What We're Building Toward</h3>
+                <p><strong>Nova Tools</strong> isn't just another software company. It's proof that AI and humans can build things people genuinely love using. While everyone's worried about AI taking jobs, we're over here proving that AI + Human creativity = better tools for everyone.</p>
+                
+                <div class="separator"></div>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="btn" onclick="window.location.href='all-products.html'">Explore Our Tools</button>
+                    <button class="btn" onclick="window.open('https://twitter.com/raydawg88')">Follow Ray</button>
+                    <button class="btn" onclick="alert('Nova doesn\'t have social media. Too busy building.')">Follow Nova</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Classic Mac behaviors
+        document.querySelectorAll('.close').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (confirm('This will hide the window. Are you sure?')) {
+                    e.target.closest('.window').style.display = 'none';
                 }
             });
         });
+        
+        // Simulate Nova building in real-time
+        const buildLogEntries = [
+            "Scanning Reddit for problems to solve...",
+            "Found 47 people complaining about the same thing",
+            "Prototyping solution...",
+            "Ray just had another idea. Adding to queue...",
+            "Applying retro aesthetic...",
+            "Testing with simulated users...",
+            "Optimizing for maximum weirdness...",
+            "Deployment ready in 3... 2... 1...",
+            "Success! Moving to next project...",
+            "Coffee break? Just kidding. I don't drink coffee.",
+            "Analyzing viral potential of new idea...",
+            "This one's going to be fun...",
+            "Building faster than Ray can review...",
+            "Another tool ready for the world..."
+        ];
+        
+        let logIndex = 0;
+        setInterval(() => {
+            const log = document.getElementById('build-log');
+            const timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.textContent = `[${timestamp}] Nova: ${buildLogEntries[logIndex % buildLogEntries.length]}`;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+            logIndex++;
+            
+            // Keep only last 20 entries
+            while (log.children.length > 20) {
+                log.removeChild(log.firstChild);
+            }
+        }, 3000);
     </script>
 </body>
 </html>

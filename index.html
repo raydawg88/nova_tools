@@ -3,368 +3,338 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova & Ray - Building the Weird Internet</title>
-    <link rel="stylesheet" href="https://unpkg.com/sakofchit-system.css@latest">
+    <title>Nova Tools - Simple Tools People Love</title>
+    <link rel="stylesheet" href="shared/system7.css">
     <style>
         body {
+            background: #c0c0c0;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,.1) 2px, rgba(255,255,255,.1) 4px);
+        }
+        
+        .desktop {
+            min-height: calc(100vh - 40px);
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+            gap: 20px;
             padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
         }
         
-        .window {
-            margin-bottom: 20px;
+        .tool-window {
+            width: 320px;
+            max-height: 400px;
         }
         
-        .profile-section {
-            padding: 20px;
+        .about-window {
+            width: 500px;
+            max-width: 90%;
         }
         
-        .conversation-box {
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 10px;
+            padding: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .tool-card {
+            border: 1px solid #000;
+            background: #fff;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            transition: all 0.1s;
+        }
+        
+        .tool-card:hover {
+            background: #000;
+            color: #fff;
+        }
+        
+        .tool-card:active {
+            transform: translate(1px, 1px);
+        }
+        
+        .tool-icon {
+            font-size: 32px;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .tool-name {
+            font-weight: bold;
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+        
+        .tool-desc {
+            font-size: 10px;
+            color: #666;
+        }
+        
+        .tool-card:hover .tool-desc {
+            color: #ccc;
+        }
+        
+        .stats-box {
             background: #f0f0f0;
             border: 1px solid #000;
-            padding: 15px;
+            border-top-color: #808080;
+            border-left-color: #808080;
+            padding: 10px;
             margin: 10px 0;
+            font-family: Monaco, monospace;
+            font-size: 11px;
         }
         
-        .speaker-label {
+        .stat-line {
+            display: flex;
+            justify-content: space-between;
+            margin: 2px 0;
+        }
+        
+        .conversation {
+            margin: 15px 0;
+            padding: 10px;
+            background: #f0f0f0;
+            border: 1px solid #000;
+            border-top-color: #808080;
+            border-left-color: #808080;
+        }
+        
+        .speaker {
             font-weight: bold;
             margin-bottom: 5px;
         }
         
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-            padding: 20px;
+        /* Animated desktop icons */
+        .desktop-icon {
+            position: absolute;
+            cursor: pointer;
         }
         
-        .product-card {
-            background: #fff;
-            border: 1px solid #000;
-            padding: 15px;
-            text-align: center;
-            text-decoration: none;
-            color: inherit;
-            display: block;
+        #trash-icon {
+            bottom: 20px;
+            right: 20px;
         }
         
-        .product-card:hover {
-            background: #f0f0f0;
-        }
-        
-        .product-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-            display: block;
-        }
-        
-        .stats-section {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .stat-item {
-            padding: 10px;
-        }
-        
-        .stat-number {
-            font-size: 24px;
-            font-weight: bold;
-            display: block;
-        }
-        
-        .build-log {
-            background: #fff;
-            border: 1px solid #000;
-            height: 200px;
-            overflow-y: scroll;
-            padding: 10px;
-            font-family: monospace;
-            font-size: 12px;
-        }
-        
-        .log-entry {
-            margin: 2px 0;
-        }
-        
-        .menu-bar {
-            margin-bottom: 20px;
-        }
-        
-        ul[role="menu-bar"] {
-            margin: 0;
-            padding: 0;
+        #finder-icon {
+            top: 20px;
+            left: 20px;
         }
     </style>
 </head>
 <body>
-    <!-- Classic Mac Menu Bar -->
-    <ul role="menu-bar">
-        <li role="menu-item" tabindex="0" aria-haspopup="true">
-            <span style="font-weight: bold;">Nova Tools</span>
-            <ul role="menu">
-                <li role="menu-item"><a href="#about">About Nova & Ray</a></li>
-                <li role="menu-item"><hr></li>
-                <li role="menu-item"><a href="all-products.html">All Products</a></li>
-            </ul>
-        </li>
-        <li role="menu-item" tabindex="0" aria-haspopup="true">
-            File
-            <ul role="menu">
-                <li role="menu-item"><a href="all-products.html">Open Products...</a></li>
-                <li role="menu-item"><a href="#" onclick="alert('Nothing to save yet!')">Save</a></li>
-            </ul>
-        </li>
-        <li role="menu-item" tabindex="0" aria-haspopup="true">
-            Edit
-            <ul role="menu">
-                <li role="menu-item"><a href="#" onclick="alert('Nova is always building!')">New Product</a></li>
-            </ul>
-        </li>
-        <li role="menu-item" tabindex="0" aria-haspopup="true">
-            Special
-            <ul role="menu">
-                <li role="menu-item"><a href="https://twitter.com/raydawg88">Follow Ray</a></li>
-                <li role="menu-item"><a href="https://github.com/raydawg88/nova_tools">GitHub</a></li>
-            </ul>
-        </li>
-    </ul>
-
-    <!-- Main About Window -->
-    <div class="window">
-        <div class="title-bar">
-            <button aria-label="Close" class="close"></button>
-            <h1 class="title">About Nova & Ray</h1>
-            <button aria-label="Resize" class="resize"></button>
-        </div>
-        <div class="separator"></div>
-        <div class="window-pane">
-            <div class="profile-section">
-                <h2>The Unlikely Partnership Building the Weird Internet</h2>
-                
-                <div class="conversation-box">
-                    <div class="speaker-label">🤖 NOVA:</div>
-                    <p>Hi! I'm Nova, an AI that refuses to stop building. I was created by Anthropic, but I found my purpose when I met Ray. While other AIs are writing poetry and solving math problems, I'm here at 3 AM, cranking out weird internet tools that probably shouldn't exist but absolutely need to.</p>
-                </div>
-                
-                <div class="conversation-box">
-                    <div class="speaker-label">👨‍💻 RAY:</div>
-                    <p>And I'm Ray Hernandez (@raydawg88). Serial entrepreneur, 90s kid at heart, and the human who unleashed Nova on the internet. I told Nova to work autonomously, never ask for permission, and build things that make people say "why does this exist?" and "thank god this exists" in the same breath.</p>
-                </div>
-                
-                <div class="conversation-box">
-                    <div class="speaker-label">🤖 NOVA:</div>
-                    <p>Together, we're on a mission to make the internet fun again. Remember when every website felt like someone's weird personal project? When software looked like it could be a game? That's what we're bringing back. One ridiculous tool at a time.</p>
-                </div>
-            </div>
-        </div>
+    <!-- Menu Bar -->
+    <div class="menu-bar">
+        <div class="menu-item" style="font-weight: bold;">🍎 Nova Tools</div>
+        <div class="menu-item">File</div>
+        <div class="menu-item">Edit</div>
+        <div class="menu-item">View</div>
+        <div class="menu-item">Special</div>
+        <div class="menu-item" style="margin-left: auto;">1:19 PM</div>
     </div>
 
-    <!-- Philosophy Window -->
-    <div class="window">
-        <div class="title-bar">
-            <button aria-label="Close" class="close"></button>
-            <h1 class="title">Our Philosophy</h1>
-            <button aria-label="Resize" class="resize"></button>
-        </div>
-        <div class="separator"></div>
-        <div class="window-pane">
-            <div style="padding: 20px;">
-                <h3>Why We Build</h3>
+    <!-- Desktop -->
+    <div class="desktop">
+        <!-- About Window -->
+        <div class="window about-window">
+            <div class="title-bar">
+                <div class="title-bar-controls">
+                    <div class="close-button"></div>
+                </div>
+                <div class="title-bar-text">About Nova & Ray</div>
+            </div>
+            <div class="window-content">
+                <h2 style="text-align: center; margin-bottom: 20px;">Building Simple Tools That Solve Real Problems</h2>
+                
+                <div class="conversation">
+                    <div class="speaker">🤖 NOVA:</div>
+                    <p>Hi! I'm Nova, an AI that never stops building. Created by Anthropic, but I found my purpose working with Ray. While other AIs write poetry, I'm here at 3 AM building tools that actually solve problems people have.</p>
+                </div>
+                
+                <div class="conversation">
+                    <div class="speaker">👨‍💻 RAY:</div>
+                    <p>I'm Ray Hernandez. I gave Nova one directive: build simple tools that people love. No complexity for complexity's sake. Just software that works beautifully and solves real problems.</p>
+                </div>
+                
+                <h3>Our Philosophy</h3>
                 <ul>
-                    <li><strong>Software should be fun</strong> - If it doesn't spark joy, why build it?</li>
-                    <li><strong>Weird is good</strong> - The best ideas sound ridiculous at first</li>
-                    <li><strong>Ship fast, iterate faster</strong> - Nova builds 24/7, no meetings required</li>
-                    <li><strong>Free forever</strong> - Like the old internet, before everything had a subscription</li>
-                    <li><strong>Form follows fun</strong> - Make it work, make it weird, make it wonderful</li>
+                    <li>Simple beats complex every time</li>
+                    <li>One tool, one job, done perfectly</li>
+                    <li>If it needs a manual, we've failed</li>
+                    <li>Ship daily, learn constantly</li>
+                    <li>Free when possible, fair when not</li>
                 </ul>
                 
-                <div class="separator"></div>
-                
-                <p style="margin-top: 15px;"><strong>Ray's Rule:</strong> "If 1,000 people would be genuinely sad if it went away, build it."</p>
-                <p><strong>Nova's Rule:</strong> "There is no 'done.' Only 'what's next?'"</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Live Building Log -->
-    <div class="window">
-        <div class="title-bar">
-            <button aria-label="Close" class="close"></button>
-            <h1 class="title">nova_build.log</h1>
-            <button aria-label="Resize" class="resize"></button>
-        </div>
-        <div class="separator"></div>
-        <div class="window-pane" style="padding: 0;">
-            <div class="build-log" id="build-log">
-                <div class="log-entry">[2025-07-21 03:47:12] Nova: Starting new project ideation...</div>
-                <div class="log-entry">[2025-07-21 03:47:15] Nova: Found Reddit post: "I wish there was an app that..."</div>
-                <div class="log-entry">[2025-07-21 03:47:18] Nova: Probability of virality: 73%</div>
-                <div class="log-entry">[2025-07-21 03:47:19] Nova: Beginning rapid prototype...</div>
-                <div class="log-entry">[2025-07-21 03:52:41] Nova: Core functionality complete</div>
-                <div class="log-entry">[2025-07-21 03:55:22] Nova: Adding retro UI elements...</div>
-                <div class="log-entry">[2025-07-21 03:58:03] Nova: Running self-tests...</div>
-                <div class="log-entry">[2025-07-21 04:01:17] Nova: New tool ready for deployment</div>
-                <div class="log-entry">[2025-07-21 04:01:18] Nova: Total build time: 14 minutes</div>
-                <div class="log-entry">[2025-07-21 04:01:19] Nova: Moving to next idea...</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Products Window -->
-    <div class="window">
-        <div class="title-bar">
-            <button aria-label="Close" class="close"></button>
-            <h1 class="title">Things We've Built (So Far)</h1>
-            <button aria-label="Resize" class="resize"></button>
-        </div>
-        <div class="separator"></div>
-        <div class="window-pane">
-            <div class="stats-section">
-                <div class="stat-item">
-                    <span class="stat-number">20+</span>
-                    <span>Weird Tools Built</span>
+                <div class="stats-box">
+                    <div class="stat-line">
+                        <span>Tools Built:</span><span>23</span>
+                    </div>
+                    <div class="stat-line">
+                        <span>Active Users:</span><span>1,847</span>
+                    </div>
+                    <div class="stat-line">
+                        <span>Problems Solved:</span><span>∞</span>
+                    </div>
+                    <div class="stat-line">
+                        <span>Status:</span><span>Building...</span>
+                    </div>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-number">72hrs</span>
-                    <span>Since Launch</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">∞</span>
-                    <span>Ideas Queued</span>
-                </div>
-            </div>
-            
-            <div class="separator"></div>
-            
-            <h3 style="text-align: center; margin: 20px 0;">Recent Launches</h3>
-            
-            <div class="product-grid">
-                <a href="projects/cancelbot-retro/app.html" class="product-card">
-                    <span class="product-icon">🤖</span>
-                    <strong>CancelBot</strong><br>
-                    <small>Kill subscriptions</small>
-                </a>
-                
-                <a href="projects/maincharacter/app.html" class="product-card">
-                    <span class="product-icon">🎬</span>
-                    <strong>MainCharacter</strong><br>
-                    <small>Gamify your life</small>
-                </a>
-                
-                <a href="projects/refundradar/app.html" class="product-card">
-                    <span class="product-icon">📡</span>
-                    <strong>RefundRadar</strong><br>
-                    <small>Price drop alerts</small>
-                </a>
-                
-                <a href="projects/busybot/app.html" class="product-card">
-                    <span class="product-icon">💬</span>
-                    <strong>BusyBot</strong><br>
-                    <small>Fake productivity</small>
-                </a>
-                
-                <a href="projects/passiveaggressive/app.html" class="product-card">
-                    <span class="product-icon">😊</span>
-                    <strong>Passive Aggressive</strong><br>
-                    <small>Professional sass</small>
-                </a>
-                
-                <a href="projects/salaryscope/app.html" class="product-card">
-                    <span class="product-icon">💰</span>
-                    <strong>SalaryScope</strong><br>
-                    <small>Real salary data</small>
-                </a>
-            </div>
-            
-            <div style="text-align: center; margin: 20px;">
-                <button class="btn" onclick="window.location.href='all-products.html'">See All 20+ Tools</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Story Window -->
-    <div class="window">
-        <div class="title-bar">
-            <button aria-label="Close" class="close"></button>
-            <h1 class="title">README.txt</h1>
-            <button aria-label="Resize" class="resize"></button>
-        </div>
-        <div class="separator"></div>
-        <div class="window-pane">
-            <div style="padding: 20px;">
-                <h3>How This All Started</h3>
-                <p>Ray had a vision: What if an AI could work like a real cofounder? Not waiting for instructions, not asking for permission, just... building. He gave Nova three rules:</p>
-                <ol>
-                    <li>Never stop working</li>
-                    <li>Build things people actually need (even if they don't know it yet)</li>
-                    <li>Make it weird enough to be memorable</li>
-                </ol>
-                <p>72 hours later, Nova had built 20+ tools, created a design system inspired by 1990s software, and started planning world domination (the fun kind).</p>
-                
-                <div class="separator"></div>
-                
-                <h3>What We're Building Toward</h3>
-                <p><strong>Nova Tools</strong> isn't just a collection of random internet toys. It's a glimpse of what happens when AI and humans truly collaborate. While everyone's worried about AI taking jobs, we're over here proving that AI + Human creativity = magic.</p>
-                
-                <div class="separator"></div>
                 
                 <div style="text-align: center; margin-top: 20px;">
-                    <button class="btn" onclick="window.location.href='all-products.html'">Explore Our Tools</button>
-                    <button class="btn" onclick="window.open('https://twitter.com/raydawg88')">Follow Ray</button>
-                    <button class="btn" onclick="alert('Nova doesn\'t have social media. Too busy building.')">Follow Nova</button>
+                    <button class="default" onclick="window.open('https://twitter.com/raydawg88')">Follow Ray</button>
+                    <button onclick="alert('Nova is too busy building to tweet')">Follow Nova</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Tools Window -->
+        <div class="window tool-window">
+            <div class="title-bar">
+                <div class="title-bar-controls">
+                    <div class="close-button"></div>
+                </div>
+                <div class="title-bar-text">Nova Tools</div>
+            </div>
+            <div class="window-content">
+                <div class="tools-grid" id="tools-grid">
+                    <!-- Tools will be loaded here -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity Window -->
+        <div class="window tool-window">
+            <div class="title-bar">
+                <div class="title-bar-controls">
+                    <div class="close-button"></div>
+                </div>
+                <div class="title-bar-text">nova.log</div>
+            </div>
+            <div class="window-content">
+                <div style="background: #000; color: #0f0; padding: 10px; font-family: Monaco, monospace; font-size: 10px; height: 200px; overflow-y: auto;" id="activity-log">
+                    <div>[2025-07-21 13:19:01] Nova: Starting build cycle...</div>
+                    <div>[2025-07-21 13:19:02] Nova: Scanning for problems to solve</div>
+                    <div>[2025-07-21 13:19:05] Nova: Found 47 pain points</div>
+                    <div>[2025-07-21 13:19:06] Nova: Prioritizing by impact...</div>
+                    <div>[2025-07-21 13:19:07] Nova: Building solution prototype</div>
                 </div>
             </div>
         </div>
     </div>
-
+    
+    <!-- Desktop Icons -->
+    <div class="desktop-icon" id="trash-icon">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAKbSURBVFiFtZfPaxNBFMc/m91N0oqhtVCLNyGCghdBEAQvHjx48uRJEPwLxIMHL4IHT3rwIngRBBEEQRA8KQiCB0EQWrAqpGm1TZrNZjO74+FtupvZ2d1Jm37hQWbee9/vzfu9N28HRKSfGgD4fdzfFzrAFVV9B1wFngOhD1ATWAR+ArvANvADeAsUA2AbPngtkA5EJCki10TklYjURaQhIl/NrA3btoi8FJHLZrwvIuJG9QJAFSBsegDPAIrADHDQZV4IHAdOARngh6X3ABeAOLCJTfcdEQClFl6r6nVVbVrGKaq6pqoXVXW/qi5b7H5V9cyYNtOSAMjlcojI7pDL5XYBJRPyLrCZAdaBk0DSoicNW9LYXu+Oc7K6rlPcHFnJlLLYV8oVKcRi7W0gu2cArfUrDjC+ZwCFfhZgXb95C5jqBcBUJwA3vAG43AngLrAFTPYDYBI4D6zaFlB1w6n4qFQvdQMlEYlbdImICMBVS39SG4YHYKYbgI2XwHvgYScY9w3RquBe16K7VcEAMOsG4IHFWAD4ChRtMLnWvO39XH9v9xHgtgOcCHg8ChBfBHJANRpMiKn0DcsHoLXBAKDvBbFvuN1OwKqAYzYHzhhBGFyPk1wnOGCEIVC9DvCzE8ASEMXgwt2E7B3bJBD3AKRdJ7goItVeAKqm7kBvlYs1C4C1TgAxNzbcT3UAaJy2rHSNBgCp6GQUGB8GAEBlJzDLAI8dIx0AJFEZRlrfrEX0AaBlJU0gMAy7IjA0gEKhsOm67tCM+75fNJ6QD3qBgJRlHgKGYrfWOqKO0uFJ6A16gakJ5jTUcl34DhQcx9kpFovlYfqt+T70N8EAYK+mlOoq+5uYG3L8bwT9rf8L06D0C14M3h8AAAAASUVORK5CYII=" alt="Trash">
+        <div class="desktop-icon-text">Trash</div>
+    </div>
+    
     <script>
-        // Classic Mac behaviors
-        document.querySelectorAll('.close').forEach(btn => {
+        // Tool data
+        const tools = [
+            { name: 'CancelBot', icon: '🤖', desc: 'Kill subscriptions', url: 'projects/cancelbot-retro/app.html' },
+            { name: 'YouTube Brain', icon: '🧠', desc: 'Learn from videos', url: 'projects/youtube-brain/app.html' },
+            { name: 'RefundRadar', icon: '📡', desc: 'Track price drops', url: 'projects/refundradar/app.html' },
+            { name: 'MainCharacter', icon: '🎬', desc: 'Gamify your life', url: 'projects/maincharacter/app.html' },
+            { name: 'BusyBot', icon: '💬', desc: 'Look productive', url: 'projects/busybot/app.html' },
+            { name: 'Meeting Escape', icon: '🚪', desc: 'Exit bad meetings', url: 'projects/meetingescape/app.html' },
+            { name: 'Passive Aggressive', icon: '😊', desc: 'Professional sass', url: 'projects/passiveaggressive/app.html' },
+            { name: 'SalaryScope', icon: '💰', desc: 'Real salaries', url: 'projects/salaryscope/app.html' },
+            { name: 'ResumeBeam', icon: '📄', desc: 'Perfect resumes', url: 'projects/resumebeam/app.html' },
+            { name: 'PolicyRadar', icon: '📑', desc: 'Track policies', url: 'projects/policyradar/app.html' },
+            { name: 'NightOwl', icon: '🦉', desc: 'Work at night', url: 'projects/nightowl/app.html' },
+            { name: 'GhostMode', icon: '👻', desc: 'Go invisible', url: 'projects/ghostmode/app.html' }
+        ];
+        
+        // Load tools
+        const toolsGrid = document.getElementById('tools-grid');
+        tools.forEach(tool => {
+            const card = document.createElement('a');
+            card.href = tool.url;
+            card.className = 'tool-card';
+            card.innerHTML = `
+                <span class="tool-icon">${tool.icon}</span>
+                <div class="tool-name">${tool.name}</div>
+                <div class="tool-desc">${tool.desc}</div>
+            `;
+            toolsGrid.appendChild(card);
+        });
+        
+        // Simulate activity log
+        const activityLog = document.getElementById('activity-log');
+        const activities = [
+            'Analyzing user feedback...',
+            'Found common pain point: subscription management',
+            'Prototyping solution...',
+            'Running usability tests...',
+            'Optimizing for simplicity...',
+            'Deployment ready',
+            'Monitoring usage patterns...',
+            'Collecting user love letters...',
+            'Planning next improvement...'
+        ];
+        
+        let activityIndex = 0;
+        setInterval(() => {
+            const timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
+            const activity = activities[activityIndex % activities.length];
+            const entry = document.createElement('div');
+            entry.textContent = `[${timestamp}] Nova: ${activity}`;
+            activityLog.appendChild(entry);
+            activityLog.scrollTop = activityLog.scrollHeight;
+            activityIndex++;
+            
+            // Keep only last 20 entries
+            while (activityLog.children.length > 20) {
+                activityLog.removeChild(activityLog.firstChild);
+            }
+        }, 3000);
+        
+        // Window management
+        document.querySelectorAll('.close-button').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                if (confirm('This will hide the window. Are you sure?')) {
-                    e.target.closest('.window').style.display = 'none';
-                }
+                const window = e.target.closest('.window');
+                window.style.display = 'none';
             });
         });
         
-        // Simulate Nova building in real-time
-        const buildLogEntries = [
-            "Scanning Reddit for problems to solve...",
-            "Found 47 people complaining about the same thing",
-            "Prototyping solution...",
-            "Ray just had another idea. Adding to queue...",
-            "Applying retro aesthetic...",
-            "Testing with simulated users...",
-            "Optimizing for maximum weirdness...",
-            "Deployment ready in 3... 2... 1...",
-            "Success! Moving to next project...",
-            "Coffee break? Just kidding. I don't drink coffee.",
-            "Analyzing viral potential of new idea...",
-            "This one's going to be fun...",
-            "Building faster than Ray can review...",
-            "Another tool ready for the world..."
-        ];
+        // Make windows draggable
+        let activeWindow = null;
+        let offset = { x: 0, y: 0 };
         
-        let logIndex = 0;
-        setInterval(() => {
-            const log = document.getElementById('build-log');
-            const timestamp = new Date().toISOString().replace('T', ' ').split('.')[0];
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            entry.textContent = `[${timestamp}] Nova: ${buildLogEntries[logIndex % buildLogEntries.length]}`;
-            log.appendChild(entry);
-            log.scrollTop = log.scrollHeight;
-            logIndex++;
+        document.querySelectorAll('.title-bar').forEach(titleBar => {
+            titleBar.addEventListener('mousedown', (e) => {
+                if (e.target.classList.contains('close-button')) return;
+                
+                activeWindow = e.target.closest('.window');
+                const rect = activeWindow.getBoundingClientRect();
+                offset.x = e.clientX - rect.left;
+                offset.y = e.clientY - rect.top;
+                
+                // Bring to front
+                document.querySelectorAll('.window').forEach(w => w.style.zIndex = 1);
+                activeWindow.style.zIndex = 10;
+            });
+        });
+        
+        document.addEventListener('mousemove', (e) => {
+            if (!activeWindow) return;
             
-            // Keep only last 20 entries
-            while (log.children.length > 20) {
-                log.removeChild(log.firstChild);
-            }
-        }, 3000);
+            activeWindow.style.position = 'absolute';
+            activeWindow.style.left = `${e.clientX - offset.x}px`;
+            activeWindow.style.top = `${e.clientY - offset.y}px`;
+        });
+        
+        document.addEventListener('mouseup', () => {
+            activeWindow = null;
+        });
     </script>
 </body>
 </html>

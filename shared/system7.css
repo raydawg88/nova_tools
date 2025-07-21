@@ -1,0 +1,431 @@
+/* System 7 CSS - Classic Mac OS Interface */
+
+:root {
+    /* System 7 Colors */
+    --system-white: #ffffff;
+    --system-black: #000000;
+    --system-gray: #c0c0c0;
+    --system-gray-light: #dfdfdf;
+    --system-gray-dark: #808080;
+    --system-highlight: #0000ff;
+    --system-highlight-text: #ffffff;
+    
+    /* System 7 Font */
+    --system-font: Chicago, "Courier New", Courier, monospace;
+    --content-font: Geneva, Arial, Helvetica, sans-serif;
+}
+
+/* Reset and Base */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    background: var(--system-gray);
+    font-family: var(--content-font);
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--system-black);
+}
+
+/* Window */
+.window {
+    background: var(--system-white);
+    border: 1px solid var(--system-black);
+    box-shadow: 1px 1px 0 var(--system-black);
+    margin-bottom: 20px;
+}
+
+/* Title Bar */
+.title-bar {
+    background: var(--system-white);
+    border-bottom: 1px solid var(--system-black);
+    height: 19px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: move;
+    user-select: none;
+}
+
+.title-bar-text {
+    flex: 1;
+    text-align: center;
+    font-family: var(--system-font);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0 20px;
+}
+
+/* Window Controls */
+.title-bar-controls {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.close-button {
+    width: 11px;
+    height: 11px;
+    border: 1px solid var(--system-black);
+    background: var(--system-white);
+    cursor: pointer;
+    position: relative;
+}
+
+.close-button:before,
+.close-button:after {
+    content: '';
+    position: absolute;
+    width: 7px;
+    height: 1px;
+    background: var(--system-black);
+    top: 50%;
+    left: 50%;
+}
+
+.close-button:before {
+    transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close-button:after {
+    transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+/* Window Content */
+.window-content {
+    padding: 10px;
+}
+
+/* Buttons */
+button, .button {
+    background: var(--system-white);
+    border: 1px solid var(--system-black);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: var(--content-font);
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 1px 1px 0 var(--system-black);
+    min-width: 69px;
+    text-align: center;
+    user-select: none;
+}
+
+button:active, .button:active {
+    background: var(--system-black);
+    color: var(--system-white);
+    box-shadow: none;
+    transform: translate(1px, 1px);
+}
+
+button:focus {
+    outline: 1px dotted var(--system-black);
+    outline-offset: -4px;
+}
+
+/* Default button (thicker border) */
+button.default, .button.default {
+    border-width: 3px;
+    border-radius: 6px;
+}
+
+/* Text Inputs */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="url"],
+textarea,
+select {
+    background: var(--system-white);
+    border: 1px solid var(--system-black);
+    border-top-color: var(--system-gray-dark);
+    border-left-color: var(--system-gray-dark);
+    padding: 2px 4px;
+    font-family: var(--content-font);
+    font-size: 12px;
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--system-black);
+}
+
+/* Checkboxes and Radio Buttons */
+input[type="checkbox"],
+input[type="radio"] {
+    width: 12px;
+    height: 12px;
+    margin: 0 4px 0 0;
+    vertical-align: text-bottom;
+}
+
+/* Labels */
+label {
+    display: inline-block;
+    margin-bottom: 4px;
+    user-select: none;
+}
+
+/* Menu Bar */
+.menu-bar {
+    background: var(--system-white);
+    border-bottom: 1px solid var(--system-black);
+    height: 20px;
+    display: flex;
+    align-items: center;
+    padding: 0 8px;
+    font-family: var(--system-font);
+    font-size: 12px;
+    margin: -20px -20px 20px -20px;
+}
+
+.menu-item {
+    padding: 0 16px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.menu-item:hover {
+    background: var(--system-black);
+    color: var(--system-white);
+}
+
+/* Lists */
+.list-box {
+    background: var(--system-white);
+    border: 1px solid var(--system-black);
+    border-top-color: var(--system-gray-dark);
+    border-left-color: var(--system-gray-dark);
+    padding: 2px;
+    overflow: auto;
+}
+
+.list-item {
+    padding: 2px 4px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.list-item:hover {
+    background: var(--system-highlight);
+    color: var(--system-highlight-text);
+}
+
+.list-item.selected {
+    background: var(--system-highlight);
+    color: var(--system-highlight-text);
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--system-black);
+    margin: -10px -10px 10px -10px;
+}
+
+.tab {
+    background: var(--system-gray-light);
+    border: 1px solid var(--system-black);
+    border-bottom: none;
+    padding: 4px 16px;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    top: 1px;
+    margin-right: -1px;
+}
+
+.tab.active {
+    background: var(--system-white);
+    z-index: 1;
+}
+
+.tab:not(.active) {
+    background: var(--system-gray);
+    border-bottom: 1px solid var(--system-black);
+    top: 0;
+}
+
+/* Progress Bar */
+.progress-bar {
+    background: var(--system-white);
+    border: 1px solid var(--system-black);
+    height: 16px;
+    position: relative;
+}
+
+.progress-bar-fill {
+    background: repeating-linear-gradient(
+        90deg,
+        var(--system-black),
+        var(--system-black) 2px,
+        var(--system-white) 2px,
+        var(--system-white) 4px
+    );
+    height: 100%;
+    transition: width 0.3s;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--system-gray-light);
+    border: 1px solid var(--system-black);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--system-gray);
+    border: 1px solid var(--system-black);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--system-gray-dark);
+}
+
+::-webkit-scrollbar-button {
+    background: var(--system-gray);
+    border: 1px solid var(--system-black);
+    width: 16px;
+    height: 16px;
+}
+
+/* Desktop Icons */
+.desktop-icon {
+    width: 64px;
+    text-align: center;
+    margin: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.desktop-icon img {
+    width: 32px;
+    height: 32px;
+    image-rendering: pixelated;
+    margin-bottom: 4px;
+}
+
+.desktop-icon-text {
+    font-size: 10px;
+    background: var(--system-white);
+    padding: 2px 4px;
+    border: 1px dotted transparent;
+}
+
+.desktop-icon:hover .desktop-icon-text,
+.desktop-icon.selected .desktop-icon-text {
+    border-color: var(--system-black);
+}
+
+/* Dialog */
+.dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-pattern;
+    z-index: 999;
+}
+
+/* Alert Box */
+.alert {
+    min-width: 300px;
+    max-width: 400px;
+}
+
+.alert-icon {
+    float: left;
+    width: 32px;
+    height: 32px;
+    margin-right: 10px;
+}
+
+.alert-text {
+    margin-left: 42px;
+    min-height: 32px;
+    display: flex;
+    align-items: center;
+}
+
+.alert-buttons {
+    text-align: right;
+    margin-top: 15px;
+}
+
+.alert-buttons button {
+    margin-left: 10px;
+}
+
+/* Divider */
+hr {
+    border: none;
+    border-top: 1px solid var(--system-gray-dark);
+    border-bottom: 1px solid var(--system-white);
+    margin: 10px 0;
+}
+
+/* Text Selection */
+::selection {
+    background: var(--system-highlight);
+    color: var(--system-highlight-text);
+}
+
+/* Utilities */
+.center {
+    text-align: center;
+}
+
+.right {
+    text-align: right;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+/* Grid Layout */
+.desktop {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    body {
+        padding: 10px;
+    }
+    
+    .window {
+        margin-bottom: 10px;
+    }
+    
+    .desktop {
+        gap: 10px;
+        padding: 10px;
+    }
+}
