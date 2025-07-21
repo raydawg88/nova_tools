@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeadNet - Save Your Digital Memories Before They Die</title>
+    <meta name="description" content="Don't let your digital memories die with the platform. Archive your content from dying social networks before it's too late.">
+    <meta property="og:title" content="DeadNet - Your Digital Memories Are About to Die">
+    <meta property="og:description" content="Tumblr is 85% dead. Twitter is dying. Save your content before it's gone forever.">
+    <meta property="og:image" content="https://deadnet.lol/og-image.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            background: radial-gradient(circle at center, #1a0000 0%, #000 100%);
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(255, 0, 0, 0.03) 2px,
+                    rgba(255, 0, 0, 0.03) 4px
+                );
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .skull {
+            font-size: 120px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff0000, #ff6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tagline {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            color: #999;
+            margin-bottom: 40px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 20px 40px;
+            background: linear-gradient(135deg, #ff0000, #ff6600);
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(255, 0, 0, 0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(255, 0, 0, 0.4);
+        }
+        
+        /* Death Clock */
+        .death-clock {
+            padding: 80px 0;
+            background: #0a0a0a;
+        }
+        
+        .death-clock h2 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #ff0000;
+        }
+        
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .platform-card {
+            background: #111;
+            border: 2px solid #222;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .platform-card:hover {
+            border-color: #ff0000;
+            transform: translateY(-5px);
+        }
+        
+        .platform-name {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .risk-meter {
+            height: 30px;
+            background: #222;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .risk-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #ff6600);
+            transition: width 1s ease;
+        }
+        
+        .risk-percentage {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .death-reason {
+            color: #999;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        /* Features */
+        .features {
+            padding: 80px 0;
+            background: #000;
+        }
+        
+        .features h2 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        
+        .feature-card {
+            text-align: center;
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #ff6600;
+        }
+        
+        .feature-description {
+            color: #999;
+            line-height: 1.8;
+        }
+        
+        /* Stats */
+        .stats {
+            padding: 80px 0;
+            background: #0a0a0a;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #ff0000;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+        
+        .footer p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+        }
+        
+        .footer-links a {
+            color: #999;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: #ff6600;
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .skull {
+                font-size: 80px;
+            }
+            
+            .platform-grid,
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="skull">💀</div>
+            <h1>Your Digital Memories<br>Are About to Die</h1>
+            <p class="tagline">Save them before the platforms do.</p>
+            <a href="#" class="cta-button" id="install-extension">Install DeadNet for Chrome</a>
+        </div>
+    </section>
+    
+    <!-- Platform Death Clock -->
+    <section class="death-clock">
+        <div class="container">
+            <h2>The Death Clock ⏰</h2>
+            <div class="platform-grid">
+                <div class="platform-card">
+                    <h3 class="platform-name">Tumblr</h3>
+                    <div class="risk-meter">
+                        <div class="risk-bar" style="width: 85%"></div>
+                        <span class="risk-percentage">85% DEAD</span>
+                    </div>
+                    <p class="death-reason">Mass exodus after adult content ban</p>
+                </div>
+                
+                <div class="platform-card">
+                    <h3 class="platform-name">Flickr</h3>
+                    <div class="risk-meter">
+                        <div class="risk-bar" style="width: 80%"></div>
+                        <span class="risk-percentage">80% DEAD</span>
+                    </div>
+                    <p class="death-reason">Multiple ownership changes, user decline</p>
+                </div>
+                
+                <div class="platform-card">
+                    <h3 class="platform-name">DeviantArt</h3>
+                    <div class="risk-meter">
+                        <div class="risk-bar" style="width: 70%"></div>
+                        <span class="risk-percentage">70% DEAD</span>
+                    </div>
+                    <p class="death-reason">AI controversy driving artists away</p>
+                </div>
+                
+                <div class="platform-card">
+                    <h3 class="platform-name">SoundCloud</h3>
+                    <div class="risk-meter">
+                        <div class="risk-bar" style="width: 65%"></div>
+                        <span class="risk-percentage">65% DEAD</span>
+                    </div>
+                    <p class="death-reason">Financial struggles, limited monetization</p>
+                </div>
+                
+                <div class="platform-card">
+                    <h3 class="platform-name">Twitter/X</h3>
+                    <div class="risk-meter">
+                        <div class="risk-bar" style="width: 60%"></div>
+                        <span class="risk-percentage">60% DEAD</span>
+                    </div>
+                    <p class="death-reason">Chaotic rebrand, advertiser exodus</p>
+                </div>
+                
+                <div class="platform-card">
+                    <h3 class="platform-name">Reddit</h3>
+                    <div class="risk-meter">
+                        <div class="risk-bar" style="width: 45%"></div>
+                        <span class="risk-percentage">45% DEAD</span>
+                    </div>
+                    <p class="death-reason">API changes, community revolt</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2>Never Lose Your Digital Self</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🚨</div>
+                    <h3 class="feature-title">Real-Time Alerts</h3>
+                    <p class="feature-description">Get notified when you visit dying platforms. Our AI tracks ownership changes, user exodus, and financial troubles.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">💾</div>
+                    <h3 class="feature-title">One-Click Archive</h3>
+                    <p class="feature-description">Save all your content instantly. Photos, posts, connections - everything that makes up your digital history.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3 class="feature-title">Death Predictions</h3>
+                    <p class="feature-description">Our algorithm analyzes platform health signals to predict when sites will die. Don't be caught off guard.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div>
+                    <div class="stat-number">12M+</div>
+                    <div class="stat-label">Memories Lost to Dead Platforms</div>
+                </div>
+                <div>
+                    <div class="stat-number">47</div>
+                    <div class="stat-label">Major Platforms Dead Since 2010</div>
+                </div>
+                <div>
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Warnings Before They Die</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>Don't let the internet forget you.</p>
+            <div class="footer-links">
+                <a href="#">Chrome Extension</a>
+                <a href="#">How It Works</a>
+                <a href="#">Blog</a>
+                <a href="#">@deadnet</a>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Animate risk bars on scroll
+        const observerOptions = {
+            threshold: 0.5
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const riskBars = entry.target.querySelectorAll('.risk-bar');
+                    riskBars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => {
+                            bar.style.width = width;
+                        }, 100);
+                    });
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.platform-grid').forEach(grid => {
+            observer.observe(grid);
+        });
+        
+        // Install button
+        document.getElementById('install-extension').addEventListener('click', (e) => {
+            e.preventDefault();
+            // In production, this would link to Chrome Web Store
+            alert('DeadNet will be available on Chrome Web Store soon! Join the waitlist.');
+        });
+        
+        // Add glitch effect to skull on hover
+        const skull = document.querySelector('.skull');
+        skull.addEventListener('mouseenter', () => {
+            skull.style.filter = 'hue-rotate(180deg)';
+            setTimeout(() => {
+                skull.style.filter = 'none';
+            }, 200);
+        });
+    </script>
+</body>
+</html>

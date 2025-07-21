@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostMouse - Beat the Surveillance State</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, monospace;
+            background: #000;
+            color: #0f0;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+        
+        /* Matrix rain effect */
+        #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .glitch {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            position: relative;
+            text-shadow: 0 0 10px #0f0;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: 'GHOSTMOUSE';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            animation: glitch-1 0.5s infinite;
+            color: #f0f;
+            z-index: -1;
+        }
+        
+        .glitch::after {
+            animation: glitch-2 0.5s infinite;
+            color: #0ff;
+            z-index: -2;
+        }
+        
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); }
+            20% { clip-path: inset(10% 0 60% 0); transform: translate(-2px); }
+            40% { clip-path: inset(50% 0 20% 0); transform: translate(2px); }
+            60% { clip-path: inset(80% 0 10% 0); transform: translate(0); }
+        }
+        
+        @keyframes glitch-2 {
+            0%, 100% { clip-path: inset(0 0 0 0); }
+            15% { clip-path: inset(20% 0 70% 0); transform: translate(2px); }
+            35% { clip-path: inset(60% 0 30% 0); transform: translate(-2px); }
+            55% { clip-path: inset(90% 0 5% 0); transform: translate(0); }
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            opacity: 0.8;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #f00;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-transform: uppercase;
+        }
+        
+        .cta-section {
+            margin: 60px 0;
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #0f0;
+            margin-bottom: 20px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 20px 60px;
+            background: #f00;
+            color: #000;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            box-shadow: 0 0 20px #f00;
+        }
+        
+        .cta-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px #f00;
+        }
+        
+        .detection-test {
+            margin: 80px auto;
+            max-width: 600px;
+            padding: 40px;
+            border: 2px solid #0f0;
+            text-align: center;
+        }
+        
+        .detection-test h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        #mouse-status {
+            font-size: 1.5rem;
+            margin: 20px 0;
+            color: #f00;
+        }
+        
+        .features {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+        
+        .feature {
+            margin: 40px 0;
+            padding-left: 40px;
+            position: relative;
+        }
+        
+        .feature::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: #0f0;
+            font-size: 1.5rem;
+        }
+        
+        .testimonials {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+        
+        .testimonial {
+            margin: 40px 0;
+            padding: 20px;
+            border-left: 4px solid #0f0;
+            font-style: italic;
+            opacity: 0.8;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+        
+        /* Cursor trail effect */
+        .cursor-trail {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #0f0;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fade 1s forwards;
+        }
+        
+        @keyframes fade {
+            to { opacity: 0; transform: scale(0.5); }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+    
+    <div class="hero">
+        <div class="hero-content">
+            <h1 class="glitch">GHOSTMOUSE</h1>
+            <p class="tagline">They can't detect what doesn't exist</p>
+            
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">0%</div>
+                    <div class="stat-label">Detection Rate</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">∞</div>
+                    <div class="stat-label">Hours Saved</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">1337</div>
+                    <div class="stat-label">Bosses Defeated</div>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <div class="price">$39.99</div>
+                <a href="#" class="cta-button">LIBERATE YOUR MOUSE</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="detection-test">
+        <h2>DETECTION TEST</h2>
+        <p>Stop moving your mouse for 10 seconds...</p>
+        <div id="mouse-status">SURVEILLANCE ACTIVE</div>
+        <p style="opacity: 0.6; margin-top: 20px;">With GhostMouse: Always undetectable</p>
+    </div>
+    
+    <div class="features">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 40px;">FEATURES</h2>
+        
+        <div class="feature">
+            <h3>HARDWARE-BASED RANDOMIZATION</h3>
+            <p>Not software. Not detectable. Pure analog chaos.</p>
+        </div>
+        
+        <div class="feature">
+            <h3>HUMAN MOVEMENT PATTERNS</h3>
+            <p>Micro-movements that perfectly mimic real usage. AI can't tell.</p>
+        </div>
+        
+        <div class="feature">
+            <h3>ZERO SOFTWARE FOOTPRINT</h3>
+            <p>No drivers. No apps. No traces. Just physics.</p>
+        </div>
+        
+        <div class="feature">
+            <h3>WORKS WITH ANY MOUSE</h3>
+            <p>Optical, laser, ball mouse from 1995. We don't discriminate.</p>
+        </div>
+    </div>
+    
+    <div class="testimonials">
+        <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 40px;">FIELD REPORTS</h2>
+        
+        <div class="testimonial">
+            "My manager installed THREE different detection tools. GhostMouse beat them all. I've been 'active' for 6 months straight." - Anonymous, Fortune 500
+        </div>
+        
+        <div class="testimonial">
+            "Bathroom breaks are human rights. GhostMouse ensures mine." - Remote Worker
+        </div>
+        
+        <div class="testimonial">
+            "I bought 5. One for each computer. My KPIs have never looked better while I pursue my actual passions." - Serial Entrepreneur
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <p>GhostMouse is not responsible for promotions, raises, or excessive praise from management.</p>
+        <p>Fight surveillance. Reclaim autonomy. Ghost them.</p>
+    </footer>
+    
+    <script>
+        // Matrix rain effect
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const chars = '01';
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+        
+        for(let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = chars[Math.floor(Math.random() * chars.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        
+        setInterval(drawMatrix, 35);
+        
+        // Mouse detection simulator
+        let mouseTimer;
+        let isMoving = true;
+        
+        document.addEventListener('mousemove', () => {
+            isMoving = true;
+            document.getElementById('mouse-status').textContent = 'ACTIVE';
+            document.getElementById('mouse-status').style.color = '#0f0';
+            
+            clearTimeout(mouseTimer);
+            mouseTimer = setTimeout(() => {
+                isMoving = false;
+                document.getElementById('mouse-status').textContent = 'IDLE DETECTED!';
+                document.getElementById('mouse-status').style.color = '#f00';
+            }, 3000);
+        });
+        
+        // Cursor trail effect
+        document.addEventListener('mousemove', (e) => {
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = e.clientX - 10 + 'px';
+            trail.style.top = e.clientY - 10 + 'px';
+            document.body.appendChild(trail);
+            
+            setTimeout(() => trail.remove(), 1000);
+        });
+        
+        // CTA click handler
+        document.querySelector('.cta-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('GhostMouse hardware coming soon!\n\nJoin the resistance at ghostmouse.lol');
+        });
+    </script>
+</body>
+</html>

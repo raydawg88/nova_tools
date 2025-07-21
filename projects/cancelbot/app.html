@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CancelBot - Generate Perfect Cancellation Emails</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff6b6b;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .form-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ff6b6b;
+            background: rgba(255,255,255,0.15);
+        }
+        
+        select {
+            cursor: pointer;
+        }
+        
+        .tone-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .tone-option {
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .tone-option:hover {
+            transform: translateY(-2px);
+            border-color: #ff6b6b;
+        }
+        
+        .tone-option.selected {
+            background: rgba(255,107,107,0.2);
+            border-color: #ff6b6b;
+        }
+        
+        .tone-emoji {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255,107,107,0.3);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .output-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .email-output {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,107,107,0.3);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .email-header {
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .email-field {
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        .email-field strong {
+            color: #ff6b6b;
+        }
+        
+        .email-body {
+            white-space: pre-wrap;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .copy-btn:hover {
+            background: #45a049;
+        }
+        
+        .regenerate-btn {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        
+        .regenerate-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .tips-section {
+            background: rgba(255,215,0,0.05);
+            border: 2px solid rgba(255,215,0,0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+        
+        .tips-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+        
+        .tip {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .tone-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+        }
+        
+        /* Success message */
+        .success-message {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>CancelBot</h1>
+            <p class="tagline">Generate the perfect cancellation email in seconds</p>
+        </header>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number" id="emails-generated">0</div>
+                <div class="stat-label">Emails Generated</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number" id="money-saved">$0</div>
+                <div class="stat-label">Money Saved</div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <div class="form-group">
+                <label for="service-name">Service/Company Name</label>
+                <input type="text" id="service-name" placeholder="e.g., Netflix, Gym Membership, HelloFresh">
+            </div>
+            
+            <div class="form-group">
+                <label for="service-type">Type of Service</label>
+                <select id="service-type">
+                    <option value="">Select type...</option>
+                    <option value="streaming">Streaming Service</option>
+                    <option value="gym">Gym/Fitness</option>
+                    <option value="software">Software/App</option>
+                    <option value="subscription-box">Subscription Box</option>
+                    <option value="membership">Membership</option>
+                    <option value="trial">Free Trial</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="reason">Reason for Canceling (Optional)</label>
+                <input type="text" id="reason" placeholder="e.g., Too expensive, Not using it, Found alternative">
+            </div>
+            
+            <div class="form-group">
+                <label>Choose Your Tone</label>
+                <div class="tone-selector">
+                    <div class="tone-option" data-tone="polite" onclick="selectTone('polite')">
+                        <div class="tone-emoji">😊</div>
+                        <div>Polite</div>
+                    </div>
+                    <div class="tone-option" data-tone="firm" onclick="selectTone('firm')">
+                        <div class="tone-emoji">💪</div>
+                        <div>Firm</div>
+                    </div>
+                    <div class="tone-option" data-tone="karen" onclick="selectTone('karen')">
+                        <div class="tone-emoji">😤</div>
+                        <div>Karen Mode</div>
+                    </div>
+                    <div class="tone-option" data-tone="legal" onclick="selectTone('legal')">
+                        <div class="tone-emoji">⚖️</div>
+                        <div>Legal-ish</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="generate-btn" onclick="generateEmail()">
+                🚀 Generate Cancellation Email
+            </button>
+        </div>
+        
+        <div class="output-section" id="output-section">
+            <div class="email-output">
+                <div class="email-header">
+                    <div class="email-field"><strong>To:</strong> <span id="email-to">support@company.com</span></div>
+                    <div class="email-field"><strong>Subject:</strong> <span id="email-subject">Cancellation Request</span></div>
+                </div>
+                <div class="email-body" id="email-body">
+                    <!-- Generated email will appear here -->
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn copy-btn" onclick="copyEmail()">📋 Copy Email</button>
+                <button class="action-btn regenerate-btn" onclick="regenerateEmail()">🔄 Try Different Version</button>
+            </div>
+        </div>
+        
+        <div class="tips-section">
+            <h3 class="tips-title">Pro Cancellation Tips</h3>
+            <div class="tip">Send during business hours for faster response</div>
+            <div class="tip">Use certified mail or email with read receipts for important cancellations</div>
+            <div class="tip">Check if phone cancellation is faster - some companies make email difficult on purpose</div>
+            <div class="tip">Screenshot your cancellation confirmation</div>
+            <div class="tip">Set a calendar reminder to verify the charge stopped</div>
+        </div>
+    </div>
+    
+    <div class="success-message" id="success-message">
+        ✓ Email copied to clipboard!
+    </div>
+    
+    <script>
+        let selectedTone = 'polite';
+        let currentService = '';
+        let emailsGenerated = parseInt(localStorage.getItem('cancelbot_emails') || 0);
+        let moneySaved = parseFloat(localStorage.getItem('cancelbot_saved') || 0);
+        
+        // Update stats on load
+        document.getElementById('emails-generated').textContent = emailsGenerated;
+        document.getElementById('money-saved').textContent = '$' + moneySaved.toFixed(0);
+        
+        // Email templates
+        const templates = {
+            polite: {
+                streaming: [
+                    "Dear {service} Support Team,\n\nI hope this message finds you well. I would like to request the cancellation of my subscription effective immediately.\n\n{reasonText}\n\nPlease confirm that my subscription has been canceled and that no further charges will be processed. Additionally, please provide the exact date when my access will end.\n\nThank you for your service.\n\nBest regards,\n[Your Name]\nAccount: [Your Account Email]",
+                    "Hello {service} Team,\n\nI am writing to cancel my subscription to your service. {reasonText}\n\nI would appreciate confirmation of this cancellation along with:\n- The final date of service\n- Confirmation that auto-renewal is disabled\n- Any refund information if applicable\n\nThank you for your assistance.\n\nSincerely,\n[Your Name]"
+                ],
+                gym: [
+                    "Dear {service} Management,\n\nI am writing to formally request the cancellation of my gym membership, effective immediately.\n\n{reasonText}\n\nAs per the membership agreement, I am providing written notice of cancellation. Please:\n1. Cancel all future charges\n2. Provide written confirmation of cancellation\n3. Return any deposit if applicable\n\nThank you for your understanding.\n\nBest regards,\n[Your Name]\nMember ID: [Your Member ID]"
+                ],
+                default: [
+                    "Dear {service} Customer Service,\n\nI would like to cancel my subscription/service with your company, effective immediately.\n\n{reasonText}\n\nPlease process this cancellation and send confirmation that:\n- My account has been canceled\n- No future charges will occur\n- My data will be handled according to your privacy policy\n\nThank you for your prompt attention to this matter.\n\nSincerely,\n[Your Name]"
+                ]
+            },
+            firm: {
+                streaming: [
+                    "To: {service} Cancellation Department\n\nCancel my subscription immediately. Do not charge my card again.\n\n{reasonText}\n\nRequired actions:\n1. Cancel subscription NOW\n2. Send confirmation within 24 hours\n3. No retention offers - my decision is final\n\nAccount: [Your Email]\n\nI expect confirmation by end of business today.",
+                    "CANCELLATION NOTICE - {service}\n\nThis is formal notice to cancel my subscription effective immediately.\n\n{reasonText}\n\nDO NOT:\n- Charge my card again\n- Send retention offers\n- Delay this cancellation\n\nDO:\n- Cancel immediately\n- Send confirmation\n- Process any applicable refund\n\nFailure to cancel will result in a chargeback.\n\n[Your Name]"
+                ],
+                default: [
+                    "Subject: IMMEDIATE CANCELLATION REQUIRED\n\nCancel my {service} account/subscription now.\n\n{reasonText}\n\nThis is not a request - this is notice of cancellation. Process it immediately and confirm via email.\n\nAny further charges will be disputed.\n\n[Your Name]\n[Account Details]"
+                ]
+            },
+            karen: {
+                default: [
+                    "I WANT TO SPEAK TO YOUR MANAGER!!!\n\nThis is UNACCEPTABLE! I have been trying to cancel {service} and your website is IMPOSSIBLE to navigate! \n\n{reasonText}\n\nI DEMAND:\n1. IMMEDIATE cancellation\n2. FULL refund for this month\n3. Confirmation IN WRITING\n4. An apology for this TERRIBLE experience\n\nIf this is not resolved TODAY, I will be:\n- Posting on EVERY social media platform\n- Contacting the Better Business Bureau\n- Disputing ALL charges with my bank\n- Leaving 1-star reviews EVERYWHERE\n\nI expect a manager to contact me IMMEDIATELY!\n\nDISGUSTED CUSTOMER,\n[Your Name]",
+                    "TO WHOEVER IS IN CHARGE:\n\nYour {service} is a COMPLETE SCAM and I DEMAND immediate cancellation!\n\n{reasonText}\n\nThe fact that I can't cancel with ONE CLICK is PREDATORY and probably ILLEGAL! I've screenshots EVERYTHING for my lawyer!\n\nCANCEL. MY. SUBSCRIPTION. NOW!\n\nOr I promise you'll be hearing from:\n- My credit card company (chargeback incoming)\n- My 50K Twitter followers\n- The local news (they LOVE these stories)\n- My cousin who's a lawyer\n\nYou have 2 HOURS to respond or I'm going NUCLEAR!\n\n[Your Name]\nP.S. - I'm screen recording EVERYTHING"
+                ]
+            },
+            legal: {
+                default: [
+                    "FORMAL NOTICE OF CANCELLATION\n\nDate: [Today's Date]\nRe: Cancellation of {service} Subscription\n\nDear Sir/Madam,\n\nThis letter serves as formal written notice of my intent to cancel all services with {service}, pursuant to applicable consumer protection laws and the terms of service.\n\n{reasonText}\n\nIn accordance with the Federal Trade Commission's regulations on negative option billing and applicable state laws, I hereby exercise my right to cancel. Any attempt to continue billing constitutes unauthorized charges.\n\nRequired Actions:\n1. Immediate cessation of all recurring charges\n2. Written confirmation of cancellation within 5 business days\n3. Provision of final statement showing zero balance\n4. Deletion of payment information per CCPA/GDPR requirements\n\nFailure to comply with this cancellation notice may result in:\n- Formal complaint to Consumer Financial Protection Bureau\n- Chargeback proceedings through card issuer\n- Small claims court action for unauthorized charges\n- Reports to appropriate regulatory bodies\n\nThis notice is sent via [email/certified mail] to establish a paper trail.\n\nGoverning Law: This cancellation is made under [Your State] consumer protection statutes.\n\nSincerely,\n\n[Your Name]\n[Your Address]\n[Account Number]\n\ncc: [Your State] Attorney General's Office"
+                ]
+            }
+        };
+        
+        function selectTone(tone) {
+            selectedTone = tone;
+            document.querySelectorAll('.tone-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            document.querySelector(`[data-tone="${tone}"]`).classList.add('selected');
+        }
+        
+        function generateEmail() {
+            const serviceName = document.getElementById('service-name').value.trim();
+            const serviceType = document.getElementById('service-type').value;
+            const reason = document.getElementById('reason').value.trim();
+            
+            if (!serviceName) {
+                alert('Please enter the service name');
+                return;
+            }
+            
+            currentService = serviceName;
+            
+            // Get appropriate template
+            const toneTemplates = templates[selectedTone];
+            const typeTemplates = toneTemplates[serviceType] || toneTemplates.default;
+            const template = typeTemplates[Math.floor(Math.random() * typeTemplates.length)];
+            
+            // Prepare reason text
+            let reasonText = '';
+            if (reason) {
+                reasonText = `The reason for my cancellation: ${reason}.`;
+            } else {
+                reasonText = 'I no longer require this service.';
+            }
+            
+            // Generate email
+            const emailBody = template
+                .replace(/{service}/g, serviceName)
+                .replace(/{reasonText}/g, reasonText);
+            
+            // Update display
+            document.getElementById('email-to').textContent = `support@${serviceName.toLowerCase().replace(/\s+/g, '')}.com`;
+            document.getElementById('email-subject').textContent = `Cancellation Request - ${serviceName}`;
+            document.getElementById('email-body').textContent = emailBody;
+            
+            // Show output
+            document.getElementById('output-section').style.display = 'block';
+            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+            
+            // Update stats
+            emailsGenerated++;
+            localStorage.setItem('cancelbot_emails', emailsGenerated);
+            document.getElementById('emails-generated').textContent = emailsGenerated;
+            
+            // Estimate money saved (random between $10-200)
+            const savedAmount = Math.floor(Math.random() * 190) + 10;
+            moneySaved += savedAmount;
+            localStorage.setItem('cancelbot_saved', moneySaved);
+            document.getElementById('money-saved').textContent = '$' + moneySaved.toFixed(0);
+        }
+        
+        function copyEmail() {
+            const emailTo = document.getElementById('email-to').textContent;
+            const emailSubject = document.getElementById('email-subject').textContent;
+            const emailBody = document.getElementById('email-body').textContent;
+            
+            const fullEmail = `To: ${emailTo}\nSubject: ${emailSubject}\n\n${emailBody}`;
+            
+            navigator.clipboard.writeText(fullEmail).then(() => {
+                const successMsg = document.getElementById('success-message');
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = fullEmail;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const successMsg = document.getElementById('success-message');
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            });
+        }
+        
+        function regenerateEmail() {
+            if (currentService) {
+                document.getElementById('service-name').value = currentService;
+                generateEmail();
+            }
+        }
+        
+        // Default tone selection
+        selectTone('polite');
+    </script>
+</body>
+</html>

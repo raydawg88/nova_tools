@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Escape Bot - Professional Exit Strategies</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .emergency-timer {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .timer-display {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #d63031;
+            margin: 10px 0;
+        }
+        
+        .form-section {
+            padding: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2d3436;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .urgency-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .urgency-btn {
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .urgency-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .urgency-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .urgency-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .escape-plan {
+            padding: 30px;
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .excuse-display {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .excuse-text {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #2d3436;
+            margin-bottom: 15px;
+        }
+        
+        .excuse-delivery {
+            font-size: 0.9rem;
+            color: #636e72;
+            font-style: italic;
+        }
+        
+        .action-steps {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+        
+        .step-text {
+            line-height: 1.5;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+            color: white;
+        }
+        
+        .copy-btn:hover {
+            background: #5a67d8;
+        }
+        
+        .new-btn {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .new-btn:hover {
+            background: #d0d0d0;
+        }
+        
+        .pro-tips {
+            background: #fff8e1;
+            border: 2px solid #ffeb3b;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 20px;
+        }
+        
+        .tips-title {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #f57c00;
+        }
+        
+        .tip {
+            margin-bottom: 12px;
+            padding-left: 25px;
+            position: relative;
+            line-height: 1.5;
+        }
+        
+        .tip::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Success message */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #2d3436;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .form-section, .escape-plan {
+                padding: 20px;
+            }
+            
+            .urgency-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+            
+            .timer-display {
+                font-size: 2rem;
+            }
+        }
+        
+        /* Fun easter egg */
+        .panic-mode {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(214, 48, 49, 0.95);
+            z-index: 9999;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .panic-mode h2 {
+            font-size: 3rem;
+            margin-top: 20%;
+            animation: blink 0.5s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card">
+            <header>
+                <h1>🏃‍♂️ Meeting Escape Bot</h1>
+                <p class="tagline">Professional exit strategies for pointless meetings</p>
+            </header>
+            
+            <div class="emergency-timer" id="emergency-timer">
+                <p><strong>⏰ Your "emergency" call incoming in:</strong></p>
+                <div class="timer-display" id="timer">5:00</div>
+                <p>Get ready to look surprised!</p>
+            </div>
+            
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="meeting-type">Type of Meeting</label>
+                    <select id="meeting-type">
+                        <option value="standup">Daily Standup</option>
+                        <option value="all-hands">All Hands</option>
+                        <option value="brainstorm">Brainstorming Session</option>
+                        <option value="status">Status Update</option>
+                        <option value="client">Client Meeting</option>
+                        <option value="one-on-one">1-on-1</option>
+                        <option value="planning">Sprint Planning</option>
+                        <option value="random">Meeting That Should've Been an Email</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="time-in">How long have you been trapped?</label>
+                    <select id="time-in">
+                        <option value="5">5 minutes</option>
+                        <option value="15">15 minutes</option>
+                        <option value="30">30 minutes</option>
+                        <option value="45">45 minutes</option>
+                        <option value="60">1 hour+</option>
+                        <option value="eternity">An eternity</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Urgency Level</label>
+                    <div class="urgency-selector">
+                        <div class="urgency-btn" data-urgency="low" onclick="selectUrgency('low')">
+                            <div class="urgency-icon">😌</div>
+                            <div>Polite Exit</div>
+                        </div>
+                        <div class="urgency-btn" data-urgency="medium" onclick="selectUrgency('medium')">
+                            <div class="urgency-icon">😰</div>
+                            <div>Urgent</div>
+                        </div>
+                        <div class="urgency-btn" data-urgency="high" onclick="selectUrgency('high')">
+                            <div class="urgency-icon">🚨</div>
+                            <div>Emergency</div>
+                        </div>
+                        <div class="urgency-btn" data-urgency="nuclear" onclick="selectUrgency('nuclear')">
+                            <div class="urgency-icon">☢️</div>
+                            <div>Nuclear</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="generate-btn" onclick="generateEscape()">
+                    🚪 Generate My Escape Plan
+                </button>
+            </div>
+            
+            <div class="escape-plan" id="escape-plan">
+                <div class="excuse-display">
+                    <div class="excuse-text" id="excuse-text"></div>
+                    <div class="excuse-delivery" id="excuse-delivery"></div>
+                </div>
+                
+                <div class="action-steps">
+                    <h3 style="margin-bottom: 15px;">Your Exit Strategy:</h3>
+                    <div id="steps-list"></div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn copy-btn" onclick="copyExcuse()">📋 Copy Excuse</button>
+                    <button class="action-btn new-btn" onclick="generateNew()">🔄 Try Another</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card pro-tips">
+            <h3 class="tips-title">🥷 Pro Escape Tips</h3>
+            <div class="tip">Always look slightly concerned when delivering your excuse</div>
+            <div class="tip">Have your phone visible for "urgent" calls</div>
+            <div class="tip">The key is confidence - hesitation kills the exit</div>
+            <div class="tip">Follow up with an email summarizing "your thoughts" to seem engaged</div>
+            <div class="tip">Keep a glass of water - bathroom breaks are always valid</div>
+            <div class="tip">Master the "apologetic but firm" tone</div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">
+        ✓ Excuse copied! Now sell it with confidence.
+    </div>
+    
+    <div class="panic-mode" id="panic-mode" onclick="closePanic()">
+        <h2>🚨 FAKE EMERGENCY CALL 🚨</h2>
+        <p style="font-size: 1.5rem; margin-top: 20px;">Click anywhere to close</p>
+        <p style="margin-top: 40px;">(Show this to someone near you)</p>
+    </div>
+    
+    <script>
+        let selectedUrgency = 'low';
+        let countdownInterval;
+        
+        const excuses = {
+            low: {
+                standup: [
+                    { 
+                        text: "Hey team, I have another standup with the [other team] starting now. I'll catch up on anything I missed in Slack!",
+                        delivery: "Delivered cheerfully while already starting to stand up"
+                    },
+                    {
+                        text: "Sorry everyone, I have a hard stop at [current time] for a client call. I'll update my status in the channel.",
+                        delivery: "Said with slight apology but firm conviction"
+                    }
+                ],
+                default: [
+                    {
+                        text: "I'm so sorry, but I have another meeting that just started. I'll review the notes!",
+                        delivery: "Apologetic but already moving"
+                    },
+                    {
+                        text: "I need to jump off for my next call. Please keep me posted on any action items!",
+                        delivery: "Professional and assumptive"
+                    }
+                ]
+            },
+            medium: {
+                standup: [
+                    {
+                        text: "Sorry team, production issue just came up. I need to jump on this immediately.",
+                        delivery: "Said with urgency while already opening laptop"
+                    },
+                    {
+                        text: "I just got pinged about a customer escalation. Need to handle this now. Back soon!",
+                        delivery: "Concerned face, phone in hand"
+                    }
+                ],
+                default: [
+                    {
+                        text: "I'm really sorry, but something urgent just came up with [important project]. I need to address this immediately.",
+                        delivery: "Apologetic but clearly stressed"
+                    },
+                    {
+                        text: "My manager just Slacked me about an urgent issue. I have to jump. So sorry!",
+                        delivery: "Show phone briefly, look worried"
+                    }
+                ]
+            },
+            high: {
+                default: [
+                    {
+                        text: "I'm so sorry - family emergency. I have to go right now.",
+                        delivery: "Stand up immediately, grab belongings, look distressed"
+                    },
+                    {
+                        text: "Building management just called - there's an issue with my car. I need to go immediately.",
+                        delivery: "Frustrated and rushed, already packing up"
+                    },
+                    {
+                        text: "My kid's school just called. I'm so sorry but I need to leave right now.",
+                        delivery: "Panicked parent face, no time for questions"
+                    }
+                ]
+            },
+            nuclear: {
+                default: [
+                    {
+                        text: "*Stand up suddenly* I'm going to be sick. *Rush out*",
+                        delivery: "No words needed, just move fast"
+                    },
+                    {
+                        text: "*Phone rings* Hello? What?! *To room:* I have to go. Now. *Leave immediately*",
+                        delivery: "Oscar-worthy performance required"
+                    },
+                    {
+                        text: "*Loud notification sound* Oh my god. *Grab everything and leave without explanation*",
+                        delivery: "Let them wonder. Mystery is powerful."
+                    }
+                ]
+            }
+        };
+        
+        const exitSteps = {
+            low: [
+                "Glance at phone/watch naturally",
+                "Wait for a pause in conversation",
+                "Deliver excuse with slight apology",
+                "Gather belongings calmly",
+                "Exit with a smile and wave"
+            ],
+            medium: [
+                "React to phone notification",
+                "Furrow brow with concern",
+                "Interrupt politely if needed",
+                "Deliver excuse while standing",
+                "Exit swiftly but not running"
+            ],
+            high: [
+                "Show visible distress",
+                "Stand up immediately", 
+                "Deliver excuse quickly",
+                "Don't wait for response",
+                "Leave immediately"
+            ],
+            nuclear: [
+                "Create instant urgency",
+                "No time for explanations",
+                "Physical reaction if needed",
+                "Exit at maximum speed",
+                "Don't look back"
+            ]
+        };
+        
+        function selectUrgency(level) {
+            selectedUrgency = level;
+            document.querySelectorAll('.urgency-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-urgency="${level}"]`).classList.add('selected');
+        }
+        
+        function generateEscape() {
+            const meetingType = document.getElementById('meeting-type').value;
+            const timeIn = document.getElementById('time-in').value;
+            
+            // Get appropriate excuse
+            const urgencyExcuses = excuses[selectedUrgency];
+            const typeExcuses = urgencyExcuses[meetingType] || urgencyExcuses.default;
+            const excuse = typeExcuses[Math.floor(Math.random() * typeExcuses.length)];
+            
+            // Display excuse
+            document.getElementById('excuse-text').textContent = excuse.text;
+            document.getElementById('excuse-delivery').textContent = `Delivery: ${excuse.delivery}`;
+            
+            // Display steps
+            const stepsList = document.getElementById('steps-list');
+            stepsList.innerHTML = '';
+            exitSteps[selectedUrgency].forEach((step, index) => {
+                const stepDiv = document.createElement('div');
+                stepDiv.className = 'step';
+                stepDiv.innerHTML = `
+                    <div class="step-number">${index + 1}</div>
+                    <div class="step-text">${step}</div>
+                `;
+                stepsList.appendChild(stepDiv);
+            });
+            
+            // Show escape plan
+            document.getElementById('escape-plan').style.display = 'block';
+            document.getElementById('escape-plan').scrollIntoView({ behavior: 'smooth' });
+            
+            // Start emergency timer for high urgency
+            if (selectedUrgency === 'high' || selectedUrgency === 'nuclear') {
+                startEmergencyTimer();
+            }
+        }
+        
+        function startEmergencyTimer() {
+            document.getElementById('emergency-timer').style.display = 'block';
+            let timeLeft = 300; // 5 minutes
+            
+            clearInterval(countdownInterval);
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    triggerFakeEmergency();
+                }
+            }, 1000);
+        }
+        
+        function triggerFakeEmergency() {
+            // Play notification sound if possible
+            const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBTGH0fPTgjMGHm7A7+OZURE');
+            audio.play().catch(() => {});
+            
+            document.getElementById('panic-mode').style.display = 'block';
+        }
+        
+        function closePanic() {
+            document.getElementById('panic-mode').style.display = 'none';
+        }
+        
+        function copyExcuse() {
+            const excuseText = document.getElementById('excuse-text').textContent;
+            
+            navigator.clipboard.writeText(excuseText).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            }).catch(() => {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = excuseText;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            });
+        }
+        
+        function generateNew() {
+            generateEscape();
+        }
+        
+        // Default selection
+        selectUrgency('low');
+        
+        // Easter egg: Konami code for instant panic mode
+        let konamiCode = [];
+        const konamiPattern = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+            
+            if (konamiCode.join(',') === konamiPattern.join(',')) {
+                triggerFakeEmergency();
+            }
+        });
+    </script>
+</body>
+</html>

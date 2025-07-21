@@ -1,0 +1,8 @@
+/* LuckLink Global Styles */
+
+/* Reset potential conflicts */
+.lucklink-omamori-effect * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}

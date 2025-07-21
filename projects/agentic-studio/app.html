@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agentic Studio - Beautiful UI for AI Coding Agents</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --border-color: #30363d;
+            --text-primary: #c9d1d9;
+            --text-secondary: #8b949e;
+            --accent-blue: #58a6ff;
+            --accent-green: #3fb950;
+            --accent-purple: #a371f7;
+            --accent-orange: #f0883e;
+            --terminal-bg: #0c1016;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow: hidden;
+            height: 100vh;
+        }
+        
+        /* Layout */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        
+        .header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 20px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .logo i {
+            color: var(--accent-purple);
+            font-size: 20px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .agent-selector {
+            display: flex;
+            gap: 8px;
+            background: var(--bg-tertiary);
+            padding: 4px;
+            border-radius: 6px;
+        }
+        
+        .agent-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            border-radius: 4px;
+            font-size: 13px;
+            transition: all 0.2s;
+        }
+        
+        .agent-btn:hover {
+            color: var(--text-primary);
+            background: var(--bg-secondary);
+        }
+        
+        .agent-btn.active {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .main-content {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .file-tree {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+        
+        .tree-item {
+            padding: 6px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: all 0.1s;
+        }
+        
+        .tree-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .tree-item.selected {
+            background: var(--bg-tertiary);
+            color: var(--accent-blue);
+        }
+        
+        .tree-item i {
+            width: 16px;
+            text-align: center;
+        }
+        
+        /* Editor Area */
+        .editor-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .tabs-bar {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            height: 40px;
+            padding: 0 12px;
+            gap: 4px;
+        }
+        
+        .tab {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+        
+        .tab:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .tab.active {
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+        
+        .tab-close {
+            opacity: 0;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            padding: 2px;
+        }
+        
+        .tab:hover .tab-close {
+            opacity: 0.6;
+        }
+        
+        .tab-close:hover {
+            opacity: 1;
+        }
+        
+        .editor-content {
+            flex: 1;
+            background: var(--bg-primary);
+            padding: 20px;
+            overflow-y: auto;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+        }
+        
+        .welcome-screen h2 {
+            font-size: 32px;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .welcome-screen p {
+            color: var(--text-secondary);
+            font-size: 16px;
+            margin-bottom: 32px;
+            max-width: 500px;
+        }
+        
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 200px);
+            gap: 16px;
+        }
+        
+        .quick-action {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: left;
+        }
+        
+        .quick-action:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        
+        .quick-action i {
+            font-size: 24px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        
+        .quick-action h3 {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+        
+        .quick-action p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* Terminal */
+        .terminal-container {
+            height: 300px;
+            background: var(--terminal-bg);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .terminal-header {
+            background: var(--bg-secondary);
+            padding: 8px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .terminal-tabs {
+            display: flex;
+            gap: 16px;
+        }
+        
+        .terminal-tab {
+            font-size: 13px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px 0;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        
+        .terminal-tab:hover {
+            color: var(--text-primary);
+        }
+        
+        .terminal-tab.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+        }
+        
+        .terminal-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .terminal-action {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+        
+        .terminal-action:hover {
+            color: var(--text-primary);
+        }
+        
+        .terminal-content {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .terminal-line {
+            margin-bottom: 4px;
+        }
+        
+        .terminal-prompt {
+            color: var(--accent-green);
+            margin-right: 8px;
+        }
+        
+        .terminal-output {
+            color: var(--text-secondary);
+        }
+        
+        .terminal-error {
+            color: #f85149;
+        }
+        
+        .terminal-success {
+            color: var(--accent-green);
+        }
+        
+        /* Command Palette */
+        .command-palette {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            max-width: 90vw;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+        
+        .command-palette.show {
+            display: block;
+        }
+        
+        .command-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 16px;
+            outline: none;
+        }
+        
+        .command-input::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .command-results {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .command-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.1s;
+        }
+        
+        .command-item:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .command-item i {
+            color: var(--text-secondary);
+            width: 16px;
+            text-align: center;
+        }
+        
+        .command-item-title {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .command-item-hint {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        
+        .overlay.show {
+            display: block;
+        }
+        
+        /* Status Bar */
+        .status-bar {
+            height: 24px;
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+        
+        .status-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-right: 20px;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+        }
+        
+        /* Split view */
+        .split-view {
+            display: flex;
+            flex: 1;
+            gap: 1px;
+            background: var(--border-color);
+        }
+        
+        .split-pane {
+            flex: 1;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .terminal-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                <span>Agentic Studio</span>
+            </div>
+            
+            <div class="header-actions">
+                <div class="agent-selector">
+                    <button class="agent-btn active" onclick="selectAgent('claude')">
+                        Claude Code
+                    </button>
+                    <button class="agent-btn" onclick="selectAgent('gemini')">
+                        Gemini CLC
+                    </button>
+                    <button class="agent-btn" onclick="selectAgent('amazonq')">
+                        Amazon Q
+                    </button>
+                </div>
+                
+                <button class="terminal-action" onclick="toggleCommandPalette()" title="Command Palette (Cmd+K)">
+                    <i class="fas fa-search"></i>
+                </button>
+                
+                <button class="terminal-action" onclick="showSettings()" title="Settings">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <div class="sidebar-header">
+                    Explorer
+                </div>
+                <div class="file-tree" id="file-tree">
+                    <div class="tree-item" onclick="selectFile('README.md')">
+                        <i class="fas fa-file-alt"></i>
+                        <span>README.md</span>
+                    </div>
+                    <div class="tree-item" onclick="selectFile('main.py')">
+                        <i class="fas fa-file-code" style="color: #3572A5;"></i>
+                        <span>main.py</span>
+                    </div>
+                    <div class="tree-item" onclick="selectFile('app.js')">
+                        <i class="fas fa-file-code" style="color: #f1e05a;"></i>
+                        <span>app.js</span>
+                    </div>
+                    <div class="tree-item" onclick="selectFile('styles.css')">
+                        <i class="fas fa-file-code" style="color: #563d7c;"></i>
+                        <span>styles.css</span>
+                    </div>
+                    <div class="tree-item" onclick="selectFile('test.spec.ts')">
+                        <i class="fas fa-file-code" style="color: #2b7489;"></i>
+                        <span>test.spec.ts</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Editor Area -->
+            <div class="editor-area">
+                <div class="tabs-bar" id="tabs-bar">
+                    <!-- Tabs will be added here dynamically -->
+                </div>
+                
+                <div class="editor-content" id="editor-content">
+                    <div class="welcome-screen">
+                        <h2>Welcome to Agentic Studio</h2>
+                        <p>The beautiful UI for AI coding agents. Connect your favorite AI coding assistant and start building.</p>
+                        
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="quickAction('new')">
+                                <i class="fas fa-file-plus" style="color: var(--accent-blue);"></i>
+                                <h3>New Project</h3>
+                                <p>Start a fresh project</p>
+                            </div>
+                            <div class="quick-action" onclick="quickAction('connect')">
+                                <i class="fas fa-plug" style="color: var(--accent-green);"></i>
+                                <h3>Connect Agent</h3>
+                                <p>Setup your AI agent</p>
+                            </div>
+                            <div class="quick-action" onclick="quickAction('open')">
+                                <i class="fas fa-folder-open" style="color: var(--accent-purple);"></i>
+                                <h3>Open Project</h3>
+                                <p>Continue working</p>
+                            </div>
+                            <div class="quick-action" onclick="quickAction('tutorial')">
+                                <i class="fas fa-graduation-cap" style="color: var(--accent-orange);"></i>
+                                <h3>Tutorial</h3>
+                                <p>Learn the basics</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Terminal -->
+        <div class="terminal-container">
+            <div class="terminal-header">
+                <div class="terminal-tabs">
+                    <div class="terminal-tab active" onclick="selectTerminalTab('terminal')">Terminal</div>
+                    <div class="terminal-tab" onclick="selectTerminalTab('output')">Output</div>
+                    <div class="terminal-tab" onclick="selectTerminalTab('problems')">Problems</div>
+                    <div class="terminal-tab" onclick="selectTerminalTab('agent')">Agent Chat</div>
+                </div>
+                
+                <div class="terminal-actions">
+                    <button class="terminal-action" onclick="clearTerminal()" title="Clear">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <button class="terminal-action" onclick="toggleTerminal()" title="Maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="terminal-content" id="terminal-content">
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$</span>
+                    <span class="terminal-output">claude-code init</span>
+                </div>
+                <div class="terminal-line terminal-success">
+                    ✓ Claude Code initialized successfully
+                </div>
+                <div class="terminal-line terminal-output">
+                    Watching for file changes...
+                </div>
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$</span>
+                    <span class="terminal-output">_</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Status Bar -->
+        <div class="status-bar">
+            <div class="status-item">
+                <div class="status-indicator"></div>
+                <span>Claude Code Connected</span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-code-branch"></i>
+                <span>main</span>
+            </div>
+            <div class="status-item">
+                <i class="fas fa-sync"></i>
+                <span>Auto-save</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Command Palette -->
+    <div class="overlay" id="overlay" onclick="toggleCommandPalette()"></div>
+    <div class="command-palette" id="command-palette">
+        <input type="text" class="command-input" placeholder="Type a command or search..." id="command-input" onkeyup="filterCommands()">
+        <div class="command-results" id="command-results">
+            <div class="command-item" onclick="executeCommand('new-file')">
+                <i class="fas fa-file-plus"></i>
+                <span class="command-item-title">New File</span>
+                <span class="command-item-hint">Ctrl+N</span>
+            </div>
+            <div class="command-item" onclick="executeCommand('run-agent')">
+                <i class="fas fa-robot"></i>
+                <span class="command-item-title">Run Agent Task</span>
+                <span class="command-item-hint">Ctrl+Enter</span>
+            </div>
+            <div class="command-item" onclick="executeCommand('split-view')">
+                <i class="fas fa-columns"></i>
+                <span class="command-item-title">Split Editor</span>
+                <span class="command-item-hint">Ctrl+\\</span>
+            </div>
+            <div class="command-item" onclick="executeCommand('theme')">
+                <i class="fas fa-palette"></i>
+                <span class="command-item-title">Change Theme</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let activeAgent = 'claude';
+        let openTabs = [];
+        let activeTab = null;
+        let terminalHistory = [];
+        
+        // Demo file contents
+        const fileContents = {
+            'README.md': `# My Agentic Project
+
+This project is being built with AI assistance using Agentic Studio.
+
+## Features
+- AI-powered code generation
+- Real-time collaboration with AI agents
+- Beautiful development environment
+
+## Getting Started
+1. Connect your preferred AI agent
+2. Start coding with AI assistance
+3. Ship faster than ever before`,
+            
+            'main.py': `import asyncio
+from typing import List, Dict
+
+class AgenticDevelopment:
+    """AI-assisted development workflow"""
+    
+    def __init__(self, agent: str = "claude"):
+        self.agent = agent
+        self.context = []
+    
+    async def generate_code(self, prompt: str) -> str:
+        """Generate code based on natural language prompt"""
+        # AI magic happens here
+        return await self.agent.complete(prompt)
+    
+    def run(self):
+        print(f"Running with {self.agent} agent...")`,
+        
+            'app.js': `// Modern JavaScript with AI assistance
+const AgenticStudio = {
+    currentAgent: 'claude',
+    
+    async executeTask(description) {
+        console.log(\`Executing: \${description}\`);
+        const result = await this.sendToAgent(description);
+        return result;
+    },
+    
+    async sendToAgent(task) {
+        // Connect to AI agent
+        return fetch('/api/agent', {
+            method: 'POST',
+            body: JSON.stringify({ task })
+        });
+    }
+};`,
+            
+            'styles.css': `/* AI-optimized styles */
+:root {
+    --primary: #58a6ff;
+    --background: #0d1117;
+}
+
+.agentic-container {
+    display: flex;
+    height: 100vh;
+    background: var(--background);
+}`,
+            
+            'test.spec.ts': `describe('Agentic Development', () => {
+    it('should connect to AI agent', async () => {
+        const agent = new ClaudeCode();
+        const connected = await agent.connect();
+        expect(connected).toBe(true);
+    });
+    
+    it('should generate code from prompt', async () => {
+        const code = await agent.generate('create a REST API');
+        expect(code).toContain('router');
+    });
+});`
+        };
+        
+        // Agent selection
+        function selectAgent(agent) {
+            activeAgent = agent;
+            document.querySelectorAll('.agent-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update status bar
+            document.querySelector('.status-indicator').style.background = 'var(--accent-green)';
+            document.querySelector('.status-bar .status-item span').textContent = `${getAgentName(agent)} Connected`;
+            
+            addTerminalLine(`Switched to ${getAgentName(agent)}`, 'success');
+        }
+        
+        function getAgentName(agent) {
+            const names = {
+                'claude': 'Claude Code',
+                'gemini': 'Gemini CLC',
+                'amazonq': 'Amazon Q'
+            };
+            return names[agent] || agent;
+        }
+        
+        // File selection
+        function selectFile(filename) {
+            // Update tree selection
+            document.querySelectorAll('.tree-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            event.target.closest('.tree-item').classList.add('selected');
+            
+            // Add or switch to tab
+            if (!openTabs.includes(filename)) {
+                openTabs.push(filename);
+            }
+            activeTab = filename;
+            updateTabs();
+            displayFile(filename);
+        }
+        
+        function updateTabs() {
+            const tabsBar = document.getElementById('tabs-bar');
+            tabsBar.innerHTML = '';
+            
+            openTabs.forEach(filename => {
+                const tab = document.createElement('div');
+                tab.className = `tab ${filename === activeTab ? 'active' : ''}`;
+                tab.onclick = () => switchToTab(filename);
+                
+                tab.innerHTML = `
+                    <i class="fas fa-file-code"></i>
+                    <span>${filename}</span>
+                    <span class="tab-close" onclick="closeTab(event, '${filename}')">×</span>
+                `;
+                
+                tabsBar.appendChild(tab);
+            });
+        }
+        
+        function switchToTab(filename) {
+            activeTab = filename;
+            updateTabs();
+            displayFile(filename);
+        }
+        
+        function closeTab(event, filename) {
+            event.stopPropagation();
+            const index = openTabs.indexOf(filename);
+            if (index > -1) {
+                openTabs.splice(index, 1);
+                if (activeTab === filename) {
+                    activeTab = openTabs[openTabs.length - 1] || null;
+                }
+                updateTabs();
+                if (activeTab) {
+                    displayFile(activeTab);
+                } else {
+                    showWelcomeScreen();
+                }
+            }
+        }
+        
+        function displayFile(filename) {
+            const content = fileContents[filename] || '// File not found';
+            const editorContent = document.getElementById('editor-content');
+            
+            // Simple syntax highlighting (mock)
+            const highlighted = content
+                .replace(/\/\/.*/g, '<span style="color: #8b949e;">$&</span>')
+                .replace(/class |def |import |from |async |await |const |let |var /g, '<span style="color: #ff7b72;">$&</span>')
+                .replace(/'[^']*'|"[^"]*"/g, '<span style="color: #a5d6ff;">$&</span>');
+            
+            editorContent.innerHTML = `<pre style="margin: 0;">${highlighted}</pre>`;
+            editorContent.classList.add('fade-in');
+        }
+        
+        function showWelcomeScreen() {
+            const editorContent = document.getElementById('editor-content');
+            editorContent.innerHTML = `
+                <div class="welcome-screen">
+                    <h2>Welcome to Agentic Studio</h2>
+                    <p>The beautiful UI for AI coding agents. Connect your favorite AI coding assistant and start building.</p>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-action" onclick="quickAction('new')">
+                            <i class="fas fa-file-plus" style="color: var(--accent-blue);"></i>
+                            <h3>New Project</h3>
+                            <p>Start a fresh project</p>
+                        </div>
+                        <div class="quick-action" onclick="quickAction('connect')">
+                            <i class="fas fa-plug" style="color: var(--accent-green);"></i>
+                            <h3>Connect Agent</h3>
+                            <p>Setup your AI agent</p>
+                        </div>
+                        <div class="quick-action" onclick="quickAction('open')">
+                            <i class="fas fa-folder-open" style="color: var(--accent-purple);"></i>
+                            <h3>Open Project</h3>
+                            <p>Continue working</p>
+                        </div>
+                        <div class="quick-action" onclick="quickAction('tutorial')">
+                            <i class="fas fa-graduation-cap" style="color: var(--accent-orange);"></i>
+                            <h3>Tutorial</h3>
+                            <p>Learn the basics</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Terminal functions
+        function selectTerminalTab(tab) {
+            document.querySelectorAll('.terminal-tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Different content for different tabs
+            const content = document.getElementById('terminal-content');
+            if (tab === 'agent') {
+                content.innerHTML = `
+                    <div class="terminal-line">
+                        <span style="color: var(--accent-purple);">Claude:</span> Ready to help! What would you like to build?
+                    </div>
+                    <div class="terminal-line">
+                        <span style="color: var(--accent-blue);">You:</span> Create a REST API with authentication
+                    </div>
+                    <div class="terminal-line">
+                        <span style="color: var(--accent-purple);">Claude:</span> I'll help you create a REST API with authentication. Let me set that up...
+                    </div>
+                `;
+            }
+        }
+        
+        function addTerminalLine(text, type = 'output') {
+            const content = document.getElementById('terminal-content');
+            const line = document.createElement('div');
+            line.className = `terminal-line terminal-${type}`;
+            line.textContent = text;
+            content.appendChild(line);
+            content.scrollTop = content.scrollHeight;
+        }
+        
+        function clearTerminal() {
+            document.getElementById('terminal-content').innerHTML = `
+                <div class="terminal-line">
+                    <span class="terminal-prompt">$</span>
+                    <span class="terminal-output">_</span>
+                </div>
+            `;
+        }
+        
+        // Command palette
+        function toggleCommandPalette() {
+            const palette = document.getElementById('command-palette');
+            const overlay = document.getElementById('overlay');
+            const input = document.getElementById('command-input');
+            
+            if (palette.classList.contains('show')) {
+                palette.classList.remove('show');
+                overlay.classList.remove('show');
+            } else {
+                palette.classList.add('show');
+                overlay.classList.add('show');
+                input.value = '';
+                input.focus();
+                filterCommands();
+            }
+        }
+        
+        function filterCommands() {
+            const query = document.getElementById('command-input').value.toLowerCase();
+            const items = document.querySelectorAll('.command-item');
+            
+            items.forEach(item => {
+                const title = item.querySelector('.command-item-title').textContent.toLowerCase();
+                item.style.display = title.includes(query) ? 'flex' : 'none';
+            });
+        }
+        
+        function executeCommand(command) {
+            toggleCommandPalette();
+            
+            switch(command) {
+                case 'new-file':
+                    addTerminalLine('Creating new file...');
+                    break;
+                case 'run-agent':
+                    addTerminalLine(`Running ${getAgentName(activeAgent)} on current file...`);
+                    setTimeout(() => {
+                        addTerminalLine('✓ Task completed successfully', 'success');
+                    }, 1500);
+                    break;
+                case 'split-view':
+                    addTerminalLine('Split view enabled');
+                    break;
+                case 'theme':
+                    addTerminalLine('Theme selector opened');
+                    break;
+            }
+        }
+        
+        // Quick actions
+        function quickAction(action) {
+            switch(action) {
+                case 'new':
+                    addTerminalLine('Creating new project...');
+                    setTimeout(() => {
+                        addTerminalLine('✓ Project created: my-ai-project', 'success');
+                        selectFile('main.py');
+                    }, 1000);
+                    break;
+                case 'connect':
+                    addTerminalLine(`Connecting to ${getAgentName(activeAgent)}...`);
+                    setTimeout(() => {
+                        addTerminalLine('✓ Successfully connected', 'success');
+                    }, 1000);
+                    break;
+                case 'open':
+                    addTerminalLine('Opening project browser...');
+                    break;
+                case 'tutorial':
+                    addTerminalLine('Loading interactive tutorial...');
+                    break;
+            }
+        }
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                toggleCommandPalette();
+            }
+            
+            if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
+                e.preventDefault();
+                executeCommand('run-agent');
+            }
+            
+            if (e.key === 'Escape' && document.getElementById('command-palette').classList.contains('show')) {
+                toggleCommandPalette();
+            }
+        });
+        
+        // Initialize
+        window.onload = () => {
+            addTerminalLine('Welcome to Agentic Studio v1.0.0');
+            addTerminalLine('Connecting to Claude Code...', 'output');
+            setTimeout(() => {
+                addTerminalLine('✓ Claude Code connected', 'success');
+            }, 1000);
+        };
+    </script>
+</body>
+</html>

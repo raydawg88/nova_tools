@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BusyBot - Always Look Productive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #1a1d21;
+            color: #fff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #4a9eff, #00d4ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .robot {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .sub-tagline {
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+        
+        /* Control Panel */
+        .control-panel {
+            background: #2c2f33;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .setting-group {
+            margin-bottom: 25px;
+        }
+        
+        .setting-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        select, input {
+            width: 100%;
+            padding: 12px;
+            background: #1a1d21;
+            border: 2px solid #4a9eff;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        select:focus, input:focus {
+            outline: none;
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+        }
+        
+        .toggle-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .toggle-btn {
+            padding: 10px 20px;
+            background: #1a1d21;
+            border: 2px solid #4a9eff;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn:hover {
+            background: #4a9eff;
+            transform: translateY(-2px);
+        }
+        
+        .toggle-btn.active {
+            background: #4a9eff;
+        }
+        
+        /* Generate Button */
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #4a9eff, #00d4ff);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            margin-top: 20px;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(74, 158, 255, 0.4);
+        }
+        
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+        
+        .status-display {
+            background: #2c2f33;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #4a9eff;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .status-emoji {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .status-text {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .status-duration {
+            text-align: center;
+            opacity: 0.7;
+            font-size: 1.1rem;
+        }
+        
+        /* Status Options */
+        .status-options {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .status-option {
+            background: #2c2f33;
+            border: 2px solid #444;
+            border-radius: 15px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .status-option:hover {
+            border-color: #4a9eff;
+            transform: translateX(5px);
+        }
+        
+        .option-emoji {
+            font-size: 2rem;
+        }
+        
+        .option-text {
+            flex: 1;
+        }
+        
+        .option-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .option-duration {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Copy & Share */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .action-btn {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .copy-btn {
+            background: #4a9eff;
+        }
+        
+        .regenerate-btn {
+            background: #666;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        /* Schedule Preview */
+        .schedule-preview {
+            background: #2c2f33;
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .schedule-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .schedule-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        .schedule-item {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-left: 2px solid #4a9eff;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .schedule-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background: #4a9eff;
+            border-radius: 50%;
+        }
+        
+        .schedule-time {
+            font-weight: 700;
+            color: #4a9eff;
+            margin-bottom: 5px;
+        }
+        
+        .schedule-status {
+            font-size: 1.1rem;
+        }
+        
+        /* Tips Section */
+        .tips-section {
+            background: rgba(74, 158, 255, 0.1);
+            border: 2px solid #4a9eff;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+        
+        .tips-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #4a9eff;
+        }
+        
+        .tip-item {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .tip-item::before {
+            content: '💡';
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="robot">🤖</div>
+            <h1>BusyBot</h1>
+            <p class="tagline">Generate the perfect "busy" status</p>
+            <p class="sub-tagline">Look productive without the productivity</p>
+        </div>
+        
+        <div class="control-panel">
+            <div class="setting-group">
+                <label class="setting-label">Your Vibe Today</label>
+                <select id="vibe-select">
+                    <option value="focused">Deep Focus Mode</option>
+                    <option value="meeting">Meeting Marathon</option>
+                    <option value="deadline">Deadline Warrior</option>
+                    <option value="creative">Creative Flow</option>
+                    <option value="strategic">Big Brain Time</option>
+                    <option value="collaborative">Team Player</option>
+                </select>
+            </div>
+            
+            <div class="setting-group">
+                <label class="setting-label">Urgency Level</label>
+                <div class="toggle-group">
+                    <button class="toggle-btn active" onclick="setUrgency('low')">Chill</button>
+                    <button class="toggle-btn" onclick="setUrgency('medium')">Busy</button>
+                    <button class="toggle-btn" onclick="setUrgency('high')">URGENT</button>
+                    <button class="toggle-btn" onclick="setUrgency('panic')">🔥 PANIC 🔥</button>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <label class="setting-label">Time Away</label>
+                <select id="duration-select">
+                    <option value="15">15 minutes</option>
+                    <option value="30">30 minutes</option>
+                    <option value="60">1 hour</option>
+                    <option value="120">2 hours</option>
+                    <option value="240">Half day</option>
+                    <option value="480">All day</option>
+                    <option value="custom">Until further notice</option>
+                </select>
+            </div>
+            
+            <div class="setting-group">
+                <label class="setting-label">Optional: Specific Project (makes it more believable)</label>
+                <input type="text" id="project-input" placeholder="e.g., Q4 Planning, Product Launch, Budget Review">
+            </div>
+            
+            <button class="generate-btn" onclick="generateStatus()">
+                🚀 Generate My Alibi
+            </button>
+        </div>
+        
+        <div class="results-section" id="results">
+            <div class="status-display">
+                <div class="status-emoji" id="status-emoji">🎯</div>
+                <div class="status-text" id="status-text">Loading...</div>
+                <div class="status-duration" id="status-duration">Back in 1 hour</div>
+            </div>
+            
+            <h3 style="margin-bottom: 20px; font-size: 1.5rem;">Alternative Options:</h3>
+            <div class="status-options" id="status-options"></div>
+            
+            <div class="action-buttons">
+                <button class="action-btn copy-btn" onclick="copyStatus()">📋 Copy Status</button>
+                <button class="action-btn regenerate-btn" onclick="generateStatus()">🔄 Regenerate</button>
+            </div>
+            
+            <div class="schedule-preview">
+                <h3 class="schedule-title">Your Day (According to Slack)</h3>
+                <div class="schedule-timeline" id="schedule-timeline"></div>
+            </div>
+        </div>
+        
+        <div class="tips-section">
+            <h3 class="tips-title">Pro Tips for Maximum Believability</h3>
+            <div class="tip-item">Update your status before anyone asks where you are</div>
+            <div class="tip-item">Vary your excuses - don't always be "in meetings"</div>
+            <div class="tip-item">Add specific project names for authenticity</div>
+            <div class="tip-item">Set calendar blocks that match your status</div>
+            <div class="tip-item">Actually do some work occasionally to maintain cover</div>
+        </div>
+    </div>
+    
+    <script>
+        let currentUrgency = 'low';
+        let generatedStatuses = [];
+        
+        const statusTemplates = {
+            focused: {
+                low: [
+                    { emoji: '🎯', text: 'Deep work mode - checking messages at [TIME]', duration: true },
+                    { emoji: '📚', text: 'Heads down on [PROJECT] - back at [TIME]', duration: true },
+                    { emoji: '🧘', text: 'Focus time - will respond after [TIME]', duration: true }
+                ],
+                medium: [
+                    { emoji: '⚡', text: 'In the zone on [PROJECT] - urgent only please', duration: false },
+                    { emoji: '🎧', text: 'Deep focus sprint - back at [TIME]', duration: true },
+                    { emoji: '🔇', text: 'Do not disturb - critical deadline work', duration: false }
+                ],
+                high: [
+                    { emoji: '🚨', text: '[PROJECT] CRUNCH TIME - offline until [TIME]', duration: true },
+                    { emoji: '⏰', text: 'Racing against deadline - NO interruptions', duration: false },
+                    { emoji: '🔥', text: 'URGENT: Fixing [PROJECT] issue - back ASAP', duration: false }
+                ],
+                panic: [
+                    { emoji: '💀', text: 'CODE RED: [PROJECT] on fire - pray for me', duration: false },
+                    { emoji: '🆘', text: 'DEFCON 1: Do not disturb unless building is on fire', duration: false },
+                    { emoji: '☠️', text: 'If you need me, you can\'t have me. [PROJECT] deadline in [TIME]', duration: true }
+                ]
+            },
+            meeting: {
+                low: [
+                    { emoji: '📅', text: 'In meetings until [TIME]', duration: true },
+                    { emoji: '💬', text: '[PROJECT] sync - back at [TIME]', duration: true },
+                    { emoji: '🤝', text: 'Client call - available after [TIME]', duration: true }
+                ],
+                medium: [
+                    { emoji: '📞', text: 'Back-to-back meetings until [TIME]', duration: true },
+                    { emoji: '🏃', text: 'Meeting marathon - check in at [TIME]', duration: true },
+                    { emoji: '📊', text: '[PROJECT] planning session - urgent only', duration: false }
+                ],
+                high: [
+                    { emoji: '🔴', text: 'URGENT: Executive meeting - offline until [TIME]', duration: true },
+                    { emoji: '⚠️', text: 'Critical [PROJECT] escalation call', duration: false },
+                    { emoji: '🚁', text: 'With leadership - DO NOT DISTURB', duration: false }
+                ],
+                panic: [
+                    { emoji: '🌋', text: 'EMERGENCY ALL-HANDS: [PROJECT] situation', duration: false },
+                    { emoji: '🚒', text: 'Fire drill meeting - literally everything is on fire', duration: false },
+                    { emoji: '💣', text: 'Board meeting prep - if you interrupt me I will cry', duration: false }
+                ]
+            },
+            deadline: {
+                low: [
+                    { emoji: '📝', text: 'Finishing up [PROJECT] - back at [TIME]', duration: true },
+                    { emoji: '✍️', text: 'Report writing time - checking messages at [TIME]', duration: true },
+                    { emoji: '📋', text: 'Wrapping up deliverables - available after [TIME]', duration: true }
+                ],
+                medium: [
+                    { emoji: '⏳', text: '[PROJECT] due today - in sprint mode', duration: false },
+                    { emoji: '🏁', text: 'Final push on [PROJECT] - back at [TIME]', duration: true },
+                    { emoji: '📈', text: 'Crunching numbers for deadline - urgent only', duration: false }
+                ],
+                high: [
+                    { emoji: '🚀', text: '[PROJECT] LAUNCHING - all hands on deck', duration: false },
+                    { emoji: '⏰', text: 'T-minus [TIME] to deadline - PLEASE DON\'T', duration: true },
+                    { emoji: '🎯', text: 'DEADLINE MODE: Respond after [TIME] or I miss it', duration: true }
+                ],
+                panic: [
+                    { emoji: '💥', text: 'DEADLINE IN [TIME] - I AM BECOME SPEED', duration: true },
+                    { emoji: '🌪️', text: 'If [PROJECT] ships late, we all die. Do not disturb.', duration: false },
+                    { emoji: '⚡', text: 'SHIPPING [PROJECT] - interruptions = violence', duration: false }
+                ]
+            },
+            creative: {
+                low: [
+                    { emoji: '🎨', text: 'Creative flow on [PROJECT] - back at [TIME]', duration: true },
+                    { emoji: '💡', text: 'Brainstorming mode - messages off until [TIME]', duration: true },
+                    { emoji: '✨', text: 'Design time - will check in at [TIME]', duration: true }
+                ],
+                medium: [
+                    { emoji: '🎭', text: 'Deep in creative work - [PROJECT] needs focus', duration: false },
+                    { emoji: '🌈', text: 'In the creative zone - disturb at your own risk', duration: false },
+                    { emoji: '🎪', text: 'Making magic happen on [PROJECT] - back [TIME]', duration: true }
+                ],
+                high: [
+                    { emoji: '🔮', text: 'BREAKTHROUGH on [PROJECT] - DO NOT break focus', duration: false },
+                    { emoji: '⚡', text: 'Creative lightning struck - riding it until [TIME]', duration: true },
+                    { emoji: '🎆', text: 'THIS IS IT - [PROJECT] inspiration mode ON', duration: false }
+                ],
+                panic: [
+                    { emoji: '🌟', text: 'EUREKA MOMENT - if you interrupt I will lose it forever', duration: false },
+                    { emoji: '🎯', text: 'Peak creative flow achieved - [PROJECT] or death', duration: false },
+                    { emoji: '🚀', text: 'Creating at the speed of light - back never', duration: false }
+                ]
+            },
+            strategic: {
+                low: [
+                    { emoji: '🧠', text: 'Strategic planning for [PROJECT] - back at [TIME]', duration: true },
+                    { emoji: '📐', text: 'Architecting solutions - checking messages at [TIME]', duration: true },
+                    { emoji: '🗺️', text: 'Roadmap work - available after [TIME]', duration: true }
+                ],
+                medium: [
+                    { emoji: '♟️', text: 'Deep strategic work on [PROJECT] - urgent only', duration: false },
+                    { emoji: '🎯', text: 'Planning next quarter - mind = blown, back [TIME]', duration: true },
+                    { emoji: '🔍', text: 'Analysis paralysis on [PROJECT] - help', duration: false }
+                ],
+                high: [
+                    { emoji: '🧩', text: 'SOLVING [PROJECT] - this is my Everest', duration: false },
+                    { emoji: '🏔️', text: 'Big brain time: [PROJECT] strategy locked in', duration: false },
+                    { emoji: '🎲', text: 'Making big moves on [PROJECT] - stand back', duration: false }
+                ],
+                panic: [
+                    { emoji: '🌊', text: 'PARADIGM SHIFT on [PROJECT] - reality is optional', duration: false },
+                    { emoji: '🪐', text: 'Operating on another plane - [PROJECT] transcendence', duration: false },
+                    { emoji: '🌌', text: 'I have seen the future of [PROJECT] - do not wake me', duration: false }
+                ]
+            },
+            collaborative: {
+                low: [
+                    { emoji: '👥', text: 'Pairing on [PROJECT] - back at [TIME]', duration: true },
+                    { emoji: '🤲', text: 'Team workshop - available after [TIME]', duration: true },
+                    { emoji: '💭', text: 'Brainstorm session for [PROJECT] until [TIME]', duration: true }
+                ],
+                medium: [
+                    { emoji: '🎪', text: 'Herding cats for [PROJECT] - pray for me', duration: false },
+                    { emoji: '🤹', text: 'Juggling 5 conversations about [PROJECT]', duration: false },
+                    { emoji: '🎭', text: 'Playing nice with others - back [TIME]', duration: true }
+                ],
+                high: [
+                    { emoji: '🚁', text: 'EMERGENCY collab on [PROJECT] - all hands', duration: false },
+                    { emoji: '🏃‍♂️', text: 'Speed-running [PROJECT] with the squad', duration: false },
+                    { emoji: '⚡', text: 'SWAT team assembled for [PROJECT]', duration: false }
+                ],
+                panic: [
+                    { emoji: '🌪️', text: 'CHAOS COORDINATION for [PROJECT] - send help', duration: false },
+                    { emoji: '🎢', text: 'This [PROJECT] collab is off the rails', duration: false },
+                    { emoji: '🔥', text: 'Team on fire (good way) - [PROJECT] magic happening', duration: false }
+                ]
+            }
+        };
+        
+        function setUrgency(level) {
+            currentUrgency = level;
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        function getTimeString(minutes) {
+            const now = new Date();
+            const later = new Date(now.getTime() + minutes * 60000);
+            const hours = later.getHours();
+            const mins = later.getMinutes();
+            const period = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours > 12 ? hours - 12 : hours || 12;
+            return `${displayHours}:${mins.toString().padStart(2, '0')} ${period}`;
+        }
+        
+        function generateStatus() {
+            const vibe = document.getElementById('vibe-select').value;
+            const duration = document.getElementById('duration-select').value;
+            const project = document.getElementById('project-input').value || 'Important Project';
+            
+            const templates = statusTemplates[vibe][currentUrgency];
+            const mainTemplate = templates[Math.floor(Math.random() * templates.length)];
+            
+            // Generate main status
+            let statusText = mainTemplate.text.replace('[PROJECT]', project);
+            if (mainTemplate.duration && duration !== 'custom') {
+                statusText = statusText.replace('[TIME]', getTimeString(parseInt(duration)));
+            } else if (duration === 'custom') {
+                statusText = statusText.replace('at [TIME]', 'later').replace('after [TIME]', 'later').replace('[TIME]', 'eventually');
+            }
+            
+            // Display main status
+            document.getElementById('status-emoji').textContent = mainTemplate.emoji;
+            document.getElementById('status-text').textContent = statusText;
+            
+            if (duration === 'custom') {
+                document.getElementById('status-duration').textContent = 'Back when I\'m back';
+            } else if (duration == 480) {
+                document.getElementById('status-duration').textContent = 'Gone for the day';
+            } else {
+                document.getElementById('status-duration').textContent = `Back in ${duration < 60 ? duration + ' minutes' : Math.floor(duration/60) + ' hour' + (duration > 119 ? 's' : '')}`;
+            }
+            
+            // Generate alternatives
+            generatedStatuses = [{ emoji: mainTemplate.emoji, text: statusText }];
+            const alternatives = document.getElementById('status-options');
+            alternatives.innerHTML = '';
+            
+            // Get 3 more alternatives
+            const otherTemplates = templates.filter(t => t !== mainTemplate);
+            const shuffled = otherTemplates.sort(() => 0.5 - Math.random()).slice(0, 3);
+            
+            shuffled.forEach(template => {
+                let altText = template.text.replace('[PROJECT]', project);
+                if (template.duration && duration !== 'custom') {
+                    altText = altText.replace('[TIME]', getTimeString(parseInt(duration)));
+                } else {
+                    altText = altText.replace('at [TIME]', 'later').replace('after [TIME]', 'later').replace('[TIME]', 'eventually');
+                }
+                
+                generatedStatuses.push({ emoji: template.emoji, text: altText });
+                
+                const option = document.createElement('div');
+                option.className = 'status-option';
+                option.onclick = () => selectStatus(template.emoji, altText);
+                option.innerHTML = `
+                    <div class="option-emoji">${template.emoji}</div>
+                    <div class="option-text">
+                        <div class="option-title">${altText}</div>
+                        <div class="option-duration">Click to use this one instead</div>
+                    </div>
+                `;
+                alternatives.appendChild(option);
+            });
+            
+            // Generate schedule
+            generateSchedule();
+            
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function selectStatus(emoji, text) {
+            document.getElementById('status-emoji').textContent = emoji;
+            document.getElementById('status-text').textContent = text;
+        }
+        
+        function generateSchedule() {
+            const timeline = document.getElementById('schedule-timeline');
+            timeline.innerHTML = '';
+            
+            const scheduleItems = [
+                { time: '9:00 AM', status: '☕ "Morning standup"' },
+                { time: '10:30 AM', status: '📊 "Reviewing metrics"' },
+                { time: '12:00 PM', status: '🍕 "Working lunch"' },
+                { time: '2:00 PM', status: '🧠 "Deep work time"' },
+                { time: '3:30 PM', status: '🎯 "Crushing goals"' },
+                { time: '5:00 PM', status: '🚀 "One more thing..."' }
+            ];
+            
+            scheduleItems.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'schedule-item';
+                div.innerHTML = `
+                    <div class="schedule-time">${item.time}</div>
+                    <div class="schedule-status">${item.status}</div>
+                `;
+                timeline.appendChild(div);
+            });
+        }
+        
+        function copyStatus() {
+            const emoji = document.getElementById('status-emoji').textContent;
+            const text = document.getElementById('status-text').textContent;
+            const fullStatus = `${emoji} ${text}`;
+            
+            navigator.clipboard.writeText(fullStatus).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

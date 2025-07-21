@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MainCharacter - Stop Being an NPC in Your Own Life</title>
+    <meta name="description" content="Transform from background character to protagonist. Daily quests, plot twists, and character development for your real life.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @keyframes pixelate {
+            0%, 100% { filter: blur(0); }
+            50% { filter: blur(1px); }
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #0f0;
+            line-height: 1.6;
+            overflow-x: hidden;
+            image-rendering: pixelated;
+        }
+        
+        /* Retro game UI */
+        .game-border {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            bottom: 20px;
+            border: 4px solid #0f0;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            background: repeating-linear-gradient(
+                0deg,
+                #000,
+                #000 2px,
+                #0a0a0a 2px,
+                #0a0a0a 4px
+            );
+        }
+        
+        .pixel-art {
+            font-size: 6rem;
+            margin-bottom: 20px;
+            animation: pixelate 2s ease-in-out infinite;
+        }
+        
+        h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 0 #005500;
+        }
+        
+        .glitch {
+            position: relative;
+            color: #0f0;
+        }
+        
+        .glitch::before,
+        .glitch::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .glitch::before {
+            animation: glitch-1 0.5s infinite;
+            color: #ff0000;
+            z-index: -1;
+        }
+        
+        .glitch::after {
+            animation: glitch-2 0.5s infinite;
+            color: #0000ff;
+            z-index: -2;
+        }
+        
+        @keyframes glitch-1 {
+            0%, 100% { clip-path: inset(0 0 0 0); }
+            20% { clip-path: inset(20% 0 60% 0); transform: translate(-2px, 0); }
+            40% { clip-path: inset(50% 0 30% 0); transform: translate(2px, 0); }
+            60% { clip-path: inset(70% 0 10% 0); transform: translate(0, 0); }
+        }
+        
+        @keyframes glitch-2 {
+            0%, 100% { clip-path: inset(0 0 0 0); }
+            15% { clip-path: inset(10% 0 85% 0); transform: translate(2px, 0); }
+            35% { clip-path: inset(40% 0 45% 0); transform: translate(-2px, 0); }
+            55% { clip-path: inset(80% 0 5% 0); transform: translate(0, 0); }
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+        
+        .start-button {
+            display: inline-block;
+            padding: 20px 40px;
+            background: #0f0;
+            color: #000;
+            text-decoration: none;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 4px 4px 0 #005500;
+        }
+        
+        .start-button:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #005500;
+        }
+        
+        .start-button:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #005500;
+        }
+        
+        /* Character Select */
+        .character-select {
+            padding: 80px 20px;
+            background: #0a0a0a;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+        
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .character-card {
+            background: #111;
+            border: 2px solid #0f0;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-card::before {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent, #0f0);
+            opacity: 0.3;
+            transition: top 0.5s;
+        }
+        
+        .character-card:hover::before {
+            top: 100%;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        .character-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .character-name {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        .character-desc {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* Quest Board */
+        .quest-board {
+            padding: 80px 20px;
+            background: #000;
+        }
+        
+        .quest-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .quest {
+            background: #0a0a0a;
+            border: 2px solid #0f0;
+            padding: 30px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .quest:hover {
+            transform: translateX(10px);
+            box-shadow: -5px 5px 0 #005500;
+        }
+        
+        .quest-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background: #0f0;
+            color: #000;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        
+        .quest-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .quest-desc {
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+        
+        .quest-reward {
+            color: #ffff00;
+            font-weight: bold;
+        }
+        
+        /* Stats Dashboard */
+        .stats {
+            padding: 80px 20px;
+            background: #0a0a0a;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .stat-box {
+            background: #111;
+            border: 2px solid #0f0;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 3rem;
+            color: #0f0;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            text-transform: uppercase;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background: #222;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #0f0;
+            width: 75%;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(
+                45deg,
+                transparent 25%,
+                rgba(255,255,255,0.2) 25%,
+                rgba(255,255,255,0.2) 50%,
+                transparent 50%,
+                transparent 75%,
+                rgba(255,255,255,0.2) 75%
+            );
+            background-size: 20px 20px;
+            animation: progress-stripes 1s linear infinite;
+        }
+        
+        @keyframes progress-stripes {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 0; }
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 20px;
+            background: #000;
+        }
+        
+        .testimonial-feed {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .testimonial {
+            background: #0a0a0a;
+            border-left: 4px solid #0f0;
+            padding: 30px;
+            margin-bottom: 30px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .testimonial-author {
+            opacity: 0.7;
+            font-style: italic;
+        }
+        
+        .level-up {
+            color: #ffff00;
+            font-weight: bold;
+            animation: blink 1s ease-in-out infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        /* CTA */
+        .final-boss {
+            padding: 100px 20px;
+            text-align: center;
+            background: radial-gradient(circle at center, #1a0a0a 0%, #000 100%);
+        }
+        
+        .boss-title {
+            font-size: 4rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            animation: shake 0.5s ease-in-out infinite;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+        
+        .boss-text {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 40px 20px;
+            text-align: center;
+            opacity: 0.5;
+            font-size: 0.9rem;
+            border-top: 2px solid #0f0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Game Border -->
+    <div class="game-border"></div>
+    
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="pixel-art">🎮</div>
+            <h1 class="glitch" data-text="YOU ARE NOT AN NPC">YOU ARE NOT AN NPC</h1>
+            <p class="tagline">Stop being a background character in your own life story</p>
+            <a href="#" class="start-button">PRESS START</a>
+        </div>
+    </section>
+    
+    <!-- Character Select -->
+    <section class="character-select">
+        <h2 class="section-title">CHOOSE YOUR CLASS</h2>
+        <div class="character-grid">
+            <div class="character-card">
+                <div class="character-icon">⚔️</div>
+                <h3 class="character-name">The Warrior</h3>
+                <p class="character-desc">Face challenges head-on. +10 Courage</p>
+            </div>
+            <div class="character-card">
+                <div class="character-icon">🧙‍♂️</div>
+                <h3 class="character-name">The Wizard</h3>
+                <p class="character-desc">Master new skills daily. +10 Wisdom</p>
+            </div>
+            <div class="character-card">
+                <div class="character-icon">🏹</div>
+                <h3 class="character-name">The Ranger</h3>
+                <p class="character-desc">Explore unknown territories. +10 Adventure</p>
+            </div>
+            <div class="character-card">
+                <div class="character-icon">💰</div>
+                <h3 class="character-name">The Merchant</h3>
+                <p class="character-desc">Build your empire. +10 Wealth</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Quest Board -->
+    <section class="quest-board">
+        <h2 class="section-title">TODAY'S QUESTS</h2>
+        <div class="quest-container">
+            <div class="quest">
+                <span class="quest-type">Main Quest</span>
+                <h3 class="quest-title">The Conversation Boss</h3>
+                <p class="quest-desc">Start a conversation with someone new. Break the NPC dialogue loop.</p>
+                <p class="quest-reward">Reward: +50 XP, +1 Charisma</p>
+            </div>
+            <div class="quest">
+                <span class="quest-type">Side Quest</span>
+                <h3 class="quest-title">The Comfort Zone Dungeon</h3>
+                <p class="quest-desc">Do one thing that scares you today. Even a small thing counts.</p>
+                <p class="quest-reward">Reward: +30 XP, +1 Bravery</p>
+            </div>
+            <div class="quest">
+                <span class="quest-type">Daily</span>
+                <h3 class="quest-title">Plot Twist Generator</h3>
+                <p class="quest-desc">Take a different route. Eat somewhere new. Break your routine.</p>
+                <p class="quest-reward">Reward: +20 XP, Random Encounter</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats Dashboard -->
+    <section class="stats">
+        <h2 class="section-title">YOUR CHARACTER STATS</h2>
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-value">42</div>
+                <div class="stat-label">Days as Protagonist</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">156</div>
+                <div class="stat-label">Quests Completed</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">23</div>
+                <div class="stat-label">Plot Twists Created</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">LVL 7</div>
+                <div class="stat-label">Character Level</div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2 class="section-title">PLAYER REVIEWS</h2>
+        <div class="testimonial-feed">
+            <div class="testimonial">
+                <p class="testimonial-text">"I spent 5 years on autopilot. Same route, same lunch, same everything. MainCharacter made me realize I was literally following NPC pathing. Now I've <span class="level-up">LEVELED UP</span> my entire life."</p>
+                <p class="testimonial-author">- Alex, Level 12 Warrior</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"The daily quests seem silly but they work. Yesterday's was 'compliment a stranger.' Led to a job interview. My life has actual plot development now."</p>
+                <p class="testimonial-author">- Sarah, Level 9 Merchant</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"I used to wait for life to happen TO me. Now I'm the one making things happen. Went from background NPC to raid boss energy."</p>
+                <p class="testimonial-author">- Marcus, Level 15 Ranger</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Final CTA -->
+    <section class="final-boss">
+        <h2 class="boss-title">DEFEAT THE FINAL BOSS</h2>
+        <p class="boss-text">The final boss is the voice telling you to stay safe, stay quiet, stay background.</p>
+        <a href="#" class="start-button" style="font-size: 2rem; padding: 30px 60px;">
+            BEGIN YOUR STORY →
+        </a>
+        <p style="margin-top: 20px; opacity: 0.7;">Free to play • No pay-to-win • Pure character development</p>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>MAINCHARACTER // EVERYONE ELSE IS PLAYING. WHY AREN'T YOU?</p>
+        <p>© 2025 BE THE PROTAGONIST</p>
+    </footer>
+    
+    <script>
+        // Add retro sound effects (simulated)
+        document.querySelectorAll('.start-button, .character-card, .quest').forEach(element => {
+            element.addEventListener('click', () => {
+                // In production, play actual 8-bit sounds
+                element.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    element.style.transform = '';
+                }, 100);
+            });
+        });
+        
+        // Random glitch effect
+        setInterval(() => {
+            const glitchElements = document.querySelectorAll('.glitch');
+            glitchElements.forEach(el => {
+                if (Math.random() > 0.95) {
+                    el.style.transform = `translate(${Math.random() * 4 - 2}px, ${Math.random() * 4 - 2}px)`;
+                    setTimeout(() => {
+                        el.style.transform = '';
+                    }, 100);
+                }
+            });
+        }, 100);
+        
+        // Start button handler
+        document.querySelectorAll('.start-button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('MAINCHARACTER BETA\n\nJOIN THE PARTY AT MAINCHARACTER.GAME\n\nFIRST 1000 PLAYERS GET LEGENDARY STARTER PACK');
+            });
+        });
+    </script>
+</body>
+</html>

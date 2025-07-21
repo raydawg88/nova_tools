@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubscriptionGhost - Find Money You Don't Know You're Wasting</title>
+    <meta name="description" content="The average person wastes $273/month on forgotten subscriptions. We find them all in 60 seconds.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Floating money animation */
+        .money-float {
+            position: absolute;
+            font-size: 30px;
+            opacity: 0.1;
+            animation: float-up 10s linear infinite;
+        }
+        
+        @keyframes float-up {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00ff88, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .shock-stat {
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
+            color: #ff3366;
+            margin: 30px 0;
+            text-shadow: 0 0 30px rgba(255, 51, 102, 0.5);
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+        
+        /* Live counter */
+        .waste-counter {
+            background: rgba(255, 51, 102, 0.1);
+            border: 2px solid #ff3366;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px auto;
+            max-width: 600px;
+        }
+        
+        .counter-label {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .counter-amount {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #ff3366;
+        }
+        
+        /* Email capture */
+        .email-form {
+            margin: 40px 0;
+        }
+        
+        .form-group {
+            display: flex;
+            gap: 10px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 600px) {
+            .form-group {
+                flex-direction: column;
+            }
+        }
+        
+        .email-input {
+            flex: 1;
+            padding: 20px;
+            font-size: 1.1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .email-input:focus {
+            outline: none;
+            border-color: #00ff88;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .email-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .scan-btn {
+            padding: 20px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ff88, #00ffff);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .scan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.4);
+        }
+        
+        /* Found subscriptions showcase */
+        .found-subs {
+            padding: 80px 20px;
+            background: #0f0f0f;
+        }
+        
+        .found-subs h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .subs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .sub-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+        
+        .sub-item.found {
+            opacity: 1;
+            border-color: #ff3366;
+            animation: pulse 1s ease;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .sub-name {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+        
+        .sub-cost {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff3366;
+        }
+        
+        /* How it works */
+        .how-it-works {
+            padding: 80px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .how-it-works h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+        
+        .step {
+            text-align: center;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 60px;
+            height: 60px;
+            line-height: 60px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ff88, #00ffff);
+            color: #000;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+        
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .step p {
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+        
+        /* Testimonials ticker */
+        .testimonials {
+            padding: 60px 0;
+            background: #0f0f0f;
+            overflow: hidden;
+        }
+        
+        .ticker-wrapper {
+            display: flex;
+            animation: scroll 30s linear infinite;
+        }
+        
+        .testimonial {
+            flex-shrink: 0;
+            padding: 0 40px;
+            min-width: 400px;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+        
+        .testimonial-author {
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        /* CTA */
+        .final-cta {
+            padding: 100px 20px;
+            text-align: center;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a0a 100%);
+        }
+        
+        .final-cta h2 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+        }
+        
+        .cta-stat {
+            font-size: 2rem;
+            color: #ff3366;
+            margin-bottom: 40px;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 40px 20px;
+            text-align: center;
+            opacity: 0.5;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <!-- Floating money background -->
+        <div class="money-float" style="left: 10%; animation-delay: 0s;">💸</div>
+        <div class="money-float" style="left: 30%; animation-delay: 2s;">💰</div>
+        <div class="money-float" style="left: 50%; animation-delay: 4s;">💵</div>
+        <div class="money-float" style="left: 70%; animation-delay: 6s;">💸</div>
+        <div class="money-float" style="left: 90%; animation-delay: 8s;">💰</div>
+        
+        <div class="hero-content">
+            <h1>You're Bleeding Money</h1>
+            <div class="shock-stat">$273/month</div>
+            <p class="tagline">That's what the average person wastes on forgotten subscriptions</p>
+            
+            <div class="waste-counter">
+                <div class="counter-label">Americans have wasted</div>
+                <div class="counter-amount" id="waste-total">$2,847,392,104</div>
+                <div class="counter-label">on zombie subscriptions this year</div>
+            </div>
+            
+            <div class="email-form">
+                <form id="scan-form" class="form-group">
+                    <input type="email" class="email-input" placeholder="Enter your email" required>
+                    <button type="submit" class="scan-btn">Find My Zombies</button>
+                </form>
+                <p style="margin-top: 15px; opacity: 0.6; font-size: 0.9rem;">
+                    Free scan • No credit card • Cancel found subscriptions in 1 click
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Found Subscriptions Demo -->
+    <section class="found-subs">
+        <h2>Subscriptions People Forgot They Had</h2>
+        <div class="subs-grid" id="subs-grid">
+            <div class="sub-item">
+                <div class="sub-name">Spotify Family</div>
+                <div class="sub-cost">$15.99/mo</div>
+            </div>
+            <div class="sub-item">
+                <div class="sub-name">Adobe Creative</div>
+                <div class="sub-cost">$52.99/mo</div>
+            </div>
+            <div class="sub-item">
+                <div class="sub-name">Gym Membership</div>
+                <div class="sub-cost">$44.99/mo</div>
+            </div>
+            <div class="sub-item">
+                <div class="sub-name">LinkedIn Premium</div>
+                <div class="sub-cost">$29.99/mo</div>
+            </div>
+            <div class="sub-item">
+                <div class="sub-name">Audible</div>
+                <div class="sub-cost">$14.95/mo</div>
+            </div>
+            <div class="sub-item">
+                <div class="sub-name">iCloud Storage</div>
+                <div class="sub-cost">$9.99/mo</div>
+            </div>
+            <div class="sub-item">
+                <div class="sub-name">Calm App</div>
+                <div class="sub-cost">$14.99/mo</div>
+            </div>
+            <div class="sub-item">
+                <div class="sub-name">Strava</div>
+                <div class="sub-cost">$11.99/mo</div>
+            </div>
+            <div class="sub-item">
+                <div class="sub-name">Dropbox Plus</div>
+                <div class="sub-cost">$11.99/mo</div>
+            </div>
+            <div class="sub-item">
+                <div class="sub-name">Dating App</div>
+                <div class="sub-cost">$34.99/mo</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2>Find Hidden Money in 60 Seconds</h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Connect Securely</h3>
+                <p>Link your email (read-only) through bank-level encryption. We scan for subscription receipts.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>AI Detects Zombies</h3>
+                <p>Our AI finds forgotten subscriptions, duplicate services, and price increases you never noticed.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Cancel in 1 Click</h3>
+                <p>We generate cancellation links and even draft emails. Average user saves $273/month in 5 minutes.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="ticker-wrapper">
+            <div class="testimonial">
+                <p class="testimonial-text">"Found $847/month in subscriptions I forgot about!"</p>
+                <p class="testimonial-author">- Sarah M., saved $10,164/year</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"I was paying for 3 music services. THREE."</p>
+                <p class="testimonial-author">- Mike K., saved $324/year</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"That gym membership from 2019... yeah, still paying."</p>
+                <p class="testimonial-author">- Jessica L., saved $540/year</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"My ex was still on my Netflix. Not anymore!"</p>
+                <p class="testimonial-author">- Tom R., saved $180/year</p>
+            </div>
+            <!-- Duplicate for seamless loop -->
+            <div class="testimonial">
+                <p class="testimonial-text">"Found $847/month in subscriptions I forgot about!"</p>
+                <p class="testimonial-author">- Sarah M., saved $10,164/year</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"I was paying for 3 music services. THREE."</p>
+                <p class="testimonial-author">- Mike K., saved $324/year</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Stop Bleeding Money Today</h2>
+        <div class="cta-stat">The average scan finds 7 forgotten subscriptions</div>
+        <button class="scan-btn" onclick="document.getElementById('scan-form').scrollIntoView()">
+            Start Free Scan →
+        </button>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>SubscriptionGhost • Find money you don't know you're wasting</p>
+        <p>Bank-level security • No access to payment methods • Cancel anytime</p>
+    </footer>
+    
+    <script>
+        // Animate waste counter
+        let wasteTotal = 2847392104;
+        setInterval(() => {
+            wasteTotal += Math.floor(Math.random() * 100);
+            document.getElementById('waste-total').textContent = 
+                '$' + wasteTotal.toLocaleString();
+        }, 1000);
+        
+        // Randomly highlight found subscriptions
+        const subItems = document.querySelectorAll('.sub-item');
+        setInterval(() => {
+            const randomIndex = Math.floor(Math.random() * subItems.length);
+            subItems[randomIndex].classList.add('found');
+            setTimeout(() => {
+                subItems[randomIndex].classList.remove('found');
+            }, 2000);
+        }, 3000);
+        
+        // Form handler
+        document.getElementById('scan-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            
+            // Show scanning animation
+            const btn = e.target.querySelector('button');
+            btn.textContent = 'Scanning...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                alert(`Ghost scan complete!\n\nWe found 7 zombie subscriptions costing you $${Math.floor(Math.random() * 200 + 150)}/month.\n\nCheck ${email} for your full report.`);
+                btn.textContent = 'Scan Complete ✓';
+                btn.style.background = '#00ff88';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>

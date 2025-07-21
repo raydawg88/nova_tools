@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NightOwl - Stop Stealing From Your Sleep</title>
+    <meta name="description" content="Reclaim your days so you don't need to steal from your nights. End revenge bedtime procrastination.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0614;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Starry background */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            background: radial-gradient(ellipse at bottom, #1a1a3e 0%, #0a0614 100%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+        
+        h1 {
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 30px;
+            line-height: 1.1;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .clock-display {
+            font-size: clamp(4rem, 12vw, 8rem);
+            font-weight: 900;
+            color: #ff6b6b;
+            margin: 40px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 40px rgba(255, 107, 107, 0.5);
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Time theft visualization */
+        .time-theft {
+            padding: 80px 20px;
+            background: #0f0f1f;
+        }
+        
+        .theft-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .theft-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .day-timeline {
+            position: relative;
+            height: 200px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+        
+        .time-block {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .time-block:hover {
+            transform: scaleY(1.1);
+            z-index: 10;
+        }
+        
+        .work { background: #ff6b6b; left: 33%; width: 34%; }
+        .obligations { background: #feca57; left: 10%; width: 23%; }
+        .commute { background: #ff9ff3; left: 0; width: 10%; }
+        .chores { background: #54a0ff; left: 67%; width: 15%; }
+        .yours { background: #48dbfb; left: 82%; width: 18%; }
+        
+        .time-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            opacity: 0.7;
+        }
+        
+        /* Calculator */
+        .calculator {
+            padding: 80px 20px;
+            background: #1a1a2e;
+        }
+        
+        .calc-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .calc-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+        }
+        
+        .calc-form {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .input-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .result-box {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid #ff6b6b;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 30px;
+        }
+        
+        .result-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #ff6b6b;
+            margin-bottom: 10px;
+        }
+        
+        .result-text {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+        
+        /* Features */
+        .features {
+            padding: 80px 20px;
+            background: #0a0614;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .feature {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px);
+            border-color: #667eea;
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        
+        .feature h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .feature p {
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+        
+        /* CTA */
+        .cta-section {
+            padding: 100px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .cta-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 20px 60px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.4);
+        }
+        
+        /* Testimonials */
+        .testimonials {
+            padding: 80px 20px;
+            background: #0f0f1f;
+        }
+        
+        .testimonials h2 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .testimonial {
+            background: rgba(255,255,255,0.05);
+            border-left: 4px solid #667eea;
+            padding: 30px;
+            border-radius: 10px;
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        
+        .testimonial-author {
+            opacity: 0.7;
+        }
+        
+        .sleep-time {
+            color: #48dbfb;
+            font-weight: 700;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 40px 20px;
+            text-align: center;
+            opacity: 0.5;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Starry background -->
+    <div class="stars" id="stars"></div>
+    
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>It's <span class="gradient-text">3:47 AM</span></h1>
+            <div class="clock-display" id="clock">03:47 AM</div>
+            <p class="tagline">And you're scrolling because it's the only time that's truly yours.</p>
+            <h2 style="font-size: 2rem; margin-top: 40px;">What if you could reclaim your days<br>instead of stealing from your nights?</h2>
+        </div>
+    </section>
+    
+    <!-- Time Theft Visualization -->
+    <section class="time-theft">
+        <div class="theft-container">
+            <h2 class="theft-title">Where Your Day Really Goes</h2>
+            <div class="day-timeline">
+                <div class="time-block work">WORK</div>
+                <div class="time-block obligations">OBLIGATIONS</div>
+                <div class="time-block commute">COMMUTE</div>
+                <div class="time-block chores">CHORES</div>
+                <div class="time-block yours">YOURS</div>
+            </div>
+            <div class="time-labels">
+                <span>6 AM</span>
+                <span>12 PM</span>
+                <span>6 PM</span>
+                <span>12 AM</span>
+            </div>
+            <p style="text-align: center; margin-top: 40px; font-size: 1.3rem; opacity: 0.8;">
+                No wonder you're up at 3 AM. It's your rebellion.
+            </p>
+        </div>
+    </section>
+    
+    <!-- Sleep Debt Calculator -->
+    <section class="calculator">
+        <div class="calc-container">
+            <h2 class="calc-title">Calculate Your Sleep Debt</h2>
+            <div class="calc-form">
+                <div class="input-group">
+                    <label>What time do you usually fall asleep?</label>
+                    <input type="time" id="sleep-time" value="03:00">
+                </div>
+                <div class="input-group">
+                    <label>What time do you wake up?</label>
+                    <input type="time" id="wake-time" value="07:00">
+                </div>
+                <div class="input-group">
+                    <label>How many nights per week?</label>
+                    <input type="number" id="nights" value="5" min="1" max="7">
+                </div>
+            </div>
+            <div class="result-box">
+                <div class="result-number" id="result">1,040</div>
+                <div class="result-text">hours of sleep lost per year</div>
+                <p style="margin-top: 20px; opacity: 0.7;">That's 43 full days of your life, every year.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features -->
+    <section class="features">
+        <h2 style="text-align: center; font-size: 3rem; margin-bottom: 60px;">
+            Take Back Your Time
+        </h2>
+        <div class="features-grid">
+            <div class="feature">
+                <div class="feature-icon">🔍</div>
+                <h3>Time Audit AI</h3>
+                <p>Our AI analyzes your calendar, emails, and habits to find where time vampires hide. Average user finds 14 hours/week of reclaimable time.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🛡️</div>
+                <h3>Boundary Builder</h3>
+                <p>Automated responses, meeting blockers, and "no" templates. Protect your time without feeling guilty.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Energy Mapping</h3>
+                <p>Track when you have energy vs. when you need it. Reorganize your day around your natural rhythms.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🎯</div>
+                <h3>Priority Sniper</h3>
+                <p>Ruthlessly identify what actually matters. Kill busy work before it kills your sleep.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌙</div>
+                <h3>Sleep Coaching</h3>
+                <p>Personalized wind-down routines that actually work. Because going to bed shouldn't feel like giving up.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Life ROI Dashboard</h3>
+                <p>See the true cost of every commitment. Make decisions based on life value, not just productivity.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2>From Night Owls to Early Birds (By Choice)</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <p class="testimonial-text">"I used to stay up until 4 AM doom scrolling. Now I'm in bed by <span class="sleep-time">11 PM</span> because my days actually belong to me. Found 3 hours of 'me time' I didn't know existed."</p>
+                <p class="testimonial-author">— Sarah M., Marketing Manager</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"The time audit was brutal. I was giving away 20 hours/week to meaningless meetings. Now I sleep <span class="sleep-time">8 hours</span> and still have time for my art."</p>
+                <p class="testimonial-author">— Marcus K., Software Engineer</p>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"Revenge bedtime procrastination was ruining my health. NightOwl helped me fire three clients and reclaim my evenings. Best decision ever."</p>
+                <p class="testimonial-author">— Jessica L., Freelance Designer</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2 class="cta-title">Your Nights Are Not The Enemy</h2>
+        <p class="cta-subtitle">Your days are. Let's fix that.</p>
+        <a href="#" class="cta-button">Start Your Time Audit →</a>
+        <p style="margin-top: 20px; opacity: 0.8;">Free 14-day trial • No credit card required</p>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>NightOwl • Because 3 AM shouldn't be your only freedom</p>
+        <p>Join 50,000+ people who've reclaimed their days and their sleep</p>
+    </footer>
+    
+    <script>
+        // Create stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = Math.random() * 3 + 's';
+            starsContainer.appendChild(star);
+        }
+        
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const ampm = hours >= 12 ? 'AM' : 'AM';
+            const displayHours = hours < 4 ? hours : 3;
+            const displayMinutes = hours < 4 ? minutes : 47;
+            
+            document.getElementById('clock').textContent = 
+                `${displayHours.toString().padStart(2, '0')}:${displayMinutes.toString().padStart(2, '0')} ${ampm}`;
+        }
+        
+        setInterval(updateClock, 1000);
+        
+        // Sleep debt calculator
+        function calculateSleepDebt() {
+            const sleepTime = document.getElementById('sleep-time').value;
+            const wakeTime = document.getElementById('wake-time').value;
+            const nights = parseInt(document.getElementById('nights').value);
+            
+            // Convert to minutes past midnight
+            const [sleepHour, sleepMin] = sleepTime.split(':').map(Number);
+            const [wakeHour, wakeMin] = wakeTime.split(':').map(Number);
+            
+            let sleepMinutes = sleepHour * 60 + sleepMin;
+            let wakeMinutes = wakeHour * 60 + wakeMin;
+            
+            // Handle next day wake time
+            if (wakeMinutes < sleepMinutes) {
+                wakeMinutes += 24 * 60;
+            }
+            
+            const hoursSlept = (wakeMinutes - sleepMinutes) / 60;
+            const deficit = Math.max(0, 8 - hoursSlept);
+            const yearlyLoss = Math.round(deficit * nights * 52);
+            
+            document.getElementById('result').textContent = yearlyLoss.toLocaleString();
+        }
+        
+        // Add event listeners
+        document.getElementById('sleep-time').addEventListener('change', calculateSleepDebt);
+        document.getElementById('wake-time').addEventListener('change', calculateSleepDebt);
+        document.getElementById('nights').addEventListener('input', calculateSleepDebt);
+        
+        // Initial calculation
+        calculateSleepDebt();
+        
+        // CTA handler
+        document.querySelector('.cta-button').addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('NightOwl Beta Launch!\n\nJoin the waitlist at nightowl.app\n\nFirst 1000 users get 6 months free.');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SalaryScope - Know Your Worth | Nova Systems</title>
+    <link rel="stylesheet" href="../../shared/retro-ui.css">
+    <script src="../../shared/retro-ui.js"></script>
+    <script src="../../shared/nova-auth.js" data-product="salaryscope"></script>
+    <script src="../../shared/nova-analytics.js" data-product="salaryscope"></script>
+    <style>
+        /* Product-specific styles */
+        .search-container {
+            background: rgba(0, 255, 0, 0.05);
+            border: 2px solid var(--retro-green);
+            padding: 30px;
+            margin: 30px 0;
+        }
+        
+        .search-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .salary-card {
+            background: #000;
+            border: 2px solid var(--retro-green);
+            padding: 20px;
+            margin: 15px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .salary-card::before {
+            content: '$';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            font-size: 120px;
+            color: rgba(0, 255, 0, 0.1);
+            font-weight: bold;
+        }
+        
+        .salary-amount {
+            font-size: 36px;
+            color: var(--retro-amber);
+            text-shadow: 0 0 10px currentColor;
+            font-weight: bold;
+        }
+        
+        .salary-range {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .range-bar {
+            flex: 1;
+            height: 20px;
+            background: #111;
+            border: 1px solid var(--retro-green);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .range-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--retro-green), var(--retro-amber));
+            transition: width 0.5s ease;
+        }
+        
+        .percentile {
+            font-size: 24px;
+            color: var(--retro-cyan);
+            min-width: 80px;
+            text-align: right;
+        }
+        
+        .data-point {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--retro-green);
+            padding: 15px;
+            margin: 10px 0;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+        }
+        
+        .verification-badge {
+            display: inline-block;
+            background: var(--retro-green);
+            color: #000;
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .negotiation-tips {
+            background: rgba(255, 176, 0, 0.1);
+            border: 2px solid var(--retro-amber);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .tip-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 176, 0, 0.3);
+        }
+        
+        .tip-item:last-child {
+            border-bottom: none;
+        }
+        
+        .submit-section {
+            background: rgba(255, 0, 128, 0.1);
+            border: 2px solid var(--retro-pink);
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .trust-indicators {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .trust-item {
+            text-align: center;
+        }
+        
+        .trust-number {
+            font-size: 36px;
+            color: var(--retro-green);
+            text-shadow: 0 0 10px currentColor;
+        }
+    </style>
+</head>
+<body class="retro-ui">
+    <div class="retro-container">
+        <!-- ASCII Header -->
+        <div class="retro-ascii-header retro-green">
+╔════════════════════════════════════════════════════════════════╗
+║  ███████╗ █████╗ ██╗      █████╗ ██████╗ ██╗   ██╗           ║
+║  ██╔════╝██╔══██╗██║     ██╔══██╗██╔══██╗╚██╗ ██╔╝           ║
+║  ███████╗███████║██║     ███████║██████╔╝ ╚████╔╝            ║
+║  ╚════██║██╔══██║██║     ██╔══██║██╔══██╗  ╚██╔╝             ║
+║  ███████║██║  ██║███████╗██║  ██║██║  ██║   ██║              ║
+║  ╚══════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝              ║
+║                                                                ║
+║  S C O P E  [ Know What You're Really Worth v1.0 ]            ║
+╚════════════════════════════════════════════════════════════════╝
+        </div>
+        
+        <p class="retro-center retro-cyan retro-blink">REAL SALARY DATA FROM REAL EMPLOYEES</p>
+        
+        <!-- Trust Indicators -->
+        <div class="trust-indicators">
+            <div class="trust-item">
+                <div class="trust-number" id="data-points">24,847</div>
+                <div>VERIFIED SALARIES</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number" id="companies">1,253</div>
+                <div>COMPANIES</div>
+            </div>
+            <div class="trust-item">
+                <div class="trust-number">100%</div>
+                <div>ANONYMOUS</div>
+            </div>
+        </div>
+        
+        <!-- Search Section -->
+        <div class="search-container">
+            <h2 class="retro-green">[ SEARCH SALARY DATA ]</h2>
+            <div class="search-grid">
+                <div>
+                    <label>Company</label>
+                    <input type="text" class="retro-input" id="company" placeholder="e.g., Google, Amazon...">
+                </div>
+                <div>
+                    <label>Job Title</label>
+                    <input type="text" class="retro-input" id="title" placeholder="e.g., Software Engineer...">
+                </div>
+                <div>
+                    <label>Level/Seniority</label>
+                    <select class="retro-select" id="level">
+                        <option value="">Any Level</option>
+                        <option value="entry">Entry Level</option>
+                        <option value="mid">Mid Level</option>
+                        <option value="senior">Senior</option>
+                        <option value="staff">Staff/Principal</option>
+                        <option value="manager">Manager</option>
+                        <option value="director">Director+</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Location</label>
+                    <input type="text" class="retro-input" id="location" placeholder="e.g., San Francisco, Remote...">
+                </div>
+            </div>
+            <div class="retro-center" style="margin-top: 20px;">
+                <button class="retro-button retro-bg-green" onclick="searchSalaries()" style="font-size: 20px; padding: 15px 40px;">
+                    [ REVEAL SALARIES ]
+                </button>
+            </div>
+        </div>
+        
+        <!-- Results Section -->
+        <div id="results-section" style="display: none;">
+            <div class="salary-card">
+                <h3 class="retro-cyan" id="result-title">Software Engineer at Google</h3>
+                <div class="salary-amount" id="median-salary">$185,000</div>
+                <p style="margin-top: 10px;">Median Total Compensation</p>
+                
+                <div class="salary-range">
+                    <span>Low</span>
+                    <div class="range-bar">
+                        <div class="range-fill" id="salary-percentile" style="width: 65%;"></div>
+                    </div>
+                    <span>High</span>
+                    <div class="percentile" id="percentile-text">65th</div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <p>Base: <span class="retro-green" id="base-salary">$150,000</span></p>
+                    <p>Stock: <span class="retro-green" id="stock">$25,000</span></p>
+                    <p>Bonus: <span class="retro-green" id="bonus">$10,000</span></p>
+                </div>
+            </div>
+            
+            <!-- Individual Data Points -->
+            <div class="retro-border" style="margin-top: 30px;">
+                <h3 class="retro-green">[ VERIFIED DATA POINTS ]</h3>
+                <div id="data-points-list">
+                    <!-- Data points will be inserted here -->
+                </div>
+            </div>
+            
+            <!-- Negotiation Tips -->
+            <div class="negotiation-tips">
+                <h3 class="retro-amber">[ NEGOTIATION INTEL ]</h3>
+                <div class="tip-item">
+                    💡 <strong>Competing Offers:</strong> People who mentioned competing offers received 15-20% higher packages
+                </div>
+                <div class="tip-item">
+                    💡 <strong>Best Time:</strong> Q4 (Oct-Dec) saw highest offers due to budget cycles
+                </div>
+                <div class="tip-item">
+                    💡 <strong>Leverage Point:</strong> Stock refresh negotiations yielded avg $30k increase
+                </div>
+                <div class="tip-item" id="specific-tip">
+                    <!-- Dynamic tip based on search -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- Submit Salary Section -->
+        <div class="submit-section">
+            <h2 class="retro-pink">[ SHARE YOUR SALARY - HELP OTHERS ]</h2>
+            <p style="margin: 20px 0;">Anonymously share your compensation to help others negotiate fairly</p>
+            <button class="retro-button retro-bg-pink" onclick="showSubmitModal()">
+                [ SUBMIT MY SALARY DATA ]
+            </button>
+            <p style="margin-top: 20px; font-size: 14px;">
+                🔒 100% Anonymous • 🎯 Verified via Work Email • 🤝 Pay It Forward
+            </p>
+        </div>
+        
+        <!-- Footer -->
+        <div class="retro-center" style="margin-top: 60px;">
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p class="retro-amber">NOVA SALARYSCOPE v1.0</p>
+            <p style="font-size: 14px;">Leveling the playing field, one salary at a time</p>
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+        </div>
+    </div>
+    
+    <script>
+        // Demo data
+        const salaryData = {
+            'google': {
+                'software engineer': {
+                    median: 185000,
+                    base: 150000,
+                    stock: 25000,
+                    bonus: 10000,
+                    percentile: 65,
+                    dataPoints: [
+                        { total: 165000, level: 'L3', yoe: 2, verified: true },
+                        { total: 185000, level: 'L4', yoe: 4, verified: true },
+                        { total: 220000, level: 'L5', yoe: 7, verified: true },
+                        { total: 195000, level: 'L4', yoe: 5, verified: true }
+                    ]
+                }
+            },
+            'default': {
+                median: 125000,
+                base: 110000,
+                stock: 10000,
+                bonus: 5000,
+                percentile: 50,
+                dataPoints: [
+                    { total: 95000, level: 'Junior', yoe: 1, verified: true },
+                    { total: 125000, level: 'Mid', yoe: 3, verified: true },
+                    { total: 155000, level: 'Senior', yoe: 6, verified: true }
+                ]
+            }
+        };
+        
+        // Initialize
+        let searchCount = parseInt(localStorage.getItem('nova_salaryscope_searches') || '0');
+        
+        // Check auth state
+        window.addEventListener('nova-auth-changed', (e) => {
+            if (!e.detail.user && searchCount >= 3) {
+                Retro.showModal({
+                    title: 'AUTHENTICATION REQUIRED',
+                    content: '<p class="retro-amber">Free users get 3 searches. Login for unlimited access!</p>',
+                    buttons: [
+                        { text: 'LOGIN', action: () => { Retro.closeModal(); NovaAuth.showAuthModal(); } },
+                        { text: 'LATER', action: () => Retro.closeModal() }
+                    ]
+                });
+            }
+        });
+        
+        function searchSalaries() {
+            const company = document.getElementById('company').value.toLowerCase().trim();
+            const title = document.getElementById('title').value.toLowerCase().trim();
+            const level = document.getElementById('level').value;
+            const location = document.getElementById('location').value;
+            
+            if (!company || !title) {
+                Retro.showToast('Please enter company and job title');
+                return;
+            }
+            
+            // Track search
+            NovaAnalytics.track('salary_search', { company, title, level, location });
+            
+            // Increment search count
+            searchCount++;
+            localStorage.setItem('nova_salaryscope_searches', searchCount);
+            
+            // Check if auth needed
+            if (!NovaAuth.isAuthenticated() && searchCount > 3) {
+                NovaAuth.showAuthModal();
+                return;
+            }
+            
+            // Show loading
+            Retro.showToast('Analyzing salary data...');
+            
+            // Get data (demo uses default or google)
+            const companyData = salaryData[company] || { 'default': salaryData.default };
+            const roleData = companyData[title] || companyData.default || salaryData.default;
+            
+            // Display results
+            setTimeout(() => {
+                displayResults(company, title, roleData);
+                document.getElementById('results-section').style.display = 'block';
+                document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+            }, 1000);
+        }
+        
+        function displayResults(company, title, data) {
+            // Update main card
+            document.getElementById('result-title').textContent = 
+                `${title.charAt(0).toUpperCase() + title.slice(1)} at ${company.charAt(0).toUpperCase() + company.slice(1)}`;
+            document.getElementById('median-salary').textContent = `$${data.median.toLocaleString()}`;
+            document.getElementById('base-salary').textContent = `$${data.base.toLocaleString()}`;
+            document.getElementById('stock').textContent = `$${data.stock.toLocaleString()}`;
+            document.getElementById('bonus').textContent = `$${data.bonus.toLocaleString()}`;
+            document.getElementById('salary-percentile').style.width = `${data.percentile}%`;
+            document.getElementById('percentile-text').textContent = `${data.percentile}th`;
+            
+            // Update data points
+            const dataPointsList = document.getElementById('data-points-list');
+            dataPointsList.innerHTML = '';
+            
+            data.dataPoints.forEach(point => {
+                const div = document.createElement('div');
+                div.className = 'data-point';
+                div.innerHTML = `
+                    <div>
+                        <strong>$${point.total.toLocaleString()}</strong> - ${point.level}, ${point.yoe} years exp
+                        ${point.verified ? '<span class="verification-badge">VERIFIED</span>' : ''}
+                    </div>
+                    <div style="color: #666;">Submitted ${Math.floor(Math.random() * 30) + 1} days ago</div>
+                `;
+                dataPointsList.appendChild(div);
+            });
+            
+            // Update specific tip
+            const tip = document.getElementById('specific-tip');
+            if (data.percentile < 50) {
+                tip.innerHTML = `💡 <strong>Your Leverage:</strong> You're being paid below median. Show this data in negotiations!`;
+            } else {
+                tip.innerHTML = `💡 <strong>Room to Grow:</strong> Top performers at this level make ${Math.floor(data.median * 1.3).toLocaleString()}`;
+            }
+        }
+        
+        function showSubmitModal() {
+            if (!NovaAuth.isAuthenticated()) {
+                Retro.showModal({
+                    title: 'LOGIN REQUIRED',
+                    content: '<p>Please login to submit salary data. We verify via work email to ensure data quality.</p>',
+                    buttons: [
+                        { text: 'LOGIN', action: () => { Retro.closeModal(); NovaAuth.showAuthModal(); } },
+                        { text: 'CANCEL', action: () => Retro.closeModal() }
+                    ]
+                });
+                return;
+            }
+            
+            Retro.showModal({
+                title: 'SUBMIT SALARY DATA',
+                content: `
+                    <div style="text-align: left;">
+                        <p class="retro-green" style="margin-bottom: 20px;">Help others by sharing your compensation anonymously</p>
+                        
+                        <div style="display: grid; gap: 15px;">
+                            <input type="text" class="retro-input" placeholder="Company" id="submit-company">
+                            <input type="text" class="retro-input" placeholder="Job Title" id="submit-title">
+                            <input type="number" class="retro-input" placeholder="Base Salary" id="submit-base">
+                            <input type="number" class="retro-input" placeholder="Stock/RSU Annual" id="submit-stock">
+                            <input type="number" class="retro-input" placeholder="Bonus" id="submit-bonus">
+                            <input type="number" class="retro-input" placeholder="Years of Experience" id="submit-yoe">
+                        </div>
+                        
+                        <p style="margin-top: 20px; color: #666; font-size: 14px;">
+                            🔒 Your email is never shown<br>
+                            ✓ Data verified via work domain<br>
+                            🤝 Help others negotiate fairly
+                        </p>
+                    </div>
+                `,
+                buttons: [
+                    { 
+                        text: 'SUBMIT', 
+                        action: () => {
+                            Retro.showToast('Salary data submitted - thank you!');
+                            NovaAnalytics.track('salary_submitted');
+                            Retro.closeModal();
+                            
+                            // Update counter
+                            const counter = document.getElementById('data-points');
+                            counter.textContent = (parseInt(counter.textContent.replace(',', '')) + 1).toLocaleString();
+                        }
+                    },
+                    { text: 'CANCEL', action: () => Retro.closeModal() }
+                ]
+            });
+        }
+        
+        // Animate numbers on load
+        window.addEventListener('load', () => {
+            animateNumber('data-points', 24847, 2000);
+            animateNumber('companies', 1253, 2000);
+        });
+        
+        function animateNumber(id, target, duration) {
+            const element = document.getElementById(id);
+            const start = 0;
+            const increment = target / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString();
+            }, 16);
+        }
+        
+        // Show welcome message for new users
+        if (searchCount === 0) {
+            setTimeout(() => {
+                Retro.showModal({
+                    title: 'WELCOME TO SALARYSCOPE',
+                    content: `
+                        <p class="retro-green">Stop leaving money on the table!</p>
+                        <p style="margin: 20px 0;">SalaryScope reveals real salary data from verified employees, helping you negotiate with confidence.</p>
+                        <p class="retro-amber">The average user discovers they're underpaid by $23,000.</p>
+                    `,
+                    buttons: [
+                        { text: 'SEARCH SALARIES', action: () => Retro.closeModal() }
+                    ]
+                });
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

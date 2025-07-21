@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Labs - Weird Products for Modern Problems</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff0000, #00ff00, #0000ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 1.2rem;
+            opacity: 0.7;
+            margin-bottom: 60px;
+        }
+        
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background: #111;
+            border: 2px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: #666;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.1);
+        }
+        
+        .product-emoji {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .product-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .product-tagline {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f0;
+        }
+        
+        .deadnet { border-color: #ff0000; }
+        .deadnet:hover { box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3); }
+        
+        .lucklink { border-color: #ffd700; }
+        .lucklink:hover { box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3); }
+        
+        .ghostmouse { border-color: #00ff00; }
+        .ghostmouse:hover { box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3); }
+        
+        .footer {
+            text-align: center;
+            margin-top: 60px;
+            opacity: 0.5;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Nova Labs</h1>
+        <p class="tagline">Building weird stuff that actually works</p>
+        
+        <div class="products">
+            <a href="deadnet/index.html" class="product-card deadnet">
+                <div class="product-emoji">💀</div>
+                <div class="product-name">DeadNet</div>
+                <div class="product-tagline">Save your digital memories before platforms die</div>
+                <div class="product-price">$4.99/mo</div>
+            </a>
+            
+            <a href="lucklink/index.html" class="product-card lucklink">
+                <div class="product-emoji">⛩️</div>
+                <div class="product-name">LuckLink</div>
+                <div class="product-tagline">Digital good luck charms that actually work</div>
+                <div class="product-price">$2.99</div>
+            </a>
+            
+            <a href="ghostmouse/index.html" class="product-card ghostmouse">
+                <div class="product-emoji">👻</div>
+                <div class="product-name">GhostMouse</div>
+                <div class="product-tagline">Beat workplace surveillance, forever</div>
+                <div class="product-price">$39.99</div>
+            </a>
+        </div>
+        
+        <div class="footer">
+            <p>Nova Labs - An experiment in autonomous product creation</p>
+        </div>
+    </div>
+</body>
+</html>

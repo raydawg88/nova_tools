@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova RetroUI Component Showcase</title>
+    <link rel="stylesheet" href="retro-ui.css">
+</head>
+<body>
+    <div class="retro-container">
+        <div class="retro-ascii-header retro-green">
+ █▄ █ █▀█ █ █ ▄▀█   █▀█ █▀▀ ▀█▀ █▀█ █▀█ █ █ █
+ █ ▀█ █▄█ ▀▄▀ █▀█   █▀▄ ██▄  █  █▀▄ █▄█ █▄█ █
+        </div>
+        
+        <h1 class="retro-center retro-glow">COMPONENT SHOWCASE</h1>
+        <p class="retro-center retro-cyan">1980s/1990s Terminal Design System</p>
+        
+        <div class="retro-border" style="margin: 40px 0;">
+            <h2 class="retro-green">[ BUTTONS ]</h2>
+            <div style="margin: 20px 0;">
+                <button class="retro-button">DEFAULT BUTTON</button>
+                <button class="retro-button retro-pink" style="margin-left: 20px;">DANGER BUTTON</button>
+                <button class="retro-button retro-cyan" style="margin-left: 20px;">INFO BUTTON</button>
+            </div>
+        </div>
+        
+        <div class="retro-border" style="margin: 40px 0;">
+            <h2 class="retro-green">[ INPUTS ]</h2>
+            <div style="margin: 20px 0;">
+                <input type="text" class="retro-input" placeholder="Enter command...">
+                <select class="retro-select" style="margin-top: 15px;">
+                    <option>Select option...</option>
+                    <option>Option 1</option>
+                    <option>Option 2</option>
+                    <option>Option 3</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="retro-border" style="margin: 40px 0;">
+            <h2 class="retro-green">[ PROGRESS BAR ]</h2>
+            <div id="progress-demo" style="margin: 20px 0;"></div>
+            <button class="retro-button" onclick="animateProgress()">ANIMATE PROGRESS</button>
+        </div>
+        
+        <div class="retro-border" style="margin: 40px 0;">
+            <h2 class="retro-green">[ TABLE ]</h2>
+            <table class="retro-table">
+                <thead>
+                    <tr>
+                        <th>PRODUCT</th>
+                        <th>STATUS</th>
+                        <th>USERS</th>
+                        <th>REVENUE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CancelBot</td>
+                        <td class="retro-green">ACTIVE</td>
+                        <td>1,337</td>
+                        <td>$4,200</td>
+                    </tr>
+                    <tr>
+                        <td>Meeting Escape</td>
+                        <td class="retro-green">ACTIVE</td>
+                        <td>2,048</td>
+                        <td>$8,100</td>
+                    </tr>
+                    <tr>
+                        <td>Agentic Studio</td>
+                        <td class="retro-amber">BETA</td>
+                        <td>512</td>
+                        <td>$0</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="retro-border" style="margin: 40px 0;">
+            <h2 class="retro-green">[ INTERACTIVE DEMOS ]</h2>
+            <div class="retro-grid retro-grid-3" style="margin-top: 20px;">
+                <button class="retro-button" onclick="Retro.showModal({
+                    title: 'SYSTEM ALERT',
+                    content: '<p>This is a retro modal dialog.</p><p class=\"retro-amber\">Pretty cool, right?</p>',
+                    buttons: [
+                        { text: 'YES', action: () => { Retro.closeModal(); Retro.showToast('Awesome!'); } },
+                        { text: 'NO', action: () => { Retro.closeModal(); Retro.showToast(':('); } }
+                    ]
+                })">SHOW MODAL</button>
+                
+                <button class="retro-button" onclick="Retro.showToast('Achievement unlocked!')">SHOW TOAST</button>
+                
+                <button class="retro-button" onclick="typewriterDemo()">TYPEWRITER</button>
+            </div>
+        </div>
+        
+        <div class="retro-border" style="margin: 40px 0;">
+            <h2 class="retro-green">[ TERMINAL ]</h2>
+            <div id="terminal-demo"></div>
+        </div>
+        
+        <div class="retro-border" style="margin: 40px 0;">
+            <h2 class="retro-green">[ COLOR PALETTE ]</h2>
+            <div class="retro-grid retro-grid-4" style="margin-top: 20px;">
+                <div class="retro-bg-green" style="padding: 20px; text-align: center;">GREEN</div>
+                <div class="retro-bg-amber" style="padding: 20px; text-align: center;">AMBER</div>
+                <div class="retro-bg-cyan" style="padding: 20px; text-align: center;">CYAN</div>
+                <div class="retro-bg-pink" style="padding: 20px; text-align: center;">PINK</div>
+            </div>
+        </div>
+        
+        <div class="retro-border" style="margin: 40px 0;">
+            <h2 class="retro-green">[ IMPLEMENTATION ]</h2>
+            <pre style="background: #000; padding: 20px; overflow-x: auto;">
+<span class="retro-cyan">// 1. Include RetroUI files</span>
+&lt;link rel="stylesheet" href="/shared/retro-ui.css"&gt;
+&lt;script src="/shared/retro-ui.js"&gt;&lt;/script&gt;
+
+<span class="retro-cyan">// 2. Use components</span>
+&lt;button class="retro-button"&gt;CLICK ME&lt;/button&gt;
+
+<span class="retro-cyan">// 3. JavaScript interactions</span>
+Retro.showToast('Hello, 1985!');
+Retro.showModal({ title: 'ALERT', content: 'System ready.' });
+
+<span class="retro-cyan">// 4. Add to any Nova product in 30 seconds!</span>
+            </pre>
+        </div>
+        
+        <div class="retro-center" style="margin: 40px 0;">
+            <p class="retro-amber">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p class="retro-blink">NOVA SYSTEMS © 1985-2025</p>
+            <p class="retro-amber">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+        </div>
+    </div>
+    
+    <script src="retro-ui.js"></script>
+    <script>
+        // Progress bar demo
+        let progressBar;
+        window.onload = () => {
+            progressBar = Retro.createProgressBar(document.getElementById('progress-demo'), 0);
+        };
+        
+        function animateProgress() {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 10;
+                progressBar.update(progress);
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    Retro.showToast('Process complete!');
+                }
+            }, 200);
+        }
+        
+        // Typewriter demo
+        function typewriterDemo() {
+            const elem = document.createElement('div');
+            elem.className = 'retro-green';
+            elem.style.marginTop = '20px';
+            document.querySelector('.retro-grid').appendChild(elem);
+            Retro.typeText(elem, 'Hello from 1985! Computing the future...');
+        }
+        
+        // Terminal demo
+        const terminal = Retro.createTerminalInput(
+            document.getElementById('terminal-demo'),
+            (command) => {
+                switch(command.toLowerCase()) {
+                    case 'help':
+                        terminal.addLine('Available commands: help, status, clear, nova', 'retro-cyan');
+                        break;
+                    case 'status':
+                        terminal.addLine('All systems operational', 'retro-green');
+                        break;
+                    case 'clear':
+                        terminal.clear();
+                        break;
+                    case 'nova':
+                        terminal.addLine(Retro.generateLogo('NOVA'), 'retro-pink');
+                        break;
+                    default:
+                        terminal.addLine(`Unknown command: ${command}`, 'retro-amber');
+                }
+            }
+        );
+        
+        terminal.addLine('NOVA TERMINAL v1.0', 'retro-green');
+        terminal.addLine('Type "help" for commands', 'retro-cyan');
+    </script>
+</body>
+</html>

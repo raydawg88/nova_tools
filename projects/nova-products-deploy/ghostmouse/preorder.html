@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostMouse - Pre-Order Now</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, monospace;
+            background: #000;
+            color: #0f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px #0f0;
+        }
+        
+        .countdown {
+            text-align: center;
+            margin-bottom: 60px;
+            padding: 30px;
+            border: 2px solid #f00;
+            background: rgba(255, 0, 0, 0.1);
+        }
+        
+        .countdown h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #f00;
+        }
+        
+        #timer {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #fff;
+        }
+        
+        .product-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .product-details {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .detail-section {
+            padding: 20px;
+            border: 1px solid #0f0;
+            background: rgba(0, 255, 0, 0.05);
+        }
+        
+        .detail-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #0f0;
+        }
+        
+        .detail-section ul {
+            list-style: none;
+            padding-left: 20px;
+        }
+        
+        .detail-section li {
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .detail-section li::before {
+            content: '>';
+            position: absolute;
+            left: -20px;
+            color: #0f0;
+        }
+        
+        .order-form {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid #0f0;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .order-form h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #0f0;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            border: 1px solid #0f0;
+            color: #0f0;
+            font-family: monospace;
+            font-size: 1rem;
+        }
+        
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .price-display {
+            font-size: 2rem;
+            color: #0f0;
+            text-align: center;
+            margin: 30px 0;
+        }
+        
+        .discount-banner {
+            background: #f00;
+            color: #000;
+            padding: 10px;
+            text-align: center;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            background: #0f0;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        
+        .submit-btn:hover {
+            background: #fff;
+            box-shadow: 0 0 30px #0f0;
+        }
+        
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            opacity: 0.7;
+        }
+        
+        .faq {
+            margin-top: 60px;
+            padding: 40px;
+            border: 1px solid #0f0;
+        }
+        
+        .faq h3 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .faq-item {
+            margin-bottom: 30px;
+        }
+        
+        .faq-item h4 {
+            color: #0f0;
+            margin-bottom: 10px;
+        }
+        
+        .faq-item p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .testimonial-ticker {
+            overflow: hidden;
+            margin: 40px 0;
+            border-top: 1px solid #0f0;
+            border-bottom: 1px solid #0f0;
+            padding: 20px 0;
+        }
+        
+        .ticker-content {
+            display: flex;
+            animation: scroll 30s linear infinite;
+        }
+        
+        .ticker-item {
+            white-space: nowrap;
+            padding: 0 50px;
+            opacity: 0.7;
+        }
+        
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>GHOSTMOUSE PRE-ORDER</h1>
+        
+        <div class="countdown">
+            <h2>⚠️ LIMITED FIRST BATCH ⚠️</h2>
+            <div id="timer">23:47:12</div>
+            <p>Only 1,000 units in first production run</p>
+        </div>
+        
+        <div class="testimonial-ticker">
+            <div class="ticker-content">
+                <span class="ticker-item">"Finally, true freedom" - Sarah K.</span>
+                <span class="ticker-item">"My boss thinks I'm employee of the month" - Mike D.</span>
+                <span class="ticker-item">"Worth every penny" - Anonymous</span>
+                <span class="ticker-item">"Can't detect what doesn't exist" - Alex R.</span>
+                <span class="ticker-item">"Finally, true freedom" - Sarah K.</span>
+                <span class="ticker-item">"My boss thinks I'm employee of the month" - Mike D.</span>
+            </div>
+        </div>
+        
+        <div class="product-details">
+            <div class="detail-section">
+                <h3>WHAT YOU GET</h3>
+                <ul>
+                    <li>GhostMouse Hardware Unit</li>
+                    <li>Universal Mouse Platform</li>
+                    <li>USB Power Adapter</li>
+                    <li>Quick Start Guide</li>
+                    <li>Sticker Pack (5 designs)</li>
+                    <li>1 Year Warranty</li>
+                </ul>
+            </div>
+            
+            <div class="detail-section">
+                <h3>SPECIFICATIONS</h3>
+                <ul>
+                    <li>Analog Movement Generation</li>
+                    <li>0% Software Footprint</li>
+                    <li>Variable Pattern Algorithm</li>
+                    <li>Silent Operation</li>
+                    <li>Works with ANY mouse</li>
+                    <li>No installation required</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="order-form">
+            <h3>SECURE YOUR GHOSTMOUSE</h3>
+            
+            <div class="discount-banner">
+                🎯 BUNDLE DEAL: Buy 2+ and save 20%! Perfect for home + office
+            </div>
+            
+            <form id="preorder-form">
+                <div class="form-group">
+                    <label>Email (for order confirmation)</label>
+                    <input type="email" name="email" required placeholder="ghost@anonymous.com">
+                </div>
+                
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <div class="quantity-selector">
+                        <select name="quantity" id="quantity">
+                            <option value="1">1 Unit - $39.99</option>
+                            <option value="2">2 Units - $63.98 (Save $15.98!)</option>
+                            <option value="3">3 Units - $95.98 (Save $23.97!)</option>
+                            <option value="5">5 Units - $159.96 (Save $39.95!)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="price-display" id="total-price">
+                    TOTAL: $39.99
+                </div>
+                
+                <button type="submit" class="submit-btn">
+                    CLAIM YOUR GHOSTMOUSE →
+                </button>
+            </form>
+            
+            <div class="security-badges">
+                <span>🔒 Encrypted</span>
+                <span>💳 Secure Checkout</span>
+                <span>📦 Ships in 2-3 weeks</span>
+            </div>
+        </div>
+        
+        <div class="faq">
+            <h3>CLASSIFIED INFORMATION</h3>
+            
+            <div class="faq-item">
+                <h4>Q: How does it work without software?</h4>
+                <p>GhostMouse uses proprietary analog movement generation. Think of it as a tiny, random earthquake generator for your mouse. Pure physics, no digital footprint.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Q: Can IT detect it?</h4>
+                <p>No. GhostMouse creates actual physical mouse movement. To any monitoring software, you're just a very consistent worker who likes small, frequent mouse adjustments.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Q: Is this legal?</h4>
+                <p>GhostMouse is a hardware device that moves your mouse. That's it. What you do with your own property is your business.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h4>Q: What about keyboard activity monitoring?</h4>
+                <p>GhostKeys coming Q2 2025. Join the resistance.</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Countdown timer
+        let timeLeft = 85632; // seconds
+        
+        function updateTimer() {
+            const hours = Math.floor(timeLeft / 3600);
+            const minutes = Math.floor((timeLeft % 3600) / 60);
+            const seconds = timeLeft % 60;
+            
+            document.getElementById('timer').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            timeLeft--;
+            if (timeLeft < 0) timeLeft = 85632; // Reset
+        }
+        
+        setInterval(updateTimer, 1000);
+        
+        // Price calculator
+        document.getElementById('quantity').addEventListener('change', (e) => {
+            const quantity = parseInt(e.target.value);
+            let price = 39.99 * quantity;
+            
+            // Apply discount for 2+
+            if (quantity >= 2) {
+                price = price * 0.8; // 20% off
+            }
+            
+            document.getElementById('total-price').textContent = `TOTAL: $${price.toFixed(2)}`;
+        });
+        
+        // Form handler
+        document.getElementById('preorder-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('GhostMouse pre-order confirmed!\n\nYou\'ll receive an email confirmation shortly.\n\nExpected ship date: 2-3 weeks\n\nWelcome to the resistance.');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passive Aggressive Translator - Office Communication Perfected</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        
+        .sub-tagline {
+            font-size: 1rem;
+            color: #95a5a6;
+            font-style: italic;
+        }
+        
+        .translator-section {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            resize: vertical;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+        
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .scenario-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .scenario-btn {
+            padding: 15px;
+            background: #ecf0f1;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+        
+        .scenario-btn:hover {
+            background: #e8e8e8;
+            transform: translateY(-2px);
+        }
+        
+        .scenario-btn.selected {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        
+        .scenario-icon {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .aggression-slider {
+            margin-bottom: 25px;
+        }
+        
+        .slider-container {
+            margin-top: 10px;
+        }
+        
+        .slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e0e0e0;
+            outline: none;
+            -webkit-appearance: none;
+            position: relative;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #3498db;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            border: none;
+        }
+        
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+        
+        .translate-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .translate-btn:hover {
+            background: #34495e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .translate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .output-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .translation-display {
+            background: #ffefd5;
+            border: 2px solid #ffdab9;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .translation-label {
+            font-size: 0.9rem;
+            color: #d2691e;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .translation-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #2c3e50;
+            white-space: pre-wrap;
+        }
+        
+        .translation-note {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #8b6914;
+            font-style: italic;
+        }
+        
+        .variations-section {
+            margin-top: 20px;
+        }
+        
+        .variation-card {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .variation-title {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .variation-text {
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .copy-btn:hover {
+            background: #229954;
+        }
+        
+        .new-btn {
+            background: #e0e0e0;
+            color: #333;
+        }
+        
+        .new-btn:hover {
+            background: #d0d0d0;
+        }
+        
+        .examples-section {
+            background: #fff4e6;
+            border: 2px solid #ffd4a3;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .examples-title {
+            font-size: 1.3rem;
+            color: #ff8c00;
+            margin-bottom: 20px;
+        }
+        
+        .example {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ffd4a3;
+        }
+        
+        .example:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .example-original {
+            font-weight: 600;
+            color: #dc143c;
+            margin-bottom: 5px;
+        }
+        
+        .example-translated {
+            color: #228b22;
+            font-style: italic;
+        }
+        
+        /* Success message */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: none;
+            animation: slideUp 0.3s ease;
+            z-index: 1000;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100%); }
+            to { transform: translate(-50%, 0); }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .translator-section {
+                padding: 20px;
+            }
+            
+            .scenario-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* Fun footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #7f8c8d;
+        }
+        
+        footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>😊 Passive Aggressive Translator™</h1>
+            <p class="tagline">Turn your rage into workplace-appropriate communication</p>
+            <p class="sub-tagline">Because "per my last email" isn't always enough</p>
+        </header>
+        
+        <div class="translator-section">
+            <div class="input-group">
+                <label for="original-message">What you REALLY want to say:</label>
+                <textarea id="original-message" placeholder="e.g., This is the third time I've asked for this report. Where is it?!"></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label>Scenario:</label>
+                <div class="scenario-selector">
+                    <div class="scenario-btn" data-scenario="email" onclick="selectScenario('email')">
+                        <div class="scenario-icon">📧</div>
+                        <div>Email</div>
+                    </div>
+                    <div class="scenario-btn" data-scenario="slack" onclick="selectScenario('slack')">
+                        <div class="scenario-icon">💬</div>
+                        <div>Slack/Teams</div>
+                    </div>
+                    <div class="scenario-btn" data-scenario="meeting" onclick="selectScenario('meeting')">
+                        <div class="scenario-icon">👥</div>
+                        <div>Meeting</div>
+                    </div>
+                    <div class="scenario-btn" data-scenario="review" onclick="selectScenario('review')">
+                        <div class="scenario-icon">📝</div>
+                        <div>Performance Review</div>
+                    </div>
+                    <div class="scenario-btn" data-scenario="client" onclick="selectScenario('client')">
+                        <div class="scenario-icon">🤝</div>
+                        <div>Client</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="aggression-slider">
+                <label for="aggression-level">Passive Aggression Level:</label>
+                <div class="slider-container">
+                    <input type="range" id="aggression-level" class="slider" min="1" max="5" value="3">
+                    <div class="slider-labels">
+                        <span>😊 Subtle</span>
+                        <span>🙂 Noticeable</span>
+                        <span>😐 Obvious</span>
+                        <span>😤 Spicy</span>
+                        <span>🌶️ Nuclear</span>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="translate-btn" onclick="translateMessage()">
+                🔄 Translate to Corporate Speak
+            </button>
+        </div>
+        
+        <div class="output-section" id="output-section">
+            <div class="translator-section">
+                <div class="translation-display">
+                    <div class="translation-label">Your professionally passive-aggressive message:</div>
+                    <div class="translation-text" id="translation-text"></div>
+                    <div class="translation-note">Remember: Plausible deniability is key! 😇</div>
+                </div>
+                
+                <div class="variations-section">
+                    <h3 style="margin-bottom: 15px;">Alternative versions:</h3>
+                    <div id="variations-list"></div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn copy-btn" onclick="copyTranslation()">📋 Copy Translation</button>
+                    <button class="action-btn new-btn" onclick="resetTranslator()">✏️ Translate Another</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="examples-section">
+            <h3 class="examples-title">🎭 Popular Translations</h3>
+            <div class="example">
+                <div class="example-original">❌ "This idea is terrible"</div>
+                <div class="example-translated">✅ "Thanks for sharing! I wonder if we might explore some alternative approaches that could potentially yield even better results?"</div>
+            </div>
+            <div class="example">
+                <div class="example-original">❌ "You're wrong"</div>
+                <div class="example-translated">✅ "That's an interesting perspective! I think there might be a small misunderstanding about [specific detail]."</div>
+            </div>
+            <div class="example">
+                <div class="example-original">❌ "I already told you this"</div>
+                <div class="example-translated">✅ "As we discussed in our previous conversation (see attached email from [date])..."</div>
+            </div>
+            <div class="example">
+                <div class="example-original">❌ "Do your job"</div>
+                <div class="example-translated">✅ "Just wanted to circle back on this to ensure it's still on your radar! Let me know if you need any clarification on the deliverables we discussed."</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Remember: With great passive aggression comes great plausible deniability 🙃</p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">Not responsible for any HR incidents. Use wisely.</p>
+        </footer>
+    </div>
+    
+    <div class="toast" id="toast">
+        ✓ Copied! Now paste with a smile 😊
+    </div>
+    
+    <script>
+        let selectedScenario = 'email';
+        let currentTranslation = '';
+        
+        const translations = {
+            1: { // Subtle
+                patterns: [
+                    { 
+                        trigger: /where is it|where's the|still waiting/i,
+                        responses: [
+                            "Just wanted to check in on the status of this. No rush, but it would be helpful to know when I might expect it!",
+                            "Hope you're having a great day! Quick question - any updates on this?",
+                            "Hi! Just following up on this in case it got buried in your inbox 😊"
+                        ]
+                    },
+                    {
+                        trigger: /wrong|incorrect|mistake/i,
+                        responses: [
+                            "Thanks for this! I think there might be a small clarification needed on one point...",
+                            "I appreciate your input! Just to make sure we're aligned, I believe...",
+                            "Great effort on this! One tiny thing I noticed that we might want to revisit..."
+                        ]
+                    },
+                    {
+                        trigger: /late|overdue|missed/i,
+                        responses: [
+                            "Just wanted to make sure this is still on your radar!",
+                            "No worries if you need more time - just let me know what works for you!",
+                            "Circling back on this when you have a moment!"
+                        ]
+                    },
+                    {
+                        trigger: /told you|already said|mentioned/i,
+                        responses: [
+                            "Just to recap our earlier discussion...",
+                            "Building on what we talked about before...",
+                            "As a friendly reminder from our last chat..."
+                        ]
+                    }
+                ]
+            },
+            3: { // Obvious
+                patterns: [
+                    {
+                        trigger: /where is it|where's the|still waiting/i,
+                        responses: [
+                            "Per my last email (sent on [DATE]), I'm still waiting for this deliverable. Please advise on timeline.",
+                            "Just circling back for the third time on this request. Please let me know if there's something blocking progress.",
+                            "Following up again on this request. As mentioned previously, this is becoming time-sensitive."
+                        ]
+                    },
+                    {
+                        trigger: /wrong|incorrect|mistake/i,
+                        responses: [
+                            "I think there may be some confusion here. Let me clarify the correct information...",
+                            "Actually, I believe you'll find that the accurate information is...",
+                            "Just to ensure we're all working with the same facts here..."
+                        ]
+                    },
+                    {
+                        trigger: /late|overdue|missed/i,
+                        responses: [
+                            "As this is now past the agreed deadline, please provide an update at your earliest convenience.",
+                            "Noting that we've missed our target date. What's the revised timeline?",
+                            "This was due [TIME AGO]. Please prioritize accordingly."
+                        ]
+                    }
+                ]
+            },
+            5: { // Nuclear
+                patterns: [
+                    {
+                        trigger: /where is it|where's the|still waiting/i,
+                        responses: [
+                            "As per my previous emails (see attached thread), this deliverable is now significantly overdue. I'll be escalating this to [MANAGER] if I don't receive it by EOD.",
+                            "I'm sure you're very busy, but this is the fourth time I've requested this. Perhaps we should loop in [MANAGER] to help prioritize your workload?",
+                            "Just so we're clear, I've documented all of these requests. Still waiting on that deliverable we discussed three weeks ago."
+                        ]
+                    },
+                    {
+                        trigger: /wrong|incorrect|mistake/i,
+                        responses: [
+                            "I'm attaching the relevant documentation that clearly shows the correct information. Please review before our next meeting.",
+                            "Interesting interpretation! However, the data/policy/previous decision clearly states otherwise. See attached.",
+                            "I think it would be beneficial for everyone if we could stick to the facts as documented rather than personal interpretations."
+                        ]
+                    }
+                ]
+            }
+        };
+        
+        function selectScenario(scenario) {
+            selectedScenario = scenario;
+            document.querySelectorAll('.scenario-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-scenario="${scenario}"]`).classList.add('selected');
+        }
+        
+        function translateMessage() {
+            const originalMessage = document.getElementById('original-message').value.trim();
+            if (!originalMessage) {
+                alert('Please enter a message to translate!');
+                return;
+            }
+            
+            const aggressionLevel = document.getElementById('aggression-level').value;
+            
+            // Get the right translation set
+            const levelTranslations = translations[aggressionLevel] || translations[3];
+            
+            // Find matching pattern
+            let mainTranslation = null;
+            for (const pattern of levelTranslations.patterns) {
+                if (pattern.trigger.test(originalMessage)) {
+                    const responses = pattern.responses;
+                    mainTranslation = responses[Math.floor(Math.random() * responses.length)];
+                    break;
+                }
+            }
+            
+            // If no pattern matches, use generic translations
+            if (!mainTranslation) {
+                mainTranslation = generateGenericTranslation(originalMessage, aggressionLevel);
+            }
+            
+            // Add scenario-specific modifications
+            mainTranslation = addScenarioFlavor(mainTranslation, selectedScenario);
+            
+            currentTranslation = mainTranslation;
+            document.getElementById('translation-text').textContent = mainTranslation;
+            
+            // Generate variations
+            generateVariations(originalMessage, aggressionLevel);
+            
+            // Show output
+            document.getElementById('output-section').style.display = 'block';
+            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function generateGenericTranslation(message, level) {
+            const genericResponses = {
+                1: [
+                    `Thanks for bringing this to my attention! ${message} - just wanted to make sure we're on the same page!`,
+                    `I appreciate your patience with this! Regarding: "${message}" - let's work together to resolve this!`,
+                    `Hope this finds you well! Quick note about: ${message} - would love your thoughts!`
+                ],
+                3: [
+                    `Just to clarify: ${message}. Please let me know if you need any additional context.`,
+                    `Circling back on this: ${message}. Looking forward to your prompt response.`,
+                    `As discussed: ${message}. Please action accordingly.`
+                ],
+                5: [
+                    `To reiterate: ${message}. I trust this won't require further clarification.`,
+                    `For absolute clarity: ${message}. I'll be documenting this conversation for our records.`,
+                    `Let me be very clear: ${message}. I expect this to be addressed immediately.`
+                ]
+            };
+            
+            const responses = genericResponses[level] || genericResponses[3];
+            return responses[Math.floor(Math.random() * responses.length)];
+        }
+        
+        function addScenarioFlavor(translation, scenario) {
+            const scenarioAddons = {
+                email: {
+                    prefix: "Hi team,\n\n",
+                    suffix: "\n\nBest regards,\n[Your Name]"
+                },
+                slack: {
+                    prefix: "",
+                    suffix: " 👍"
+                },
+                meeting: {
+                    prefix: "Just to build on that point... ",
+                    suffix: " ...but I'm happy to take this offline if needed!"
+                },
+                review: {
+                    prefix: "I want to start by saying I really value our working relationship. ",
+                    suffix: " Moving forward, I'm confident we can address this together."
+                },
+                client: {
+                    prefix: "Thank you so much for your partnership! ",
+                    suffix: " We really appreciate your understanding on this matter."
+                }
+            };
+            
+            const addon = scenarioAddons[scenario] || scenarioAddons.email;
+            return addon.prefix + translation + addon.suffix;
+        }
+        
+        function generateVariations(originalMessage, level) {
+            const variationsContainer = document.getElementById('variations-list');
+            variationsContainer.innerHTML = '';
+            
+            const variationTypes = [
+                { title: "Extra Polite Version", modifier: "polite" },
+                { title: "With Documentation", modifier: "documented" },
+                { title: "CC Your Manager Version", modifier: "escalated" }
+            ];
+            
+            variationTypes.forEach(type => {
+                const card = document.createElement('div');
+                card.className = 'variation-card';
+                
+                let variationText = currentTranslation;
+                
+                if (type.modifier === 'polite') {
+                    variationText = "I hope this message finds you well! " + variationText + " Thank you so much for your time and consideration!";
+                } else if (type.modifier === 'documented') {
+                    variationText = variationText.replace(/\./g, ' (see attached documentation).');
+                } else if (type.modifier === 'escalated') {
+                    variationText = variationText + "\n\nCC: [Your Manager], [Their Manager]";
+                }
+                
+                card.innerHTML = `
+                    <div class="variation-title">${type.title}:</div>
+                    <div class="variation-text">${variationText}</div>
+                `;
+                
+                variationsContainer.appendChild(card);
+            });
+        }
+        
+        function copyTranslation() {
+            navigator.clipboard.writeText(currentTranslation).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            }).catch(() => {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = currentTranslation;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            });
+        }
+        
+        function resetTranslator() {
+            document.getElementById('original-message').value = '';
+            document.getElementById('output-section').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Default selection
+        selectScenario('email');
+        
+        // Update slider background gradient
+        const slider = document.getElementById('aggression-level');
+        slider.addEventListener('input', function() {
+            const value = this.value;
+            const percentage = ((value - 1) / 4) * 100;
+            this.style.background = `linear-gradient(to right, #3498db 0%, #3498db ${percentage}%, #e0e0e0 ${percentage}%, #e0e0e0 100%)`;
+        });
+    </script>
+</body>
+</html>

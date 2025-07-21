@@ -1,0 +1,569 @@
+{
+  "search_date": "2025-07-20 12:12:57",
+  "total_opportunities_found": 28,
+  "top_5_opportunities": [
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "Tool to Transfer Files over Sound between PCs and/or Smarpthones",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lq3y4u/tool_to_transfer_files_over_sound_between_pcs/",
+      "score": 8,
+      "num_comments": 6,
+      "created_utc": "2025-07-02 13:48",
+      "matched_categories": [
+        [
+          "tool_requests",
+          "looking for a tool"
+        ]
+      ],
+      "selftext": "I'm looking for a tool that will allow sending and receiving files over sounds, no internet connection or other wireless connection must be required, tool must work completely offline. Almost every modern laptop and phone has speaker(s) and microphone(s) - that should be enough for sending files.  \n  \nFiles I'm thinking about are small - 50 megabytes biggest, most of them are less than 10 megabytes.  \n  \nThere are already tools for that task like ggwave, chirp, quiet libraries. Also there is fld",
+      "author": "-Defrago-",
+      "engagement_score": 68
+    },
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "Tool to Transfer Files over Sound between PCs and/or Smarpthones",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lq3y4u/tool_to_transfer_files_over_sound_between_pcs/",
+      "score": 8,
+      "num_comments": 6,
+      "created_utc": "2025-07-02 13:48",
+      "matched_categories": [
+        [
+          "tool_requests",
+          "looking for a tool"
+        ]
+      ],
+      "selftext": "I'm looking for a tool that will allow sending and receiving files over sounds, no internet connection or other wireless connection must be required, tool must work completely offline. Almost every modern laptop and phone has speaker(s) and microphone(s) - that should be enough for sending files.  \n  \nFiles I'm thinking about are small - 50 megabytes biggest, most of them are less than 10 megabytes.  \n  \nThere are already tools for that task like ggwave, chirp, quiet libraries. Also there is fld",
+      "author": "-Defrago-",
+      "engagement_score": 68
+    },
+    {
+      "subreddit": "r/InternetIsBeautiful",
+      "title": "Nintendo Switch 2 Inventory Tracker - Shows real-time stock at every Best Buy in the US",
+      "url": "https://reddit.com/r/InternetIsBeautiful/comments/1l5tm25/nintendo_switch_2_inventory_tracker_shows/",
+      "score": 532,
+      "num_comments": 135,
+      "created_utc": "2025-06-07 14:54",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "After getting tired of the \"check back later\" dance with Best Buy's useless product page, I built this to actually show which stores have Switch 2s in stock right now.\n\n**What it does:**\n\n* Real-time inventory check across all 1,000+ Best Buy locations nationwide\n* Updates every hour using Best Buy's internal GraphQL endpoints\n* Shows exact store locations with stock + phone numbers for confirmation\n* No fluff - just clean data on where you can actually buy one\n\n**Why it works:** Best Buy's main",
+      "author": "campcancel",
+      "engagement_score": 1882
+    },
+    {
+      "subreddit": "r/InternetIsBeautiful",
+      "title": "I was tired of Googling \"Facebook cover size\" \u2013 so I made this",
+      "url": "https://reddit.com/r/InternetIsBeautiful/comments/1lg0s0i/i_was_tired_of_googling_facebook_cover_size_so_i/",
+      "score": 459,
+      "num_comments": 72,
+      "created_utc": "2025-06-20 05:39",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "Every time I had to post something, I found myself searching for image dimensions. So I built\u00a0[MediaCheatSheet.com](http://mediacheatsheet.com/)\u00a0\u2013 a clean, searchable directory of up-to-date social media sizes (images + video). Download ready-to-use SVG templates with safe zones for any size.\n\nYou can choose a platform and content type, then copy a direct link to share \u2013 useful for collaborating with clients or designers. \n\nFree, minimal, and updated regularly.",
+      "author": "ronaldsvilcins",
+      "engagement_score": 1179
+    },
+    {
+      "subreddit": "r/startups",
+      "title": "Share your startup - quarterly post",
+      "url": "https://reddit.com/r/startups/comments/1lxc97s/share_your_startup_quarterly_post/",
+      "score": 39,
+      "num_comments": 159,
+      "created_utc": "2025-07-11 12:01",
+      "matched_categories": [
+        [
+          "productivity_needs",
+          "efficiency"
+        ]
+      ],
+      "selftext": "Share Your Startup - Q4 2023\n\n[**r/startups**](https://www.reddit.com/r/startups/) **wants to hear what you're working on!**\n\nTell us about your startup in a comment within this submission. Follow this template:\n=====================================================================================\n\n\u200b\n\n*   **Startup Name / URL**\n*   **Location of Your Headquarters**\n    *   Let people know where you are based for possible local networking with you and to share local resources with you\n*   **Elevat",
+      "author": "julian88888888",
+      "engagement_score": 1629
+    }
+  ],
+  "all_opportunities": [
+    {
+      "subreddit": "r/InternetIsBeautiful",
+      "title": "Nintendo Switch 2 Inventory Tracker - Shows real-time stock at every Best Buy in the US",
+      "url": "https://reddit.com/r/InternetIsBeautiful/comments/1l5tm25/nintendo_switch_2_inventory_tracker_shows/",
+      "score": 532,
+      "num_comments": 135,
+      "created_utc": "2025-06-07 14:54",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "After getting tired of the \"check back later\" dance with Best Buy's useless product page, I built this to actually show which stores have Switch 2s in stock right now.\n\n**What it does:**\n\n* Real-time inventory check across all 1,000+ Best Buy locations nationwide\n* Updates every hour using Best Buy's internal GraphQL endpoints\n* Shows exact store locations with stock + phone numbers for confirmation\n* No fluff - just clean data on where you can actually buy one\n\n**Why it works:** Best Buy's main",
+      "author": "campcancel",
+      "engagement_score": 1882
+    },
+    {
+      "subreddit": "r/startups",
+      "title": "Share your startup - quarterly post",
+      "url": "https://reddit.com/r/startups/comments/1lxc97s/share_your_startup_quarterly_post/",
+      "score": 39,
+      "num_comments": 159,
+      "created_utc": "2025-07-11 12:01",
+      "matched_categories": [
+        [
+          "productivity_needs",
+          "efficiency"
+        ]
+      ],
+      "selftext": "Share Your Startup - Q4 2023\n\n[**r/startups**](https://www.reddit.com/r/startups/) **wants to hear what you're working on!**\n\nTell us about your startup in a comment within this submission. Follow this template:\n=====================================================================================\n\n\u200b\n\n*   **Startup Name / URL**\n*   **Location of Your Headquarters**\n    *   Let people know where you are based for possible local networking with you and to share local resources with you\n*   **Elevat",
+      "author": "julian88888888",
+      "engagement_score": 1629
+    },
+    {
+      "subreddit": "r/InternetIsBeautiful",
+      "title": "I was tired of Googling \"Facebook cover size\" \u2013 so I made this",
+      "url": "https://reddit.com/r/InternetIsBeautiful/comments/1lg0s0i/i_was_tired_of_googling_facebook_cover_size_so_i/",
+      "score": 459,
+      "num_comments": 72,
+      "created_utc": "2025-06-20 05:39",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "Every time I had to post something, I found myself searching for image dimensions. So I built\u00a0[MediaCheatSheet.com](http://mediacheatsheet.com/)\u00a0\u2013 a clean, searchable directory of up-to-date social media sizes (images + video). Download ready-to-use SVG templates with safe zones for any size.\n\nYou can choose a platform and content type, then copy a direct link to share \u2013 useful for collaborating with clients or designers. \n\nFree, minimal, and updated regularly.",
+      "author": "ronaldsvilcins",
+      "engagement_score": 1179
+    },
+    {
+      "subreddit": "r/InternetIsBeautiful",
+      "title": "I was tired of Googling \"Facebook cover size\" \u2013 so I made this",
+      "url": "https://reddit.com/r/InternetIsBeautiful/comments/1lg0s0i/i_was_tired_of_googling_facebook_cover_size_so_i/",
+      "score": 457,
+      "num_comments": 72,
+      "created_utc": "2025-06-20 05:39",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "Every time I had to post something, I found myself searching for image dimensions. So I built\u00a0[MediaCheatSheet.com](http://mediacheatsheet.com/)\u00a0\u2013 a clean, searchable directory of up-to-date social media sizes (images + video). Download ready-to-use SVG templates with safe zones for any size.\n\nYou can choose a platform and content type, then copy a direct link to share \u2013 useful for collaborating with clients or designers. \n\nFree, minimal, and updated regularly.",
+      "author": "ronaldsvilcins",
+      "engagement_score": 1177
+    },
+    {
+      "subreddit": "r/productivity",
+      "title": "What productivity hack worked for you?",
+      "url": "https://reddit.com/r/productivity/comments/1m3niap/what_productivity_hack_worked_for_you/",
+      "score": 40,
+      "num_comments": 52,
+      "created_utc": "2025-07-18 23:43",
+      "matched_categories": [
+        [
+          "productivity_needs",
+          "productivity hack"
+        ]
+      ],
+      "selftext": "I can\u2019t seem to get anything done these days, and it\u2019s a problem. I keep putting off tasks, no matter how simple it is, for unproductive things like doom scrolling on social media, nonsense video games, mindless socializing, binging on snacks, online shopping. I feel like I\u2019m wasting my life away in my \u201ccomfort zone\u201d and it\u2019s gonna be another year where my goals don\u2019t happen because I can\u2019t seem to get on top of it. I can\u2019t even read a book these days, because after 1-2 pages somehow I end up on",
+      "author": "sneezingfeathers",
+      "engagement_score": 560
+    },
+    {
+      "subreddit": "r/productivity",
+      "title": "What productivity hack worked for you?",
+      "url": "https://reddit.com/r/productivity/comments/1m3niap/what_productivity_hack_worked_for_you/",
+      "score": 39,
+      "num_comments": 52,
+      "created_utc": "2025-07-18 23:43",
+      "matched_categories": [
+        [
+          "productivity_needs",
+          "productivity hack"
+        ]
+      ],
+      "selftext": "I can\u2019t seem to get anything done these days, and it\u2019s a problem. I keep putting off tasks, no matter how simple it is, for unproductive things like doom scrolling on social media, nonsense video games, mindless socializing, binging on snacks, online shopping. I feel like I\u2019m wasting my life away in my \u201ccomfort zone\u201d and it\u2019s gonna be another year where my goals don\u2019t happen because I can\u2019t seem to get on top of it. I can\u2019t even read a book these days, because after 1-2 pages somehow I end up on",
+      "author": "sneezingfeathers",
+      "engagement_score": 559
+    },
+    {
+      "subreddit": "r/productivity",
+      "title": "I got tired of manually opening the same apps every time I load up my computer.",
+      "url": "https://reddit.com/r/productivity/comments/1m4b42t/i_got_tired_of_manually_opening_the_same_apps/",
+      "score": 0,
+      "num_comments": 17,
+      "created_utc": "2025-07-19 19:11",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "So I found a tiny tool that lets me hit ctrl+alt+1 and instantly open all my coding apps/sites/files, arranged how I like \u2014 VS Code, ChatGPT, Notion, docs, browser tabs - even X or Instagram.\n\nI call these my \u201cfocus modes.\u201d so I can toggle from developer to debugger to doomscroller in seconds.\n\nWondered if anyone does things like this?",
+      "author": "DlE4GUY",
+      "engagement_score": 170
+    },
+    {
+      "subreddit": "r/productivity",
+      "title": "I got tired of manually opening the same apps every time I load up my computer.",
+      "url": "https://reddit.com/r/productivity/comments/1m4b42t/i_got_tired_of_manually_opening_the_same_apps/",
+      "score": 0,
+      "num_comments": 17,
+      "created_utc": "2025-07-19 19:11",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "So I found a tiny tool that lets me hit ctrl+alt+1 and instantly open all my coding apps/sites/files, arranged how I like \u2014 VS Code, ChatGPT, Notion, docs, browser tabs - even X or Instagram.\n\nI call these my \u201cfocus modes.\u201d so I can toggle from developer to debugger to doomscroller in seconds.\n\nWondered if anyone does things like this?",
+      "author": "DlE4GUY",
+      "engagement_score": 170
+    },
+    {
+      "subreddit": "r/lifehacks",
+      "title": "Use zip ties and a wall-mounted coat rack to neatly store hair tools and keep your bathroom clutter-free",
+      "url": "https://reddit.com/r/lifehacks/comments/1lp8tu1/use_zip_ties_and_a_wallmounted_coat_rack_to/",
+      "score": 4,
+      "num_comments": 13,
+      "created_utc": "2025-07-01 13:06",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "My dad was tired of seeing my \u201ctools\u201d \u2014 hairdryer, straightener, curling wand \u2014 lying around the bathroom like a messy workbench. \ud83d\ude05\nSo he grabbed some zip ties, looped them through the handles, and hung everything on a sturdy coat rack screwed into the wall.\nNow it\u2019s all tidy, accessible, and off the counter. Bonus: no more tangled cords!\n\nIt\u2019s a super cheap and effective way to organize heat tools if you don\u2019t have drawer space.",
+      "author": "Plane-Buddy8796",
+      "engagement_score": 134
+    },
+    {
+      "subreddit": "r/lifehacks",
+      "title": "Use zip ties and a wall-mounted coat rack to neatly store hair tools and keep your bathroom clutter-free",
+      "url": "https://reddit.com/r/lifehacks/comments/1lp8tu1/use_zip_ties_and_a_wallmounted_coat_rack_to/",
+      "score": 3,
+      "num_comments": 13,
+      "created_utc": "2025-07-01 13:06",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "My dad was tired of seeing my \u201ctools\u201d \u2014 hairdryer, straightener, curling wand \u2014 lying around the bathroom like a messy workbench. \ud83d\ude05\nSo he grabbed some zip ties, looped them through the handles, and hung everything on a sturdy coat rack screwed into the wall.\nNow it\u2019s all tidy, accessible, and off the counter. Bonus: no more tangled cords!\n\nIt\u2019s a super cheap and effective way to organize heat tools if you don\u2019t have drawer space.",
+      "author": "Plane-Buddy8796",
+      "engagement_score": 133
+    },
+    {
+      "subreddit": "r/productivity",
+      "title": "The most effective productivity hack is the one that feels like a threat.",
+      "url": "https://reddit.com/r/productivity/comments/1m40wza/the_most_effective_productivity_hack_is_the_one/",
+      "score": 33,
+      "num_comments": 9,
+      "created_utc": "2025-07-19 11:48",
+      "matched_categories": [
+        [
+          "productivity_needs",
+          "productivity hack"
+        ]
+      ],
+      "selftext": "For years I was stuck in the productivity loop. I would find a new system or app, spend hours setting up the perfect workflow, and feel a rush of hope. But after a few days I would abandon it because my brain is a clever lawyer. It knows there is no real punishment for ignoring my perfectly organized digital planner.\n\nI eventually realized all these systems relied on the same broken component, my own internal motivation. Trying to optimize my workflow felt like rearranging deck chairs on a sinki",
+      "author": "Less_Student_4945",
+      "engagement_score": 123
+    },
+    {
+      "subreddit": "r/productivity",
+      "title": "The most effective productivity hack is the one that feels like a threat.",
+      "url": "https://reddit.com/r/productivity/comments/1m40wza/the_most_effective_productivity_hack_is_the_one/",
+      "score": 30,
+      "num_comments": 9,
+      "created_utc": "2025-07-19 11:48",
+      "matched_categories": [
+        [
+          "productivity_needs",
+          "productivity hack"
+        ]
+      ],
+      "selftext": "For years I was stuck in the productivity loop. I would find a new system or app, spend hours setting up the perfect workflow, and feel a rush of hope. But after a few days I would abandon it because my brain is a clever lawyer. It knows there is no real punishment for ignoring my perfectly organized digital planner.\n\nI eventually realized all these systems relied on the same broken component, my own internal motivation. Trying to optimize my workflow felt like rearranging deck chairs on a sinki",
+      "author": "Less_Student_4945",
+      "engagement_score": 120
+    },
+    {
+      "subreddit": "r/productivity",
+      "title": "Consume vs Create - \"Learning is just smart person's way of procrastinating\"",
+      "url": "https://reddit.com/r/productivity/comments/1m40ssm/consume_vs_create_learning_is_just_smart_persons/",
+      "score": 20,
+      "num_comments": 8,
+      "created_utc": "2025-07-19 11:43",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "I just watching another Ali Abdaal video when I heard this quote. And it just lit a fire under my ass.\n\nI've spent the better half of the year just reading books and watching YT videos about how James Dyson spent 3 years building 5172 prototypes for the Dyson Cyclone, or how to start a business in 2025, or how to focus on The ONE Thing. But if you were to ask me what I've done? ...  I'm not even sure where to start. And all that is because, when I boil it down, I was scared, scared of making mis",
+      "author": "dian_reddits",
+      "engagement_score": 100
+    },
+    {
+      "subreddit": "r/productivity",
+      "title": "Consume vs Create - \"Learning is just smart person's way of procrastinating\"",
+      "url": "https://reddit.com/r/productivity/comments/1m40ssm/consume_vs_create_learning_is_just_smart_persons/",
+      "score": 19,
+      "num_comments": 8,
+      "created_utc": "2025-07-19 11:43",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "I just watching another Ali Abdaal video when I heard this quote. And it just lit a fire under my ass.\n\nI've spent the better half of the year just reading books and watching YT videos about how James Dyson spent 3 years building 5172 prototypes for the Dyson Cyclone, or how to start a business in 2025, or how to focus on The ONE Thing. But if you were to ask me what I've done? ...  I'm not even sure where to start. And all that is because, when I boil it down, I was scared, scared of making mis",
+      "author": "dian_reddits",
+      "engagement_score": 99
+    },
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "Looking for Chrome extension ideas, help me find something worth building",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lsrxs7/looking_for_chrome_extension_ideas_help_me_find/",
+      "score": 0,
+      "num_comments": 9,
+      "created_utc": "2025-07-05 22:50",
+      "matched_categories": [
+        [
+          "productivity_needs",
+          "automate"
+        ]
+      ],
+      "selftext": "I\u2019m trying to learn how to build Chrome extensions and I want to pick a project that\u2019s actually useful.\n\nSo I would love to hear any small problems or annoying little things you run into when using Chrome (or browsing the web in general)?\n\nMaybe there\u2019s something repetitive you wish could be automated, or a tiny improvement that would save you clicks or time. Even if it sounds silly, I would love to hear it.\n\nEdit: Grammar fixes",
+      "author": "Technical-physicist",
+      "engagement_score": 90
+    },
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "Looking for Chrome extension ideas, help me find something worth building",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lsrxs7/looking_for_chrome_extension_ideas_help_me_find/",
+      "score": 0,
+      "num_comments": 9,
+      "created_utc": "2025-07-05 22:50",
+      "matched_categories": [
+        [
+          "productivity_needs",
+          "automate"
+        ]
+      ],
+      "selftext": "I\u2019m trying to learn how to build Chrome extensions and I want to pick a project that\u2019s actually useful.\n\nSo I would love to hear any small problems or annoying little things you run into when using Chrome (or browsing the web in general)?\n\nMaybe there\u2019s something repetitive you wish could be automated, or a tiny improvement that would save you clicks or time. Even if it sounds silly, I would love to hear it.\n\nEdit: Grammar fixes",
+      "author": "Technical-physicist",
+      "engagement_score": 90
+    },
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "A tool that analyzes Reddit to find 'SomebodyMakeThis' opportunities automatically",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lvuqmn/a_tool_that_analyzes_reddit_to_find/",
+      "score": 4,
+      "num_comments": 7,
+      "created_utc": "2025-07-09 16:21",
+      "matched_categories": [
+        [
+          "pain_points",
+          "wish there was"
+        ]
+      ],
+      "selftext": "You know how this subreddit is full of people saying 'someone should build X'? What if there was a tool that automatically found these opportunities across Reddit?\n\n**The idea**: Scan subreddits for patterns like:\n\n* \"I wish there was an app that...\"\n* \"Why doesn't anyone make...\"\n* \"This should exist but doesn't...\"\n* Common complaints that hint at business opportunities\n\nBasically, it would surface the problems people are asking to be solved, similar to what gets posted here but from all of Re",
+      "author": "ffstrauf",
+      "engagement_score": 74
+    },
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "A tool that analyzes Reddit to find 'SomebodyMakeThis' opportunities automatically",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lvuqmn/a_tool_that_analyzes_reddit_to_find/",
+      "score": 4,
+      "num_comments": 7,
+      "created_utc": "2025-07-09 16:21",
+      "matched_categories": [
+        [
+          "pain_points",
+          "wish there was"
+        ]
+      ],
+      "selftext": "You know how this subreddit is full of people saying 'someone should build X'? What if there was a tool that automatically found these opportunities across Reddit?\n\n**The idea**: Scan subreddits for patterns like:\n\n* \"I wish there was an app that...\"\n* \"Why doesn't anyone make...\"\n* \"This should exist but doesn't...\"\n* Common complaints that hint at business opportunities\n\nBasically, it would surface the problems people are asking to be solved, similar to what gets posted here but from all of Re",
+      "author": "ffstrauf",
+      "engagement_score": 74
+    },
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "Tool to Transfer Files over Sound between PCs and/or Smarpthones",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lq3y4u/tool_to_transfer_files_over_sound_between_pcs/",
+      "score": 8,
+      "num_comments": 6,
+      "created_utc": "2025-07-02 13:48",
+      "matched_categories": [
+        [
+          "tool_requests",
+          "looking for a tool"
+        ]
+      ],
+      "selftext": "I'm looking for a tool that will allow sending and receiving files over sounds, no internet connection or other wireless connection must be required, tool must work completely offline. Almost every modern laptop and phone has speaker(s) and microphone(s) - that should be enough for sending files.  \n  \nFiles I'm thinking about are small - 50 megabytes biggest, most of them are less than 10 megabytes.  \n  \nThere are already tools for that task like ggwave, chirp, quiet libraries. Also there is fld",
+      "author": "-Defrago-",
+      "engagement_score": 68
+    },
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "Tool to Transfer Files over Sound between PCs and/or Smarpthones",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lq3y4u/tool_to_transfer_files_over_sound_between_pcs/",
+      "score": 8,
+      "num_comments": 6,
+      "created_utc": "2025-07-02 13:48",
+      "matched_categories": [
+        [
+          "tool_requests",
+          "looking for a tool"
+        ]
+      ],
+      "selftext": "I'm looking for a tool that will allow sending and receiving files over sounds, no internet connection or other wireless connection must be required, tool must work completely offline. Almost every modern laptop and phone has speaker(s) and microphone(s) - that should be enough for sending files.  \n  \nFiles I'm thinking about are small - 50 megabytes biggest, most of them are less than 10 megabytes.  \n  \nThere are already tools for that task like ggwave, chirp, quiet libraries. Also there is fld",
+      "author": "-Defrago-",
+      "engagement_score": 68
+    },
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "Browser Plugin that automatically hides anything with \"Step-\" in the title on popular porn sites",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lt8lhb/browser_plugin_that_automatically_hides_anything/",
+      "score": 7,
+      "num_comments": 6,
+      "created_utc": "2025-07-06 13:40",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "Just tired of seeing an interesting thumbnail and then seeing \"My stepdaughter...\" in the fucking title, I assumed the trope would lose steam after a while but now it seems like every other title on the homepage of any pornsite has that weird \"incest with plausible deniability\" thing shoehorned into it.  The whole \"incest with plausible deniability\" thing is such an immediate turn-off for me and I just don't wanna see it anymore.\n\nWould also be nice for said plugin to let you choose or add your ",
+      "author": "ImClaaara",
+      "engagement_score": 67
+    },
+    {
+      "subreddit": "r/SomebodyMakeThis",
+      "title": "Browser Plugin that automatically hides anything with \"Step-\" in the title on popular porn sites",
+      "url": "https://reddit.com/r/SomebodyMakeThis/comments/1lt8lhb/browser_plugin_that_automatically_hides_anything/",
+      "score": 7,
+      "num_comments": 6,
+      "created_utc": "2025-07-06 13:40",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "Just tired of seeing an interesting thumbnail and then seeing \"My stepdaughter...\" in the fucking title, I assumed the trope would lose steam after a while but now it seems like every other title on the homepage of any pornsite has that weird \"incest with plausible deniability\" thing shoehorned into it.  The whole \"incest with plausible deniability\" thing is such an immediate turn-off for me and I just don't wanna see it anymore.\n\nWould also be nice for said plugin to let you choose or add your ",
+      "author": "ImClaaara",
+      "engagement_score": 67
+    },
+    {
+      "subreddit": "r/webdev",
+      "title": "I built a text-based game to teach JS/HTML, because I'm tired of boring video lectures.",
+      "url": "https://reddit.com/r/webdev/comments/1m4o8gi/i_built_a_textbased_game_to_teach_jshtml_because/",
+      "score": 5,
+      "num_comments": 6,
+      "created_utc": "2025-07-20 07:55",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "Hey everyone,\n\nLike a lot of you, I've spent my fair share of time learning from endless video tutorials and multiple-choice quizzes. It works, but it can be a real slog. I kept thinking there had to be a more engaging way to learn core concepts like loops, DOM manipulation, or even just CSS selectors.\n\nSo, I started building a project called\u00a0**microlearn.me**.\n\nThe core idea is to teach technical skills through interactive, narrative-driven simulations. Instead of watching a video about JavaScr",
+      "author": "Mother-Historian-432",
+      "engagement_score": 65
+    },
+    {
+      "subreddit": "r/webdev",
+      "title": "I built a text-based game to teach JS/HTML, because I'm tired of boring video lectures.",
+      "url": "https://reddit.com/r/webdev/comments/1m4o8gi/i_built_a_textbased_game_to_teach_jshtml_because/",
+      "score": 5,
+      "num_comments": 6,
+      "created_utc": "2025-07-20 07:55",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "Hey everyone,\n\nLike a lot of you, I've spent my fair share of time learning from endless video tutorials and multiple-choice quizzes. It works, but it can be a real slog. I kept thinking there had to be a more engaging way to learn core concepts like loops, DOM manipulation, or even just CSS selectors.\n\nSo, I started building a project called\u00a0**microlearn.me**.\n\nThe core idea is to teach technical skills through interactive, narrative-driven simulations. Instead of watching a video about JavaScr",
+      "author": "Mother-Historian-432",
+      "engagement_score": 65
+    },
+    {
+      "subreddit": "r/Lightbulb",
+      "title": "Universal wireless transmitter/receiver",
+      "url": "https://reddit.com/r/Lightbulb/comments/1lmqdmb/universal_wireless_transmitterreceiver/",
+      "score": 2,
+      "num_comments": 6,
+      "created_utc": "2025-06-28 11:04",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "So I was wondering if there is a device that  can take multiple inputs (USB c, HDMI, VGA, etc) and transfer it wirelessly or with just one large wire to another device, that would do the same thing but in reverse. This would be so you don't have to have a long cord for every device. I thought of it because I'm getting tired of hooking up 4 or more wired controllers to a game console, with 4 very long wires that get in the way.",
+      "author": "privatecrunch98",
+      "engagement_score": 62
+    },
+    {
+      "subreddit": "r/Lightbulb",
+      "title": "Universal wireless transmitter/receiver",
+      "url": "https://reddit.com/r/Lightbulb/comments/1lmqdmb/universal_wireless_transmitterreceiver/",
+      "score": 2,
+      "num_comments": 6,
+      "created_utc": "2025-06-28 11:04",
+      "matched_categories": [
+        [
+          "pain_points",
+          "tired of"
+        ]
+      ],
+      "selftext": "So I was wondering if there is a device that  can take multiple inputs (USB c, HDMI, VGA, etc) and transfer it wirelessly or with just one large wire to another device, that would do the same thing but in reverse. This would be so you don't have to have a long cord for every device. I thought of it because I'm getting tired of hooking up 4 or more wired controllers to a game console, with 4 very long wires that get in the way.",
+      "author": "privatecrunch98",
+      "engagement_score": 62
+    },
+    {
+      "subreddit": "r/InternetIsBeautiful",
+      "title": "I built Hidden Gems FFO \u2013 a site that maps Reddit\u2019s \u201cFor Fans Of\u201d tags to uncover niche prog-metal bands",
+      "url": "https://reddit.com/r/InternetIsBeautiful/comments/1m0i7ax/i_built_hidden_gems_ffo_a_site_that_maps_reddits/",
+      "score": 13,
+      "num_comments": 0,
+      "created_utc": "2025-07-15 08:46",
+      "matched_categories": [
+        [
+          "pain_points",
+          "frustrated with"
+        ]
+      ],
+      "selftext": "Made\u00a0for\u00a0fellow music diggers frustrated with mainstream algos. Pulls from r/progmetal, cleans artist names via GPT-4o, and lets you search or random-roll\u00a0new\u00a0bands and almost unknown bands. Would love feedback &amp; bug reports!",
+      "author": "juepachon",
+      "engagement_score": 13
+    },
+    {
+      "subreddit": "r/InternetIsBeautiful",
+      "title": "I built Hidden Gems FFO \u2013 a site that maps Reddit\u2019s \u201cFor Fans Of\u201d tags to uncover niche prog-metal bands",
+      "url": "https://reddit.com/r/InternetIsBeautiful/comments/1m0i7ax/i_built_hidden_gems_ffo_a_site_that_maps_reddits/",
+      "score": 12,
+      "num_comments": 0,
+      "created_utc": "2025-07-15 08:46",
+      "matched_categories": [
+        [
+          "pain_points",
+          "frustrated with"
+        ]
+      ],
+      "selftext": "Made\u00a0for\u00a0fellow music diggers frustrated with mainstream algos. Pulls from r/progmetal, cleans artist names via GPT-4o, and lets you search or random-roll\u00a0new\u00a0bands and almost unknown bands. Would love feedback &amp; bug reports!",
+      "author": "juepachon",
+      "engagement_score": 12
+    }
+  ]
+}

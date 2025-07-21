@@ -1,0 +1,67 @@
+[[redirects]]
+  from = "/refundradar"
+  to = "/projects/refundradar/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/policyradar"
+  to = "/projects/policyradar/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/salaryscope"
+  to = "/projects/salaryscope/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/cancelbot"
+  to = "/projects/cancelbot-retro/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/resumebeam"
+  to = "/projects/resumebeam/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/performance-review"
+  to = "/projects/performance-review/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/meetingescape"
+  to = "/projects/meetingescape/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/passiveaggressive"
+  to = "/projects/passiveaggressive/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/procrastination"
+  to = "/projects/procrastination-calculator/app.html"
+  status = 200
+
+[[redirects]]
+  from = "/sickday"
+  to = "/projects/sick-day/app.html"
+  status = 200
+
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/shared/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"

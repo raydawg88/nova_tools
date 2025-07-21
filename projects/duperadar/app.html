@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DupeRadar - Find Cheaper Alternatives Instantly</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f23;
+            color: #fff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        /* Radar Animation */
+        .radar-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            height: 300px;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .radar {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #00ff41;
+            border-radius: 50%;
+        }
+        
+        .radar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border: 2px solid #00ff41;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: radar-pulse 3s infinite;
+        }
+        
+        .radar-sweep {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, #00ff41);
+            transform-origin: left center;
+            animation: radar-sweep 3s infinite linear;
+        }
+        
+        @keyframes radar-pulse {
+            0% { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        
+        @keyframes radar-sweep {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #00ff41, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 1.3rem;
+            margin-bottom: 50px;
+            opacity: 0.9;
+        }
+        
+        /* Search Section */
+        .search-section {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(0,255,65,0.3);
+            border-radius: 20px;
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .search-input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 20px;
+            font-size: 1.2rem;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(0,255,65,0.5);
+            border-radius: 10px;
+            color: white;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #00ff41;
+            box-shadow: 0 0 20px rgba(0,255,65,0.3);
+        }
+        
+        .search-btn {
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #00ff41, #00ffff);
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,255,65,0.4);
+        }
+        
+        /* Category Pills */
+        .category-pills {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .pill {
+            padding: 8px 16px;
+            background: rgba(0,255,65,0.1);
+            border: 1px solid rgba(0,255,65,0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .pill:hover, .pill.active {
+            background: rgba(0,255,65,0.3);
+            border-color: #00ff41;
+        }
+        
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+        
+        .original-product {
+            background: rgba(255,0,0,0.1);
+            border: 2px solid rgba(255,0,0,0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        
+        .original-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 10px;
+        }
+        
+        .original-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .original-price {
+            font-size: 3rem;
+            color: #ff3366;
+            font-weight: 900;
+        }
+        
+        /* Alternatives Grid */
+        .alternatives-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .savings-highlight {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #00ff41;
+            margin-bottom: 10px;
+        }
+        
+        .alternatives-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .alternative-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(0,255,65,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .alternative-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff41;
+            box-shadow: 0 10px 30px rgba(0,255,65,0.2);
+        }
+        
+        .savings-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #00ff41;
+            color: #000;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        
+        .alt-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        
+        .alt-brand {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 15px;
+        }
+        
+        .alt-price {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #00ff41;
+            margin-bottom: 10px;
+        }
+        
+        .alt-features {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .alt-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .stars {
+            color: #ffd700;
+        }
+        
+        /* Where to Buy */
+        .buy-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .buy-link {
+            padding: 8px 16px;
+            background: rgba(0,255,65,0.2);
+            border: 1px solid rgba(0,255,65,0.4);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .buy-link:hover {
+            background: rgba(0,255,65,0.4);
+        }
+        
+        /* Comparison Table */
+        .comparison-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        .comparison-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .comparison-table th {
+            background: rgba(0,255,65,0.1);
+            font-weight: 700;
+        }
+        
+        .comparison-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        /* Alert Section */
+        .alert-section {
+            background: rgba(0,255,65,0.1);
+            border: 2px solid rgba(0,255,65,0.3);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .alert-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #00ff41;
+        }
+        
+        .alert-input {
+            padding: 12px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(0,255,65,0.3);
+            border-radius: 8px;
+            color: white;
+            margin-right: 10px;
+        }
+        
+        .alert-btn {
+            padding: 12px 30px;
+            background: #00ff41;
+            color: #000;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .alert-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,255,65,0.4);
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loading-text {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .radar-mini {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto;
+            border: 2px solid #00ff41;
+            border-radius: 50%;
+            position: relative;
+            animation: rotate 2s linear infinite;
+        }
+        
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="radar-container">
+        <div class="radar">
+            <div class="radar-sweep"></div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1>DupeRadar</h1>
+        <p class="tagline">Why pay more? Find the same thing cheaper in seconds.</p>
+        
+        <div class="search-section">
+            <div class="search-input-group">
+                <input type="text" class="search-input" id="product-input" placeholder="Enter product name (e.g., AirPods Pro, Dyson V15, iPad)">
+                <button class="search-btn" onclick="searchDupes()">🔍 SCAN FOR DUPES</button>
+            </div>
+            
+            <div class="category-pills">
+                <div class="pill" onclick="setCategory('all')">All</div>
+                <div class="pill" onclick="setCategory('tech')">Tech</div>
+                <div class="pill" onclick="setCategory('home')">Home</div>
+                <div class="pill" onclick="setCategory('fashion')">Fashion</div>
+                <div class="pill" onclick="setCategory('beauty')">Beauty</div>
+                <div class="pill" onclick="setCategory('fitness')">Fitness</div>
+            </div>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="loading-text">🔍 Scanning the entire internet for better deals...</div>
+            <div class="radar-mini"></div>
+        </div>
+        
+        <div class="results-section" id="results">
+            <div class="original-product">
+                <div class="original-label">You searched for</div>
+                <div class="original-name" id="original-name">Product Name</div>
+                <div class="original-price" id="original-price">$299</div>
+            </div>
+            
+            <div class="alternatives-header">
+                <div class="savings-highlight" id="savings-highlight">Save up to $150!</div>
+                <p style="font-size: 1.2rem; opacity: 0.8;">We found <span id="alt-count">5</span> cheaper alternatives</p>
+            </div>
+            
+            <div class="alternatives-grid" id="alternatives-grid"></div>
+            
+            <div class="comparison-section">
+                <h2 class="comparison-title">Quick Comparison</h2>
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Original</th>
+                            <th>Best Alternative</th>
+                        </tr>
+                    </thead>
+                    <tbody id="comparison-tbody">
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="alert-section">
+                <h3 class="alert-title">🔔 Get Price Drop Alerts</h3>
+                <p style="margin-bottom: 20px;">We'll notify you when any of these products go on sale</p>
+                <input type="email" class="alert-input" placeholder="your@email.com">
+                <button class="alert-btn" onclick="setAlert()">Set Alert</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Product database with alternatives
+        const productDatabase = {
+            'airpods pro': {
+                name: 'AirPods Pro',
+                price: 249,
+                alternatives: [
+                    {
+                        name: 'Sony WF-1000XM4',
+                        brand: 'Sony',
+                        price: 199,
+                        savings: 50,
+                        features: 'Better noise cancellation, longer battery life',
+                        rating: 4.8,
+                        reviews: 12453,
+                        stores: ['Amazon', 'Best Buy', 'Sony Direct']
+                    },
+                    {
+                        name: 'Jabra Elite 85t',
+                        brand: 'Jabra',
+                        price: 149,
+                        savings: 100,
+                        features: 'Great call quality, customizable sound',
+                        rating: 4.6,
+                        reviews: 8234,
+                        stores: ['Amazon', 'Target', 'Jabra Store']
+                    },
+                    {
+                        name: 'Samsung Galaxy Buds Pro',
+                        brand: 'Samsung',
+                        price: 129,
+                        savings: 120,
+                        features: '360 audio, IPX7 water resistance',
+                        rating: 4.5,
+                        reviews: 9876,
+                        stores: ['Amazon', 'Samsung', 'Best Buy']
+                    },
+                    {
+                        name: 'Anker Soundcore Liberty 3 Pro',
+                        brand: 'Anker',
+                        price: 99,
+                        savings: 150,
+                        features: 'Amazing value, LDAC support',
+                        rating: 4.4,
+                        reviews: 5432,
+                        stores: ['Amazon', 'Anker Direct']
+                    }
+                ]
+            },
+            'dyson': {
+                name: 'Dyson V15',
+                price: 749,
+                alternatives: [
+                    {
+                        name: 'Shark Stratos IZ862H',
+                        brand: 'Shark',
+                        price: 399,
+                        savings: 350,
+                        features: 'Self-cleaning brushroll, odor neutralization',
+                        rating: 4.7,
+                        reviews: 7654,
+                        stores: ['Amazon', 'Shark', 'Target']
+                    },
+                    {
+                        name: 'Tineco Pure ONE S15',
+                        brand: 'Tineco',
+                        price: 299,
+                        savings: 450,
+                        features: 'Smart sensor, auto-adjust suction',
+                        rating: 4.5,
+                        reviews: 4321,
+                        stores: ['Amazon', 'Tineco', 'Walmart']
+                    },
+                    {
+                        name: 'LG CordZero A9',
+                        brand: 'LG',
+                        price: 349,
+                        savings: 400,
+                        features: 'Dual battery, telescopic wand',
+                        rating: 4.4,
+                        reviews: 3456,
+                        stores: ['Best Buy', 'LG', 'Home Depot']
+                    }
+                ]
+            },
+            'ipad': {
+                name: 'iPad Pro 11"',
+                price: 799,
+                alternatives: [
+                    {
+                        name: 'Samsung Galaxy Tab S9',
+                        brand: 'Samsung',
+                        price: 649,
+                        savings: 150,
+                        features: 'AMOLED display, S Pen included',
+                        rating: 4.7,
+                        reviews: 8765,
+                        stores: ['Amazon', 'Samsung', 'Best Buy']
+                    },
+                    {
+                        name: 'Microsoft Surface Pro 9',
+                        brand: 'Microsoft',
+                        price: 699,
+                        savings: 100,
+                        features: 'Full Windows, kickstand built-in',
+                        rating: 4.6,
+                        reviews: 6543,
+                        stores: ['Microsoft', 'Best Buy', 'Amazon']
+                    },
+                    {
+                        name: 'OnePlus Pad',
+                        brand: 'OnePlus',
+                        price: 479,
+                        savings: 320,
+                        features: '144Hz display, fast charging',
+                        rating: 4.5,
+                        reviews: 2345,
+                        stores: ['OnePlus', 'Amazon']
+                    }
+                ]
+            }
+        };
+        
+        // Generic alternatives for unknown products
+        const genericAlternatives = {
+            tech: [
+                { brand: 'Generic Brand', savings: '30-50%', features: 'Similar specs, lower price' },
+                { brand: 'Amazon Basics', savings: '40-60%', features: 'Reliable budget option' },
+                { brand: 'Store Brand', savings: '35-55%', features: 'Good warranty, basic features' }
+            ],
+            home: [
+                { brand: 'Store Brand', savings: '25-40%', features: 'Same functionality, simpler design' },
+                { brand: 'Generic Option', savings: '35-50%', features: 'Basic features, good value' },
+                { brand: 'Budget Alternative', savings: '45-65%', features: 'No-frills version' }
+            ]
+        };
+        
+        let currentCategory = 'all';
+        let searchedProduct = '';
+        
+        function setCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.pill').forEach(pill => {
+                pill.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        function searchDupes() {
+            const input = document.getElementById('product-input').value.trim();
+            if (!input) {
+                alert('Enter a product name to search for alternatives!');
+                return;
+            }
+            
+            searchedProduct = input.toLowerCase();
+            
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            
+            // Simulate search delay
+            setTimeout(() => {
+                displayResults();
+            }, 2000);
+        }
+        
+        function displayResults() {
+            document.getElementById('loading').style.display = 'none';
+            
+            let productData;
+            let originalPrice;
+            
+            // Check if product exists in database
+            const matchedProduct = Object.keys(productDatabase).find(key => 
+                searchedProduct.includes(key)
+            );
+            
+            if (matchedProduct) {
+                productData = productDatabase[matchedProduct];
+                originalPrice = productData.price;
+            } else {
+                // Generate generic alternatives
+                originalPrice = Math.floor(Math.random() * 500) + 100;
+                productData = {
+                    name: searchedProduct.charAt(0).toUpperCase() + searchedProduct.slice(1),
+                    price: originalPrice,
+                    alternatives: generateGenericAlternatives(originalPrice)
+                };
+            }
+            
+            // Display original product
+            document.getElementById('original-name').textContent = productData.name;
+            document.getElementById('original-price').textContent = `$${productData.price}`;
+            
+            // Display alternatives
+            const grid = document.getElementById('alternatives-grid');
+            grid.innerHTML = '';
+            
+            const maxSavings = Math.max(...productData.alternatives.map(alt => alt.savings));
+            document.getElementById('savings-highlight').textContent = `Save up to $${maxSavings}!`;
+            document.getElementById('alt-count').textContent = productData.alternatives.length;
+            
+            productData.alternatives.forEach(alt => {
+                const card = document.createElement('div');
+                card.className = 'alternative-card';
+                card.innerHTML = `
+                    <div class="savings-badge">SAVE $${alt.savings}</div>
+                    <div class="alt-name">${alt.name}</div>
+                    <div class="alt-brand">${alt.brand}</div>
+                    <div class="alt-price">$${alt.price}</div>
+                    <div class="alt-features">${alt.features}</div>
+                    <div class="alt-rating">
+                        <span class="stars">${'★'.repeat(Math.floor(alt.rating))}</span>
+                        <span>${alt.rating} (${alt.reviews.toLocaleString()} reviews)</span>
+                    </div>
+                    <div class="buy-links">
+                        ${alt.stores.map(store => `<div class="buy-link">${store}</div>`).join('')}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            
+            // Update comparison table
+            updateComparisonTable(productData);
+            
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function generateGenericAlternatives(originalPrice) {
+            const alternatives = [];
+            const discounts = [0.2, 0.35, 0.5, 0.6];
+            
+            discounts.forEach((discount, index) => {
+                const price = Math.floor(originalPrice * (1 - discount));
+                const savings = originalPrice - price;
+                
+                alternatives.push({
+                    name: `Alternative Option ${index + 1}`,
+                    brand: ['ValueBrand', 'BudgetChoice', 'SmartBuy', 'EconoOption'][index],
+                    price: price,
+                    savings: savings,
+                    features: [
+                        'Similar features at lower price',
+                        'Great value for money',
+                        'Budget-friendly alternative',
+                        'Basic functionality covered'
+                    ][index],
+                    rating: 4 + Math.random() * 0.7,
+                    reviews: Math.floor(Math.random() * 5000) + 1000,
+                    stores: ['Amazon', 'eBay', 'Walmart', 'AliExpress'].slice(0, Math.floor(Math.random() * 3) + 2)
+                });
+            });
+            
+            return alternatives;
+        }
+        
+        function updateComparisonTable(productData) {
+            const tbody = document.getElementById('comparison-tbody');
+            const bestAlt = productData.alternatives[0];
+            
+            const comparisons = [
+                { feature: 'Price', original: `$${productData.price}`, alternative: `$${bestAlt.price}` },
+                { feature: 'You Save', original: '-', alternative: `$${bestAlt.savings} (${Math.round(bestAlt.savings/productData.price*100)}%)` },
+                { feature: 'Rating', original: '4.5 ★', alternative: `${bestAlt.rating} ★` },
+                { feature: 'Availability', original: 'Limited', alternative: 'Widely Available' },
+                { feature: 'Warranty', original: '1 Year', alternative: '1-2 Years' }
+            ];
+            
+            tbody.innerHTML = comparisons.map(comp => `
+                <tr>
+                    <td>${comp.feature}</td>
+                    <td>${comp.original}</td>
+                    <td style="color: #00ff41;">${comp.alternative}</td>
+                </tr>
+            `).join('');
+        }
+        
+        function setAlert() {
+            const email = event.target.previousElementSibling.value;
+            if (!email || !email.includes('@')) {
+                alert('Please enter a valid email address!');
+                return;
+            }
+            
+            alert(`✅ Price alert set! We'll notify ${email} when prices drop.`);
+            event.target.previousElementSibling.value = '';
+        }
+        
+        // Enter key support
+        document.getElementById('product-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchDupes();
+            }
+        });
+    </script>
+</body>
+</html>

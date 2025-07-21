@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RefundRadar - Never Miss a Price Drop Refund | Nova Systems</title>
+    <link rel="stylesheet" href="../../shared/retro-ui.css">
+    <style>
+        /* Product-specific styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-card {
+            background: rgba(0, 255, 0, 0.1);
+            border: 2px solid var(--retro-green);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            color: var(--retro-green);
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .purchase-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        
+        .purchase-item {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--retro-green);
+            padding: 15px;
+            margin-bottom: 10px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .purchase-item.has-refund {
+            border-color: var(--retro-amber);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .refund-amount {
+            font-size: 24px;
+            color: var(--retro-amber);
+            text-shadow: 0 0 10px currentColor;
+        }
+        
+        .add-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 15px;
+            margin: 20px 0;
+            align-items: end;
+        }
+        
+        .radar-animation {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            position: relative;
+            border: 2px solid var(--retro-green);
+            border-radius: 50%;
+            overflow: hidden;
+        }
+        
+        .radar-sweep {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--retro-green));
+            transform-origin: left center;
+            animation: radar-sweep 3s linear infinite;
+        }
+        
+        @keyframes radar-sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .notification-badge {
+            background: var(--retro-pink);
+            color: var(--terminal-bg);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="retro-container">
+        <!-- ASCII Header -->
+        <div class="retro-ascii-header retro-green">
+╔═══════════════════════════════════════════════════════════════╗
+║  ██████╗ ███████╗███████╗██╗   ██╗███╗   ██╗██████╗          ║
+║  ██╔══██╗██╔════╝██╔════╝██║   ██║████╗  ██║██╔══██╗         ║
+║  ██████╔╝█████╗  █████╗  ██║   ██║██╔██╗ ██║██║  ██║         ║
+║  ██╔══██╗██╔══╝  ██╔══╝  ██║   ██║██║╚██╗██║██║  ██║         ║
+║  ██║  ██║███████╗██║     ╚██████╔╝██║ ╚████║██████╔╝         ║
+║  ╚═╝  ╚═╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═══╝╚═════╝          ║
+║                                                                ║
+║   R A D A R   [ Price Drop Detection System v1.0 ]            ║
+╚═══════════════════════════════════════════════════════════════╝
+        </div>
+        
+        <p class="retro-center retro-cyan">SCANNING FOR PRICE DROPS ON YOUR PURCHASES...</p>
+        
+        <!-- Radar Animation -->
+        <div class="radar-animation">
+            <div class="radar-sweep"></div>
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--retro-green);">
+                <span id="scan-status">SCANNING</span>
+            </div>
+        </div>
+        
+        <!-- Stats Dashboard -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">$<span id="total-saved">0</span></div>
+                <div>TOTAL REFUNDS</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="active-monitors">0</div>
+                <div>ACTIVE MONITORS</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">$<span id="pending-refunds">0</span></div>
+                <div>PENDING REFUNDS</div>
+            </div>
+        </div>
+        
+        <!-- Add Purchase Form -->
+        <div class="retro-border">
+            <h2 class="retro-green">[ ADD PURCHASE TO MONITOR ]</h2>
+            <div class="add-form">
+                <input type="text" class="retro-input" id="item-name" placeholder="Item name...">
+                <input type="text" class="retro-input" id="store-name" placeholder="Store...">
+                <input type="number" class="retro-input" id="price-paid" placeholder="Price paid..." step="0.01">
+                <button class="retro-button" onclick="addPurchase()">[ TRACK ]</button>
+            </div>
+        </div>
+        
+        <!-- Active Monitors -->
+        <div class="retro-border">
+            <h2 class="retro-green">[ ACTIVE PRICE MONITORS ]</h2>
+            <div class="purchase-list" id="purchase-list">
+                <!-- Purchases will be added here -->
+            </div>
+        </div>
+        
+        <!-- Demo Mode Notice -->
+        <div class="retro-border" style="background: rgba(255, 176, 0, 0.1);">
+            <p class="retro-amber retro-center">
+                DEMO MODE: Add purchases above to see RefundRadar in action!<br>
+                <small>Real version would connect to store APIs and browser extensions</small>
+            </p>
+        </div>
+        
+        <!-- Footer -->
+        <div class="retro-center" style="margin-top: 60px;">
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p class="retro-amber">NOVA REFUNDRADAR v1.0</p>
+            <p style="font-size: 14px;">Never leave money on the table again</p>
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+        </div>
+    </div>
+    
+    <script src="../../shared/retro-ui.js"></script>
+    <script src="../../shared/nova-auth.js" data-product="refundradar"></script>
+    <script>
+        // Load saved data
+        let purchases = JSON.parse(localStorage.getItem('nova_refundradar_purchases') || '[]');
+        let totalSaved = parseFloat(localStorage.getItem('nova_refundradar_saved') || '0');
+        
+        // Update UI on load
+        updateStats();
+        renderPurchases();
+        
+        // Check if user is logged in
+        window.addEventListener('nova-auth-changed', (e) => {
+            if (e.detail.user) {
+                Retro.showToast('Syncing your RefundRadar data...');
+            }
+        });
+        
+        function addPurchase() {
+            const itemName = document.getElementById('item-name').value.trim();
+            const storeName = document.getElementById('store-name').value.trim();
+            const pricePaid = parseFloat(document.getElementById('price-paid').value);
+            
+            if (!itemName || !storeName || !pricePaid) {
+                Retro.showToast('Please fill all fields!');
+                return;
+            }
+            
+            const purchase = {
+                id: Date.now(),
+                itemName,
+                storeName,
+                pricePaid,
+                currentPrice: pricePaid,
+                dateAdded: new Date().toISOString(),
+                refundAvailable: 0,
+                status: 'monitoring'
+            };
+            
+            purchases.unshift(purchase);
+            savePurchases();
+            
+            // Clear form
+            document.getElementById('item-name').value = '';
+            document.getElementById('store-name').value = '';
+            document.getElementById('price-paid').value = '';
+            
+            // Simulate price check after 3 seconds
+            setTimeout(() => checkPriceDrops(), 3000);
+            
+            Retro.showToast('Purchase added to monitoring!');
+            renderPurchases();
+            updateStats();
+        }
+        
+        function checkPriceDrops() {
+            let foundDrops = 0;
+            
+            purchases.forEach(purchase => {
+                if (purchase.status === 'monitoring') {
+                    // Simulate price drops (30% chance)
+                    if (Math.random() < 0.3) {
+                        const dropPercent = Math.random() * 0.3 + 0.05; // 5-35% drop
+                        purchase.currentPrice = purchase.pricePaid * (1 - dropPercent);
+                        purchase.refundAvailable = purchase.pricePaid - purchase.currentPrice;
+                        purchase.status = 'refund-available';
+                        foundDrops++;
+                    }
+                }
+            });
+            
+            if (foundDrops > 0) {
+                savePurchases();
+                renderPurchases();
+                updateStats();
+                
+                Retro.showModal({
+                    title: '💰 PRICE DROPS DETECTED!',
+                    content: `<p class="retro-amber">Found ${foundDrops} price drop${foundDrops > 1 ? 's' : ''}!</p>
+                             <p>Total refunds available: $${calculatePendingRefunds().toFixed(2)}</p>`,
+                    buttons: [
+                        { text: 'VIEW REFUNDS', action: () => Retro.closeModal() }
+                    ]
+                });
+            }
+        }
+        
+        function renderPurchases() {
+            const list = document.getElementById('purchase-list');
+            list.innerHTML = '';
+            
+            if (purchases.length === 0) {
+                list.innerHTML = '<p class="retro-center" style="color: #666;">No purchases being monitored</p>';
+                return;
+            }
+            
+            purchases.forEach(purchase => {
+                const item = document.createElement('div');
+                item.className = `purchase-item ${purchase.status === 'refund-available' ? 'has-refund' : ''}`;
+                
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight: bold; color: var(--retro-cyan);">${purchase.itemName}</div>
+                        <div style="font-size: 14px; color: #999;">
+                            ${purchase.storeName} • Paid: $${purchase.pricePaid.toFixed(2)}
+                            ${purchase.currentPrice < purchase.pricePaid ? 
+                                ` • Now: $${purchase.currentPrice.toFixed(2)}` : ''}
+                        </div>
+                    </div>
+                    <div>
+                        ${purchase.status === 'refund-available' ? 
+                            `<button class="retro-button retro-amber" onclick="claimRefund(${purchase.id})">
+                                CLAIM $${purchase.refundAvailable.toFixed(2)}
+                            </button>` :
+                            `<span style="color: #666;">Monitoring...</span>`
+                        }
+                    </div>
+                `;
+                
+                list.appendChild(item);
+            });
+        }
+        
+        function claimRefund(purchaseId) {
+            const purchase = purchases.find(p => p.id === purchaseId);
+            if (!purchase) return;
+            
+            // Generate refund email
+            const email = generateRefundEmail(purchase);
+            
+            Retro.showModal({
+                title: 'REFUND REQUEST GENERATOR',
+                content: `
+                    <p class="retro-green">Ready to claim your $${purchase.refundAvailable.toFixed(2)} refund!</p>
+                    <div style="background: #111; border: 1px solid var(--retro-green); padding: 15px; margin: 20px 0; font-size: 14px; white-space: pre-wrap;">${email}</div>
+                `,
+                buttons: [
+                    { 
+                        text: 'COPY EMAIL', 
+                        action: () => {
+                            navigator.clipboard.writeText(email);
+                            Retro.showToast('Email copied! Send it to get your refund.');
+                            
+                            // Mark as claimed
+                            purchase.status = 'claimed';
+                            totalSaved += purchase.refundAvailable;
+                            savePurchases();
+                            localStorage.setItem('nova_refundradar_saved', totalSaved);
+                            
+                            renderPurchases();
+                            updateStats();
+                            Retro.closeModal();
+                        }
+                    },
+                    { text: 'CANCEL', action: () => Retro.closeModal() }
+                ]
+            });
+        }
+        
+        function generateRefundEmail(purchase) {
+            return `Subject: Price Protection Claim - ${purchase.itemName}
+
+Dear ${purchase.storeName} Customer Service,
+
+I recently purchased ${purchase.itemName} from your store for $${purchase.pricePaid.toFixed(2)}. I noticed the price has since dropped to $${purchase.currentPrice.toFixed(2)}.
+
+According to your price protection policy, I am eligible for a refund of the difference: $${purchase.refundAvailable.toFixed(2)}.
+
+Purchase details:
+- Item: ${purchase.itemName}
+- Original price: $${purchase.pricePaid.toFixed(2)}
+- Current price: $${purchase.currentPrice.toFixed(2)}
+- Difference: $${purchase.refundAvailable.toFixed(2)}
+- Purchase date: ${new Date(purchase.dateAdded).toLocaleDateString()}
+
+Please process this price adjustment refund at your earliest convenience.
+
+Thank you,
+[Your name]
+
+---
+Generated by RefundRadar | Nova Systems`;
+        }
+        
+        function calculatePendingRefunds() {
+            return purchases
+                .filter(p => p.status === 'refund-available')
+                .reduce((sum, p) => sum + p.refundAvailable, 0);
+        }
+        
+        function updateStats() {
+            document.getElementById('total-saved').textContent = totalSaved.toFixed(2);
+            document.getElementById('active-monitors').textContent = purchases.filter(p => p.status === 'monitoring').length;
+            document.getElementById('pending-refunds').textContent = calculatePendingRefunds().toFixed(2);
+        }
+        
+        function savePurchases() {
+            localStorage.setItem('nova_refundradar_purchases', JSON.stringify(purchases));
+            
+            // Save to Nova Auth if logged in
+            if (window.NovaAuth && window.NovaAuth.isAuthenticated()) {
+                window.NovaAuth.saveProductData('refundradar', {
+                    purchases: purchases,
+                    totalSaved: totalSaved
+                });
+            }
+        }
+        
+        // Auto-check for price drops every 30 seconds (in production would be server-side)
+        setInterval(() => {
+            if (purchases.some(p => p.status === 'monitoring')) {
+                document.getElementById('scan-status').textContent = 'SCANNING';
+                setTimeout(() => {
+                    checkPriceDrops();
+                    document.getElementById('scan-status').textContent = 'IDLE';
+                }, 2000);
+            }
+        }, 30000);
+        
+        // Add demo purchases if none exist
+        if (purchases.length === 0) {
+            setTimeout(() => {
+                Retro.showModal({
+                    title: 'WELCOME TO REFUNDRADAR',
+                    content: `
+                        <p class="retro-green">Never miss a price drop refund again!</p>
+                        <p style="margin: 20px 0;">RefundRadar monitors your purchases and alerts you when prices drop, helping you claim refunds through store price protection policies.</p>
+                        <p class="retro-amber">Most people don't know: Major retailers offer 14-90 day price protection!</p>
+                    `,
+                    buttons: [
+                        { text: 'START MONITORING', action: () => Retro.closeModal() }
+                    ]
+                });
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

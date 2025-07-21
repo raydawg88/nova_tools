@@ -1,0 +1,8 @@
+/* DeadNet Content Styles - Injected into pages */
+
+/* Reset any potential conflicts */
+#deadnet-widget * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}

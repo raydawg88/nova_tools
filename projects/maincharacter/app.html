@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MainCharacter - Daily Quests for Your Real Life</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @keyframes pixelate {
+            0%, 100% { filter: blur(0); }
+            50% { filter: blur(0.5px); }
+        }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: #0f0;
+            line-height: 1.6;
+            image-rendering: pixelated;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .game-header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #0a0a0a;
+            border: 4px solid #0f0;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 #005500;
+            animation: pixelate 2s ease-in-out infinite;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        /* Character Select */
+        .character-select {
+            margin-bottom: 40px;
+        }
+        
+        .section-title {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        .character-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .character-card {
+            background: #111;
+            border: 2px solid #0f0;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .character-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #0f0;
+        }
+        
+        .character-card.selected {
+            background: #0f0;
+            color: #000;
+        }
+        
+        .character-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        
+        .character-name {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+        }
+        
+        /* Quest Generator */
+        .quest-generator {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .generate-btn {
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: #0f0;
+            color: #000;
+            border: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            box-shadow: 4px 4px 0 #005500;
+        }
+        
+        .generate-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0 #005500;
+        }
+        
+        .generate-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 #005500;
+        }
+        
+        /* Quest Display */
+        .quest-container {
+            background: #0a0a0a;
+            border: 2px solid #0f0;
+            padding: 30px;
+            margin-bottom: 30px;
+            position: relative;
+            display: none;
+        }
+        
+        .quest-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            background: #0f0;
+            color: #000;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+        
+        .quest-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .quest-desc {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            opacity: 0.9;
+            line-height: 1.8;
+        }
+        
+        .quest-reward {
+            color: #ffff00;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        /* Quest Completion */
+        .completion-section {
+            text-align: center;
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .complete-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background: #ffff00;
+            color: #000;
+            border: none;
+            text-transform: uppercase;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+        }
+        
+        .complete-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .skip-btn {
+            background: #ff0000;
+        }
+        
+        /* Stats */
+        .stats-section {
+            background: #0a0a0a;
+            border: 2px solid #0f0;
+            padding: 20px;
+            margin-top: 40px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .stat-item {
+            padding: 15px;
+            background: #111;
+            border: 1px solid #0f0;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            color: #ffff00;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        
+        /* Level Up Animation */
+        .level-up {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ffff00;
+            text-transform: uppercase;
+            display: none;
+            animation: levelUpPulse 1s ease-out;
+            text-shadow: 0 0 20px #ffff00;
+        }
+        
+        @keyframes levelUpPulse {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+        }
+        
+        /* History */
+        .history-section {
+            margin-top: 40px;
+        }
+        
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            background: #0a0a0a;
+            border: 1px solid #0f0;
+            padding: 20px;
+        }
+        
+        .history-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #333;
+        }
+        
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        
+        .history-date {
+            font-size: 0.9rem;
+            opacity: 0.6;
+        }
+        
+        .history-quest {
+            margin-top: 5px;
+        }
+        
+        .completed {
+            color: #0f0;
+        }
+        
+        .skipped {
+            color: #ff0000;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-header">
+            <h1>MainCharacter</h1>
+            <p class="tagline">Stop being an NPC. Start your real quest.</p>
+        </div>
+        
+        <!-- Character Selection -->
+        <div class="character-select">
+            <h2 class="section-title">Choose Your Class</h2>
+            <div class="character-grid">
+                <div class="character-card" onclick="selectCharacter('warrior')">
+                    <div class="character-icon">⚔️</div>
+                    <div class="character-name">Warrior</div>
+                </div>
+                <div class="character-card" onclick="selectCharacter('wizard')">
+                    <div class="character-icon">🧙‍♂️</div>
+                    <div class="character-name">Wizard</div>
+                </div>
+                <div class="character-card" onclick="selectCharacter('ranger')">
+                    <div class="character-icon">🏹</div>
+                    <div class="character-name">Ranger</div>
+                </div>
+                <div class="character-card" onclick="selectCharacter('merchant')">
+                    <div class="character-icon">💰</div>
+                    <div class="character-name">Merchant</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quest Generator -->
+        <div class="quest-generator">
+            <button class="generate-btn" onclick="generateQuest()">
+                GENERATE TODAY'S QUEST
+            </button>
+        </div>
+        
+        <!-- Quest Display -->
+        <div class="quest-container" id="quest-display">
+            <span class="quest-type" id="quest-type">MAIN QUEST</span>
+            <h3 class="quest-title" id="quest-title"></h3>
+            <p class="quest-desc" id="quest-desc"></p>
+            <p class="quest-reward" id="quest-reward"></p>
+        </div>
+        
+        <!-- Completion Section -->
+        <div class="completion-section" id="completion-section">
+            <button class="complete-btn" onclick="completeQuest()">QUEST COMPLETE!</button>
+            <button class="complete-btn skip-btn" onclick="skipQuest()">SKIP QUEST</button>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-section">
+            <h2 class="section-title">Your Stats</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-value" id="level">1</div>
+                    <div class="stat-label">Level</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="xp">0</div>
+                    <div class="stat-label">XP</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="streak">0</div>
+                    <div class="stat-label">Streak</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="completed">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Quest History -->
+        <div class="history-section">
+            <h2 class="section-title">Quest Log</h2>
+            <div class="history-list" id="history-list">
+                <p style="opacity: 0.6; text-align: center;">No quests yet. Generate your first quest!</p>
+            </div>
+        </div>
+        
+        <!-- Level Up Notification -->
+        <div class="level-up" id="level-up">LEVEL UP!</div>
+    </div>
+    
+    <script>
+        // Quest Database
+        const QUESTS = {
+            warrior: {
+                easy: [
+                    { title: "The Greeting Gauntlet", desc: "Initiate conversation with someone new today. A simple 'hello' counts.", xp: 25 },
+                    { title: "Stand Your Ground", desc: "Voice your opinion in a meeting or conversation where you'd normally stay quiet.", xp: 30 },
+                    { title: "The Rejection Quest", desc: "Ask for something knowing you might get rejected. Build rejection immunity.", xp: 40 }
+                ],
+                medium: [
+                    { title: "Confront the Boss", desc: "Have that difficult conversation you've been avoiding.", xp: 50 },
+                    { title: "Physical Challenge", desc: "Do something physically challenging you've never done before.", xp: 45 },
+                    { title: "Defend the Weak", desc: "Stand up for someone or something today.", xp: 55 }
+                ],
+                hard: [
+                    { title: "The Vulnerability Raid", desc: "Share something personal that scares you to share.", xp: 75 },
+                    { title: "Solo Mission", desc: "Go to a social event alone and talk to at least 3 people.", xp: 80 },
+                    { title: "The Apology Quest", desc: "Apologize for something you've been holding onto.", xp: 70 }
+                ]
+            },
+            wizard: {
+                easy: [
+                    { title: "Knowledge Scroll", desc: "Learn something completely new in 30 minutes or less.", xp: 25 },
+                    { title: "The Teaching Spell", desc: "Teach someone something you know well.", xp: 30 },
+                    { title: "Question Everything", desc: "Ask 'why' about something you normally accept.", xp: 25 }
+                ],
+                medium: [
+                    { title: "Master New Magic", desc: "Start learning a skill you've always wanted but never began.", xp: 50 },
+                    { title: "The Creation Ritual", desc: "Create something today - art, code, writing, anything.", xp: 45 },
+                    { title: "Wisdom Sharing", desc: "Write down and share one life lesson you've learned.", xp: 40 }
+                ],
+                hard: [
+                    { title: "The Impossible Problem", desc: "Tackle a problem you've been avoiding because it's 'too hard'.", xp: 80 },
+                    { title: "Teach the Masses", desc: "Share your knowledge publicly - post, video, or presentation.", xp: 75 },
+                    { title: "Mental Marathon", desc: "Deep focus on one task for 2+ hours, no distractions.", xp: 70 }
+                ]
+            },
+            ranger: {
+                easy: [
+                    { title: "New Path Discovery", desc: "Take a different route than usual. Walk, drive, or commute differently.", xp: 25 },
+                    { title: "Urban Exploration", desc: "Visit a place in your city you've never been to.", xp: 30 },
+                    { title: "The Food Quest", desc: "Try a cuisine or dish you've never had before.", xp: 25 }
+                ],
+                medium: [
+                    { title: "Solo Adventure", desc: "Do something alone that you'd normally do with others.", xp: 45 },
+                    { title: "Nature's Call", desc: "Spend at least 1 hour in nature with no phone.", xp: 50 },
+                    { title: "The Lost Art", desc: "Try a hobby or activity you haven't done in years.", xp: 40 }
+                ],
+                hard: [
+                    { title: "The Comfort Zone Expedition", desc: "Do something that genuinely scares you (but is safe).", xp: 80 },
+                    { title: "24-Hour Challenge", desc: "Go 24 hours without your biggest crutch (social media, coffee, etc).", xp: 85 },
+                    { title: "Stranger Lands", desc: "Strike up conversations with 5 strangers in one day.", xp: 75 }
+                ]
+            },
+            merchant: {
+                easy: [
+                    { title: "The Negotiation", desc: "Negotiate a price or ask for a discount on something today.", xp: 25 },
+                    { title: "Value Exchange", desc: "Trade skills or items with someone instead of using money.", xp: 30 },
+                    { title: "Investment Research", desc: "Research one new way to make or save money.", xp: 25 }
+                ],
+                medium: [
+                    { title: "Side Hustle Start", desc: "Take one concrete step toward a side income today.", xp: 50 },
+                    { title: "The Pitch", desc: "Pitch an idea to someone who could help make it real.", xp: 55 },
+                    { title: "Network Expansion", desc: "Make a valuable professional connection.", xp: 45 }
+                ],
+                hard: [
+                    { title: "The Big Ask", desc: "Ask for a raise, promotion, or better deal on something major.", xp: 85 },
+                    { title: "Launch Something", desc: "Put something you've created out into the world for sale or feedback.", xp: 80 },
+                    { title: "Cold Outreach Campaign", desc: "Reach out to 10 people who could change your trajectory.", xp: 75 }
+                ]
+            }
+        };
+        
+        // Game State
+        let gameState = {
+            character: null,
+            level: 1,
+            xp: 0,
+            xpToNext: 100,
+            streak: 0,
+            completed: 0,
+            currentQuest: null,
+            questHistory: [],
+            lastQuestDate: null
+        };
+        
+        // Load saved state
+        function loadGameState() {
+            const saved = localStorage.getItem('mainCharacterState');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                updateUI();
+                updateHistory();
+            }
+        }
+        
+        // Save state
+        function saveGameState() {
+            localStorage.setItem('mainCharacterState', JSON.stringify(gameState));
+        }
+        
+        // Select character
+        function selectCharacter(character) {
+            gameState.character = character;
+            document.querySelectorAll('.character-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.character-card').classList.add('selected');
+            saveGameState();
+        }
+        
+        // Generate quest
+        function generateQuest() {
+            if (!gameState.character) {
+                alert('Choose your character class first!');
+                return;
+            }
+            
+            // Check if already generated today
+            const today = new Date().toDateString();
+            if (gameState.lastQuestDate === today && gameState.currentQuest) {
+                alert('You already have a quest for today! Complete it first.');
+                return;
+            }
+            
+            // Determine difficulty based on level
+            let difficulty = 'easy';
+            if (gameState.level >= 5) difficulty = 'medium';
+            if (gameState.level >= 10) difficulty = 'hard';
+            
+            // Get random quest
+            const questPool = QUESTS[gameState.character][difficulty];
+            const quest = questPool[Math.floor(Math.random() * questPool.length)];
+            
+            gameState.currentQuest = quest;
+            gameState.lastQuestDate = today;
+            
+            // Display quest
+            document.getElementById('quest-type').textContent = difficulty.toUpperCase() + ' QUEST';
+            document.getElementById('quest-title').textContent = quest.title;
+            document.getElementById('quest-desc').textContent = quest.desc;
+            document.getElementById('quest-reward').textContent = `Reward: +${quest.xp} XP`;
+            
+            document.getElementById('quest-display').style.display = 'block';
+            document.getElementById('completion-section').style.display = 'block';
+            
+            saveGameState();
+        }
+        
+        // Complete quest
+        function completeQuest() {
+            if (!gameState.currentQuest) return;
+            
+            // Add XP
+            gameState.xp += gameState.currentQuest.xp;
+            gameState.completed++;
+            gameState.streak++;
+            
+            // Check level up
+            if (gameState.xp >= gameState.xpToNext) {
+                gameState.level++;
+                gameState.xp = gameState.xp - gameState.xpToNext;
+                gameState.xpToNext = gameState.level * 100;
+                showLevelUp();
+            }
+            
+            // Add to history
+            gameState.questHistory.unshift({
+                date: new Date().toLocaleString(),
+                quest: gameState.currentQuest.title,
+                completed: true,
+                xp: gameState.currentQuest.xp
+            });
+            
+            gameState.currentQuest = null;
+            
+            updateUI();
+            updateHistory();
+            saveGameState();
+            
+            // Hide quest display
+            document.getElementById('quest-display').style.display = 'none';
+            document.getElementById('completion-section').style.display = 'none';
+        }
+        
+        // Skip quest
+        function skipQuest() {
+            if (!gameState.currentQuest) return;
+            
+            gameState.streak = 0;
+            
+            // Add to history
+            gameState.questHistory.unshift({
+                date: new Date().toLocaleString(),
+                quest: gameState.currentQuest.title,
+                completed: false,
+                xp: 0
+            });
+            
+            gameState.currentQuest = null;
+            gameState.lastQuestDate = null; // Allow new quest generation
+            
+            updateUI();
+            updateHistory();
+            saveGameState();
+            
+            // Hide quest display
+            document.getElementById('quest-display').style.display = 'none';
+            document.getElementById('completion-section').style.display = 'none';
+        }
+        
+        // Update UI
+        function updateUI() {
+            document.getElementById('level').textContent = gameState.level;
+            document.getElementById('xp').textContent = gameState.xp;
+            document.getElementById('streak').textContent = gameState.streak;
+            document.getElementById('completed').textContent = gameState.completed;
+            
+            // Update selected character
+            if (gameState.character) {
+                document.querySelectorAll('.character-card').forEach(card => {
+                    if (card.textContent.toLowerCase().includes(gameState.character)) {
+                        card.classList.add('selected');
+                    }
+                });
+            }
+        }
+        
+        // Update history
+        function updateHistory() {
+            const historyList = document.getElementById('history-list');
+            
+            if (gameState.questHistory.length === 0) {
+                historyList.innerHTML = '<p style="opacity: 0.6; text-align: center;">No quests yet. Generate your first quest!</p>';
+                return;
+            }
+            
+            historyList.innerHTML = '';
+            gameState.questHistory.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `
+                    <div class="history-date">${item.date}</div>
+                    <div class="history-quest ${item.completed ? 'completed' : 'skipped'}">
+                        ${item.quest} ${item.completed ? `(+${item.xp} XP)` : '(Skipped)'}
+                    </div>
+                `;
+                historyList.appendChild(div);
+            });
+        }
+        
+        // Show level up animation
+        function showLevelUp() {
+            const levelUpEl = document.getElementById('level-up');
+            levelUpEl.style.display = 'block';
+            setTimeout(() => {
+                levelUpEl.style.display = 'none';
+            }, 1000);
+        }
+        
+        // Initialize
+        loadGameState();
+    </script>
+</body>
+</html>

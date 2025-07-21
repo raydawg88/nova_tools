@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NightOwl - Stop Stealing From Your Sleep</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #0a0614;
+            color: #fff;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+        }
+        
+        .clock-display {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #ff6b6b;
+            text-align: center;
+            margin: 30px 0;
+            font-family: 'Courier New', monospace;
+            text-shadow: 0 0 40px rgba(255, 107, 107, 0.5);
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 50px;
+        }
+        
+        /* Time Audit Section */
+        .audit-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .audit-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .time-input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .time-input {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .time-input label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        .time-input input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 5px;
+            color: white;
+            font-size: 1.1rem;
+        }
+        
+        .time-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+        
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+        
+        .day-timeline {
+            position: relative;
+            height: 150px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .time-block {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .time-block:hover {
+            transform: scaleY(1.1);
+            z-index: 10;
+        }
+        
+        .work { background: #ff6b6b; }
+        .commute { background: #ff9ff3; }
+        .obligations { background: #feca57; }
+        .chores { background: #54a0ff; }
+        .meals { background: #48dbfb; }
+        .yours { background: #1dd1a1; }
+        
+        .time-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        .freedom-score {
+            text-align: center;
+            margin: 40px 0;
+            padding: 40px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+        }
+        
+        .score-label {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .score-number {
+            font-size: 5rem;
+            font-weight: 900;
+            color: #1dd1a1;
+            margin-bottom: 10px;
+        }
+        
+        .score-number.bad {
+            color: #ff6b6b;
+        }
+        
+        .score-number.okay {
+            color: #feca57;
+        }
+        
+        .score-message {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+        
+        .recommendations {
+            background: rgba(102, 126, 234, 0.1);
+            border: 2px solid #667eea;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        
+        .recommendations h3 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+        
+        .recommendation-item {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .recommendation-item::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-size: 1.2rem;
+        }
+        
+        .sleep-debt-section {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid #ff6b6b;
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        
+        .debt-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #ff6b6b;
+            margin: 20px 0;
+        }
+        
+        .share-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .share-btn {
+            padding: 15px 40px;
+            margin: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .twitter-btn {
+            background: #1da1f2;
+        }
+        
+        .copy-btn {
+            background: #667eea;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>NightOwl Time Audit</h1>
+        <div class="clock-display" id="clock">03:47 AM</div>
+        <p class="tagline">Calculate how much of your day is actually yours</p>
+        
+        <div class="audit-section">
+            <h2 class="audit-title">Where Does Your Day Go?</h2>
+            
+            <div class="time-input-grid">
+                <div class="time-input">
+                    <label>Work Hours (include prep time)</label>
+                    <input type="number" id="work" placeholder="9" min="0" max="24" value="9">
+                </div>
+                
+                <div class="time-input">
+                    <label>Commute (total both ways)</label>
+                    <input type="number" id="commute" placeholder="1.5" min="0" max="24" step="0.5" value="1.5">
+                </div>
+                
+                <div class="time-input">
+                    <label>Obligations (meetings, calls, appointments)</label>
+                    <input type="number" id="obligations" placeholder="2" min="0" max="24" step="0.5" value="2">
+                </div>
+                
+                <div class="time-input">
+                    <label>Chores & Errands</label>
+                    <input type="number" id="chores" placeholder="2" min="0" max="24" step="0.5" value="2">
+                </div>
+                
+                <div class="time-input">
+                    <label>Meals (prep + eating)</label>
+                    <input type="number" id="meals" placeholder="1.5" min="0" max="24" step="0.5" value="1.5">
+                </div>
+                
+                <div class="time-input">
+                    <label>Sleep (be honest)</label>
+                    <input type="number" id="sleep" placeholder="6" min="0" max="24" step="0.5" value="6">
+                </div>
+            </div>
+            
+            <button class="calculate-btn" onclick="calculateTimeAudit()">
+                Calculate My Freedom Score
+            </button>
+        </div>
+        
+        <div class="results-section" id="results">
+            <h2 style="text-align: center; font-size: 2rem; margin-bottom: 30px;">Your Day Visualized</h2>
+            
+            <div class="day-timeline" id="timeline"></div>
+            <div class="time-labels">
+                <span>12 AM</span>
+                <span>6 AM</span>
+                <span>12 PM</span>
+                <span>6 PM</span>
+                <span>12 AM</span>
+            </div>
+            
+            <div class="freedom-score">
+                <p class="score-label">Your Freedom Score</p>
+                <div class="score-number" id="freedom-score">0</div>
+                <p class="score-message" id="score-message"></p>
+            </div>
+            
+            <div class="recommendations" id="recommendations">
+                <h3>How to Reclaim Your Time</h3>
+                <div id="recommendation-list"></div>
+            </div>
+            
+            <div class="sleep-debt-section">
+                <h3>If you're staying up late for "me time"...</h3>
+                <p>You're losing</p>
+                <div class="debt-number" id="sleep-debt">0</div>
+                <p>hours of sleep per year</p>
+            </div>
+            
+            <div class="share-section">
+                <button class="share-btn twitter-btn" onclick="shareResults()">
+                    Share on Twitter
+                </button>
+                <button class="share-btn copy-btn" onclick="copyResults()">
+                    Copy Results
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const isLateNight = hours >= 0 && hours < 4;
+            
+            // Show late night time if it's actually late
+            const displayHours = isLateNight ? hours : 3;
+            const displayMinutes = isLateNight ? minutes : 47;
+            
+            const ampm = displayHours >= 12 ? 'PM' : 'AM';
+            const formattedHours = displayHours === 0 ? 12 : displayHours;
+            
+            document.getElementById('clock').textContent = 
+                `${formattedHours.toString().padStart(2, '0')}:${displayMinutes.toString().padStart(2, '0')} ${ampm}`;
+        }
+        
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        function calculateTimeAudit() {
+            // Get all inputs
+            const work = parseFloat(document.getElementById('work').value) || 0;
+            const commute = parseFloat(document.getElementById('commute').value) || 0;
+            const obligations = parseFloat(document.getElementById('obligations').value) || 0;
+            const chores = parseFloat(document.getElementById('chores').value) || 0;
+            const meals = parseFloat(document.getElementById('meals').value) || 0;
+            const sleep = parseFloat(document.getElementById('sleep').value) || 0;
+            
+            const totalCommitted = work + commute + obligations + chores + meals + sleep;
+            const freeTime = Math.max(0, 24 - totalCommitted);
+            
+            // Create timeline visualization
+            const timeline = document.getElementById('timeline');
+            timeline.innerHTML = '';
+            
+            const blocks = [
+                { name: 'SLEEP', hours: sleep, class: 'sleep', color: '#2c3e50' },
+                { name: 'WORK', hours: work, class: 'work' },
+                { name: 'COMMUTE', hours: commute, class: 'commute' },
+                { name: 'OBLIGATIONS', hours: obligations, class: 'obligations' },
+                { name: 'CHORES', hours: chores, class: 'chores' },
+                { name: 'MEALS', hours: meals, class: 'meals' },
+                { name: 'YOURS', hours: freeTime, class: 'yours' }
+            ];
+            
+            let currentPosition = 0;
+            blocks.forEach(block => {
+                if (block.hours > 0) {
+                    const width = (block.hours / 24) * 100;
+                    const div = document.createElement('div');
+                    div.className = `time-block ${block.class}`;
+                    div.style.left = `${currentPosition}%`;
+                    div.style.width = `${width}%`;
+                    if (block.color) div.style.background = block.color;
+                    div.innerHTML = `${block.name}<br>${block.hours.toFixed(1)}h`;
+                    timeline.appendChild(div);
+                    currentPosition += width;
+                }
+            });
+            
+            // Calculate freedom score (percentage of day that's yours)
+            const freedomScore = Math.round((freeTime / 24) * 100);
+            const scoreElement = document.getElementById('freedom-score');
+            scoreElement.textContent = `${freedomScore}%`;
+            
+            // Color code the score
+            scoreElement.className = 'score-number';
+            if (freedomScore < 10) {
+                scoreElement.classList.add('bad');
+            } else if (freedomScore < 20) {
+                scoreElement.classList.add('okay');
+            }
+            
+            // Score message
+            const messageElement = document.getElementById('score-message');
+            if (freedomScore < 5) {
+                messageElement.textContent = "You're living someone else's life";
+            } else if (freedomScore < 10) {
+                messageElement.textContent = "No wonder you're up at 3 AM";
+            } else if (freedomScore < 20) {
+                messageElement.textContent = "You have some time, but not enough";
+            } else {
+                messageElement.textContent = "You're doing better than most!";
+            }
+            
+            // Calculate sleep debt if low free time
+            if (freedomScore < 15 && sleep < 8) {
+                const sleepDeficit = 8 - sleep;
+                const yearlyLoss = Math.round(sleepDeficit * 365);
+                document.getElementById('sleep-debt').textContent = yearlyLoss;
+            }
+            
+            // Generate recommendations
+            const recommendations = [];
+            if (work > 9) recommendations.push("Your work hours are above average. Can you negotiate flexibility?");
+            if (commute > 1) recommendations.push("Your commute is eating your life. Remote work? Move closer?");
+            if (obligations > 2) recommendations.push("You're overcommitted. Time to practice saying 'no'");
+            if (chores > 2) recommendations.push("Automate or delegate chores. Your time is worth more");
+            if (freeTime < 3) recommendations.push("You need at least 3 hours daily for mental health");
+            
+            const recList = document.getElementById('recommendation-list');
+            recList.innerHTML = '';
+            recommendations.forEach(rec => {
+                const div = document.createElement('div');
+                div.className = 'recommendation-item';
+                div.textContent = rec;
+                recList.appendChild(div);
+            });
+            
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function shareResults() {
+            const freeTime = 24 - (
+                parseFloat(document.getElementById('work').value) +
+                parseFloat(document.getElementById('commute').value) +
+                parseFloat(document.getElementById('obligations').value) +
+                parseFloat(document.getElementById('chores').value) +
+                parseFloat(document.getElementById('meals').value) +
+                parseFloat(document.getElementById('sleep').value)
+            );
+            
+            const freedomScore = Math.round((freeTime / 24) * 100);
+            const text = `My Freedom Score is ${freedomScore}%. Only ${freeTime.toFixed(1)} hours of my day are actually mine. No wonder I'm up at 3 AM. Check yours:`;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent('https://nightowl.app')}`, '_blank');
+        }
+        
+        function copyResults() {
+            const freeTime = 24 - (
+                parseFloat(document.getElementById('work').value) +
+                parseFloat(document.getElementById('commute').value) +
+                parseFloat(document.getElementById('obligations').value) +
+                parseFloat(document.getElementById('chores').value) +
+                parseFloat(document.getElementById('meals').value) +
+                parseFloat(document.getElementById('sleep').value)
+            );
+            
+            const freedomScore = Math.round((freeTime / 24) * 100);
+            const text = `NightOwl Time Audit Results:
+            
+Freedom Score: ${freedomScore}%
+Free Time: ${freeTime.toFixed(1)} hours/day
+Work: ${document.getElementById('work').value} hours
+Commute: ${document.getElementById('commute').value} hours
+Sleep: ${document.getElementById('sleep').value} hours
+
+No wonder I'm up at 3 AM scrolling.`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Results copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>

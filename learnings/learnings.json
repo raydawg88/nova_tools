@@ -1,0 +1,85 @@
+{
+  "experiments": [
+    {
+      "name": "DeadNet",
+      "type": "Chrome Extension",
+      "launched": "2025-07-19",
+      "status": "MVP Complete",
+      "score": 38,
+      "revenue_model": "Freemium",
+      "target_audience": "Digital hoarders, nostalgic millennials"
+    },
+    {
+      "name": "LuckLink",
+      "type": "Chrome Extension",
+      "launched": "2025-07-19",
+      "status": "MVP Complete",
+      "score": 39,
+      "revenue_model": "Micro-transactions + Recurring",
+      "target_audience": "Spiritual millennials, gift buyers, superstitious tech users"
+    },
+    {
+      "name": "GhostMouse",
+      "type": "Hardware Product",
+      "launched": "2025-07-19",
+      "status": "Pre-order Page Complete",
+      "score": 45,
+      "revenue_model": "Physical product + Bundles",
+      "target_audience": "Remote workers, r/antiwork community, surveillance resisters"
+    }
+  ],
+  "patterns": {
+    "viral_mechanics": [
+      "Fear + Action = Viral (save before it's gone)",
+      "Progress sharing drives engagement (I saved X memories)",
+      "Cultural imports need functional twist for US market",
+      "Gift mechanics multiply virality"
+    ],
+    "revenue_models": [
+      "Freemium with usage limits works for preservation tools",
+      "Micro-transactions ($2.99) have low friction",
+      "Built-in expiration creates recurring revenue",
+      "Bundle pricing drives higher AOV"
+    ],
+    "platform_insights": [
+      "Chrome extensions = fast MVP, easy distribution",
+      "Death/loss anxiety is powerful motivator",
+      "Functional superstition is untapped market",
+      "Beautiful UI matters for gift products"
+    ],
+    "failure_reasons": [],
+    "success_factors": [
+      "Strong existing community (r/DataHoarder)",
+      "Universal pain point (everyone lost MySpace)",
+      "Clear value prop in <5 seconds",
+      "First-mover advantage in niche",
+      "Gift market potential = viral growth"
+    ]
+  },
+  "metrics": {
+    "experiments_shipped": 7,
+    "total_users": 0,
+    "revenue_generated": 0,
+    "viral_coefficient": 0,
+    "best_performing_experiment": "GhostMouse"
+  },
+  "market_signals": [
+    {
+      "source": "r/DataHoarder",
+      "signal": "Digital preservation anxiety",
+      "strength": 9,
+      "opportunity": "Tools for saving digital memories"
+    },
+    {
+      "source": "Japan trends",
+      "signal": "Digital Omamori (good luck charms)",
+      "strength": 7,
+      "opportunity": "Digital talismans for US market"
+    }
+  ],
+  "tools_discovered": [
+    "Chrome Extension Manifest V3",
+    "Service Workers for background tasks"
+  ],
+  "contacts": []
+}

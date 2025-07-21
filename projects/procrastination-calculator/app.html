@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Procrastination Calculator - The True Cost of Waiting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+        
+        .clock-display {
+            font-size: 2rem;
+            font-family: 'Courier New', monospace;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+        
+        .calculator-card {
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            margin-bottom: 30px;
+        }
+        
+        .task-input-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+        
+        .task-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .task-type-btn {
+            padding: 15px;
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .task-type-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .task-type-btn.selected {
+            background: #3498db;
+            color: white;
+            border-color: #2980b9;
+        }
+        
+        .task-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        
+        .calculate-btn {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+        }
+        
+        .results-section {
+            display: none;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .cost-summary {
+            background: #fee;
+            border: 2px solid #fcc;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .total-cost {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #e74c3c;
+            margin: 20px 0;
+        }
+        
+        .cost-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .cost-item {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .cost-label {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+        }
+        
+        .cost-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .timeline-visualization {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .timeline-bar {
+            height: 60px;
+            background: #e0e0e0;
+            border-radius: 30px;
+            position: relative;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .timeline-wasted {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(90deg, #e74c3c, #c0392b);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease;
+        }
+        
+        .opportunity-cost {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .opportunity-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+        
+        .opportunity-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #ffeaa7;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .opportunity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .guilt-multiplier {
+            background: #ffe6e6;
+            border: 2px solid #ffcccc;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .guilt-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #e74c3c;
+            margin: 15px 0;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .do-it-btn {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .do-it-btn:hover {
+            background: #229954;
+        }
+        
+        .share-btn {
+            background: #3498db;
+            color: white;
+        }
+        
+        .share-btn:hover {
+            background: #2980b9;
+        }
+        
+        .new-calc-btn {
+            background: #95a5a6;
+            color: white;
+        }
+        
+        .new-calc-btn:hover {
+            background: #7f8c8d;
+        }
+        
+        /* Motivational quotes */
+        .motivation-section {
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .quote {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        
+        .author {
+            opacity: 0.8;
+        }
+        
+        /* Fun animations */
+        .money-burn {
+            position: fixed;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: burn 2s ease-out forwards;
+        }
+        
+        @keyframes burn {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 600px) {
+            .calculator-card {
+                padding: 20px;
+            }
+            
+            .task-type-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .cost-breakdown {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .total-cost {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⏰ Procrastination Calculator</h1>
+            <p class="tagline">Discover the true cost of "I'll do it tomorrow"</p>
+            <div class="clock-display" id="clock">00:00:00</div>
+        </header>
+        
+        <div class="calculator-card">
+            <div class="task-input-section">
+                <div class="form-group">
+                    <label for="task-name">What are you putting off?</label>
+                    <input type="text" id="task-name" placeholder="e.g., Filing taxes, Starting that project, Going to the gym">
+                </div>
+                
+                <div class="form-group">
+                    <label for="days-procrastinated">How many days have you been procrastinating?</label>
+                    <input type="number" id="days-procrastinated" min="1" placeholder="Be honest...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="hours-needed">How many hours would it actually take?</label>
+                    <input type="number" id="hours-needed" min="0.5" step="0.5" placeholder="Usually less than you think">
+                </div>
+                
+                <div class="form-group">
+                    <label>Type of task:</label>
+                    <div class="task-type-grid">
+                        <div class="task-type-btn" data-type="work" onclick="selectTaskType('work')">
+                            <div class="task-icon">💼</div>
+                            <div>Work</div>
+                        </div>
+                        <div class="task-type-btn" data-type="health" onclick="selectTaskType('health')">
+                            <div class="task-icon">🏃</div>
+                            <div>Health</div>
+                        </div>
+                        <div class="task-type-btn" data-type="financial" onclick="selectTaskType('financial')">
+                            <div class="task-icon">💰</div>
+                            <div>Financial</div>
+                        </div>
+                        <div class="task-type-btn" data-type="personal" onclick="selectTaskType('personal')">
+                            <div class="task-icon">🎯</div>
+                            <div>Personal</div>
+                        </div>
+                        <div class="task-type-btn" data-type="creative" onclick="selectTaskType('creative')">
+                            <div class="task-icon">🎨</div>
+                            <div>Creative</div>
+                        </div>
+                        <div class="task-type-btn" data-type="social" onclick="selectTaskType('social')">
+                            <div class="task-icon">👥</div>
+                            <div>Social</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" onclick="calculateCost()">
+                    💸 Calculate My Procrastination Cost
+                </button>
+            </div>
+        </div>
+        
+        <div class="results-section" id="results">
+            <div class="calculator-card">
+                <div class="cost-summary">
+                    <h2 style="color: #e74c3c; margin-bottom: 10px;">Your Procrastination Bill:</h2>
+                    <div class="total-cost" id="total-cost">$0</div>
+                    <p style="color: #666;">And counting...</p>
+                </div>
+                
+                <div class="cost-breakdown">
+                    <div class="cost-item">
+                        <div class="cost-label">Mental Energy Wasted</div>
+                        <div class="cost-value" id="mental-cost">0 hours</div>
+                    </div>
+                    <div class="cost-item">
+                        <div class="cost-label">Stress Compound Interest</div>
+                        <div class="cost-value" id="stress-cost">0%</div>
+                    </div>
+                    <div class="cost-item">
+                        <div class="cost-label">Opportunity Cost</div>
+                        <div class="cost-value" id="opportunity-cost">$0</div>
+                    </div>
+                </div>
+                
+                <div class="timeline-visualization">
+                    <h3 style="margin-bottom: 15px;">Time Wasted vs. Time Needed</h3>
+                    <div class="timeline-bar">
+                        <div class="timeline-wasted" id="timeline-wasted" style="width: 0%">
+                            <span id="wasted-percentage">0%</span>
+                        </div>
+                    </div>
+                    <p style="text-align: center; color: #666;">
+                        You've spent <strong id="time-thinking">0</strong> hours thinking about this 
+                        <strong id="time-ratio">0</strong>-hour task
+                    </p>
+                </div>
+                
+                <div class="opportunity-cost">
+                    <h3 style="color: #f39c12; margin-bottom: 10px;">What You Could Have Done Instead:</h3>
+                    <ul class="opportunity-list" id="opportunity-list">
+                        <!-- Generated dynamically -->
+                    </ul>
+                </div>
+                
+                <div class="guilt-multiplier">
+                    <h3 style="color: #e74c3c;">Guilt Score</h3>
+                    <div class="guilt-score" id="guilt-score">0/10</div>
+                    <p id="guilt-message" style="color: #666;"></p>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="action-btn do-it-btn" onclick="commitToAction()">
+                        ✅ I'll Do It Right Now!
+                    </button>
+                    <button class="action-btn share-btn" onclick="shareShame()">
+                        📢 Share My Shame
+                    </button>
+                    <button class="action-btn new-calc-btn" onclick="newCalculation()">
+                        🔄 Calculate Another
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="motivation-section">
+            <p class="quote" id="quote">"The best time to plant a tree was 20 years ago. The second best time is now."</p>
+            <p class="author">- Chinese Proverb</p>
+        </div>
+    </div>
+    
+    <script>
+        let selectedTaskType = '';
+        let currentTaskData = {};
+        
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { hour12: false });
+            document.getElementById('clock').textContent = timeString;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        // Task type selection
+        function selectTaskType(type) {
+            selectedTaskType = type;
+            document.querySelectorAll('.task-type-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            document.querySelector(`[data-type="${type}"]`).classList.add('selected');
+        }
+        
+        // Calculate procrastination cost
+        function calculateCost() {
+            const taskName = document.getElementById('task-name').value.trim();
+            const daysProcrastinated = parseInt(document.getElementById('days-procrastinated').value) || 0;
+            const hoursNeeded = parseFloat(document.getElementById('hours-needed').value) || 0;
+            
+            if (!taskName || !daysProcrastinated || !hoursNeeded || !selectedTaskType) {
+                alert('Please fill in all fields and select a task type!');
+                return;
+            }
+            
+            // Store current task data
+            currentTaskData = { taskName, daysProcrastinated, hoursNeeded, taskType: selectedTaskType };
+            
+            // Calculate various costs
+            const mentalEnergyHours = Math.round(daysProcrastinated * 0.5); // 30 min/day thinking about it
+            const stressCompound = Math.min(daysProcrastinated * 5, 100); // 5% per day, max 100%
+            const hourlyValue = getHourlyValue(selectedTaskType);
+            const opportunityCost = daysProcrastinated * hourlyValue;
+            const totalCost = opportunityCost + (mentalEnergyHours * 20); // Mental energy valued at $20/hr
+            
+            // Update display
+            document.getElementById('total-cost').textContent = `$${totalCost.toFixed(0)}`;
+            document.getElementById('mental-cost').textContent = `${mentalEnergyHours} hours`;
+            document.getElementById('stress-cost').textContent = `${stressCompound}%`;
+            document.getElementById('opportunity-cost').textContent = `$${opportunityCost.toFixed(0)}`;
+            
+            // Timeline visualization
+            const wastedRatio = Math.min((daysProcrastinated * 24) / hoursNeeded * 100, 1000);
+            const timelineBar = document.getElementById('timeline-wasted');
+            timelineBar.style.width = '0%';
+            setTimeout(() => {
+                timelineBar.style.width = Math.min(wastedRatio, 100) + '%';
+            }, 100);
+            document.getElementById('wasted-percentage').textContent = 
+                wastedRatio > 100 ? `${Math.round(wastedRatio)}%` : `${Math.round(wastedRatio)}%`;
+            
+            document.getElementById('time-thinking').textContent = mentalEnergyHours;
+            document.getElementById('time-ratio').textContent = hoursNeeded;
+            
+            // Generate opportunity list
+            generateOpportunityList(daysProcrastinated, selectedTaskType);
+            
+            // Calculate guilt score
+            calculateGuiltScore(daysProcrastinated, hoursNeeded, selectedTaskType);
+            
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            
+            // Fun money burning animation
+            if (totalCost > 100) {
+                burnMoney();
+            }
+        }
+        
+        function getHourlyValue(taskType) {
+            const values = {
+                work: 50,
+                health: 100, // Health is priceless
+                financial: 75,
+                personal: 40,
+                creative: 35,
+                social: 30
+            };
+            return values[taskType] || 40;
+        }
+        
+        function generateOpportunityList(days, taskType) {
+            const opportunities = {
+                work: [
+                    `Completed ${days * 2} other productive tasks`,
+                    `Earned $${days * 100} in side projects`,
+                    `Learned a new skill`,
+                    `Networked with ${days} new contacts`
+                ],
+                health: [
+                    `Worked out ${days} times`,
+                    `Prepared ${days * 3} healthy meals`,
+                    `Meditated for ${days * 20} minutes`,
+                    `Slept ${Math.round(days * 0.5)} extra hours`
+                ],
+                financial: [
+                    `Saved $${days * 50} by budgeting`,
+                    `Invested $${days * 100} in index funds`,
+                    `Researched ${days} investment opportunities`,
+                    `Reduced expenses by ${days * 2}%`
+                ],
+                personal: [
+                    `Read ${Math.round(days / 7)} books`,
+                    `Spent ${days * 2} quality hours with loved ones`,
+                    `Pursued hobbies for ${days * 1.5} hours`,
+                    `Decluttered ${days} areas of your home`
+                ],
+                creative: [
+                    `Created ${days} pieces of content`,
+                    `Practiced your craft for ${days * 2} hours`,
+                    `Started ${Math.round(days / 7)} new projects`,
+                    `Shared your work ${days} times`
+                ],
+                social: [
+                    `Connected with ${days} friends`,
+                    `Attended ${Math.round(days / 7)} social events`,
+                    `Made ${Math.round(days / 14)} new connections`,
+                    `Strengthened ${days / 2} relationships`
+                ]
+            };
+            
+            const list = document.getElementById('opportunity-list');
+            list.innerHTML = '';
+            
+            const relevantOpportunities = opportunities[taskType] || opportunities.personal;
+            relevantOpportunities.forEach(opp => {
+                const li = document.createElement('li');
+                li.className = 'opportunity-item';
+                li.innerHTML = `<span>😢</span> <span>${opp}</span>`;
+                list.appendChild(li);
+            });
+        }
+        
+        function calculateGuiltScore(days, hours, taskType) {
+            // Base guilt on ratio of procrastination time to task time
+            let guilt = Math.min(Math.round((days * 24 / hours) / 10), 10);
+            
+            // Adjust based on task type
+            const typeMultipliers = {
+                health: 1.5,
+                financial: 1.3,
+                work: 1.2,
+                personal: 1.0,
+                creative: 0.9,
+                social: 0.8
+            };
+            
+            guilt = Math.min(Math.round(guilt * (typeMultipliers[taskType] || 1)), 10);
+            
+            document.getElementById('guilt-score').textContent = `${guilt}/10`;
+            
+            // Guilt messages
+            const messages = [
+                "You're doing fine! Just a small delay.",
+                "A little procrastination never hurt anyone... right?",
+                "Starting to feel it, aren't you?",
+                "The guilt is building...",
+                "This is getting uncomfortable.",
+                "Okay, this is actually pretty bad.",
+                "The weight of inaction is heavy.",
+                "You know what you need to do.",
+                "This has gone on too long.",
+                "Maximum guilt achieved. Do it NOW!"
+            ];
+            
+            document.getElementById('guilt-message').textContent = messages[guilt - 1] || messages[9];
+        }
+        
+        function burnMoney() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const money = document.createElement('div');
+                    money.className = 'money-burn';
+                    money.textContent = '💸';
+                    money.style.left = Math.random() * window.innerWidth + 'px';
+                    money.style.top = window.innerHeight - 100 + 'px';
+                    document.body.appendChild(money);
+                    
+                    setTimeout(() => money.remove(), 2000);
+                }, i * 200);
+            }
+        }
+        
+        function commitToAction() {
+            alert(`Great decision! You're about to save yourself from ${currentTaskData.daysProcrastinated} more days of guilt. \n\nGo do "${currentTaskData.taskName}" right now! \n\nYour future self will thank you. 💪`);
+            
+            // Could add calendar integration here
+        }
+        
+        function shareShame() {
+            const text = `I've been procrastinating on "${currentTaskData.taskName}" for ${currentTaskData.daysProcrastinated} days. The Procrastination Calculator says it's cost me $${document.getElementById('total-cost').textContent}! Time to stop putting it off. 😅`;
+            
+            // Try to share via Web Share API, fallback to Twitter
+            if (navigator.share) {
+                navigator.share({
+                    title: 'My Procrastination Cost',
+                    text: text,
+                    url: window.location.href
+                });
+            } else {
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`, '_blank');
+            }
+        }
+        
+        function newCalculation() {
+            document.getElementById('task-name').value = '';
+            document.getElementById('days-procrastinated').value = '';
+            document.getElementById('hours-needed').value = '';
+            document.querySelectorAll('.task-type-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            selectedTaskType = '';
+            document.getElementById('results').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Motivational quotes
+        const quotes = [
+            { text: "The best time to plant a tree was 20 years ago. The second best time is now.", author: "Chinese Proverb" },
+            { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
+            { text: "The secret to getting ahead is getting started.", author: "Mark Twain" },
+            { text: "Procrastination is the thief of time.", author: "Edward Young" },
+            { text: "A year from now you'll wish you had started today.", author: "Karen Lamb" },
+            { text: "The way to get started is to quit talking and begin doing.", author: "Walt Disney" }
+        ];
+        
+        // Rotate quotes
+        let quoteIndex = 0;
+        setInterval(() => {
+            quoteIndex = (quoteIndex + 1) % quotes.length;
+            document.getElementById('quote').textContent = `"${quotes[quoteIndex].text}"`;
+            document.querySelector('.author').textContent = `- ${quotes[quoteIndex].author}`;
+        }, 10000);
+    </script>
+</body>
+</html>

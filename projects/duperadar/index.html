@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DupeRadar - Never Pay Full Price Again</title>
+    <meta name="description" content="The Shazam for finding cheaper alternatives. Point, scan, save. Join 2M+ dupe hunters beating the system.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #fff;
+            color: #000;
+            line-height: 1.6;
+        }
+        
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ff006e 0%, #8338ec 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Floating price tags */
+        .price-tag {
+            position: absolute;
+            background: white;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            animation: float 20s infinite linear;
+            opacity: 0.1;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+        
+        h1 {
+            font-size: clamp(3rem, 10vw, 5rem);
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        .strike {
+            text-decoration: line-through;
+            opacity: 0.5;
+        }
+        
+        .hero-tagline {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .scan-demo {
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px auto;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .phone-mockup {
+            width: 200px;
+            height: 400px;
+            background: #000;
+            border-radius: 30px;
+            margin: 0 auto 20px;
+            position: relative;
+            border: 10px solid #222;
+            overflow: hidden;
+        }
+        
+        .camera-view {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #333 25%, transparent 25%, transparent 75%, #333 75%),
+                        linear-gradient(45deg, #333 25%, transparent 25%, transparent 75%, #333 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 10px 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: #0f0;
+            box-shadow: 0 0 10px #0f0;
+            animation: scan 2s infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+        
+        .scan-target {
+            width: 120px;
+            height: 120px;
+            border: 3px solid #0f0;
+            position: relative;
+        }
+        
+        .scan-target::before,
+        .scan-target::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #0f0;
+        }
+        
+        .scan-target::before {
+            top: -3px;
+            left: -3px;
+            border-right: none;
+            border-bottom: none;
+        }
+        
+        .scan-target::after {
+            bottom: -3px;
+            right: -3px;
+            border-left: none;
+            border-top: none;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 20px 60px;
+            background: white;
+            color: #ff006e;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 900;
+            border-radius: 50px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        
+        /* Dupe Examples */
+        .dupes-showcase {
+            padding: 80px 20px;
+            background: #f8f8f8;
+        }
+        
+        .showcase-title {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #ff006e;
+        }
+        
+        .dupe-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .dupe-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        
+        .dupe-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .dupe-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            height: 200px;
+        }
+        
+        .original-img,
+        .dupe-img {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            position: relative;
+        }
+        
+        .original-img {
+            background: #f0f0f0;
+        }
+        
+        .dupe-img {
+            background: #e8f5e9;
+        }
+        
+        .price-badge {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: #000;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+        
+        .dupe-info {
+            padding: 20px;
+        }
+        
+        .dupe-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+        
+        .dupe-score {
+            display: inline-block;
+            background: #ff006e;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .savings {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #4caf50;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 20px;
+            background: white;
+        }
+        
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .step {
+            text-align: center;
+        }
+        
+        .step-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #ff006e;
+            color: white;
+            border-radius: 50%;
+            line-height: 40px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .step p {
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+        
+        /* Stats */
+        .stats-section {
+            padding: 80px 20px;
+            background: #ff006e;
+            color: white;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .stat {
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        /* Community */
+        .community {
+            padding: 80px 20px;
+            background: #f8f8f8;
+        }
+        
+        .community-feed {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .community-post {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+        
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        
+        .username {
+            font-weight: bold;
+            color: #ff006e;
+        }
+        
+        .saved-amount {
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .post-stats {
+            display: flex;
+            gap: 20px;
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        /* CTA */
+        .final-cta {
+            padding: 100px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #8338ec 0%, #ff006e 100%);
+            color: white;
+        }
+        
+        .cta-title {
+            font-size: 3.5rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+        
+        .cta-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        /* Footer */
+        .footer {
+            padding: 40px 20px;
+            text-align: center;
+            background: #000;
+            color: white;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero">
+        <!-- Floating price tags -->
+        <div class="price-tag" style="top: 10%; left: 5%; animation-delay: 0s;">$1,290</div>
+        <div class="price-tag" style="top: 20%; left: 85%; animation-delay: 2s;">$89</div>
+        <div class="price-tag" style="top: 60%; left: 10%; animation-delay: 4s;">$450</div>
+        <div class="price-tag" style="top: 70%; left: 80%; animation-delay: 6s;">$23</div>
+        <div class="price-tag" style="top: 40%; left: 50%; animation-delay: 8s;">$799</div>
+        
+        <div class="hero-content">
+            <h1><span class="strike">Pay Full Price</span><br>Find The Dupe</h1>
+            <p class="hero-tagline">The Shazam for finding cheaper alternatives to everything</p>
+            
+            <div class="scan-demo">
+                <div class="phone-mockup">
+                    <div class="camera-view">
+                        <div class="scan-line"></div>
+                        <div class="scan-target"></div>
+                    </div>
+                </div>
+                <p style="font-size: 1.2rem; margin-bottom: 20px;">Point. Scan. Save.</p>
+            </div>
+            
+            <a href="#" class="cta-button">Download DupeRadar</a>
+            <p style="margin-top: 20px; opacity: 0.8;">Join 2M+ dupe hunters • Free to use</p>
+        </div>
+    </section>
+    
+    <!-- Dupe Examples -->
+    <section class="dupes-showcase">
+        <h2 class="showcase-title">Recent Dupe Wins 🏆</h2>
+        <div class="dupe-grid">
+            <div class="dupe-card">
+                <div class="dupe-images">
+                    <div class="original-img">
+                        👜
+                        <span class="price-badge">$3,200</span>
+                    </div>
+                    <div class="dupe-img">
+                        👜
+                        <span class="price-badge">$42</span>
+                    </div>
+                </div>
+                <div class="dupe-info">
+                    <h3 class="dupe-title">Designer Tote → Target Find</h3>
+                    <span class="dupe-score">94% Match</span>
+                    <div class="savings">Saved $3,158</div>
+                </div>
+            </div>
+            
+            <div class="dupe-card">
+                <div class="dupe-images">
+                    <div class="original-img">
+                        ☕
+                        <span class="price-badge">$120/mo</span>
+                    </div>
+                    <div class="dupe-img">
+                        ☕
+                        <span class="price-badge">$15/mo</span>
+                    </div>
+                </div>
+                <div class="dupe-info">
+                    <h3 class="dupe-title">Fancy Coffee → Home Setup</h3>
+                    <span class="dupe-score">96% Match</span>
+                    <div class="savings">Saved $105/mo</div>
+                </div>
+            </div>
+            
+            <div class="dupe-card">
+                <div class="dupe-images">
+                    <div class="original-img">
+                        💊
+                        <span class="price-badge">$89</span>
+                    </div>
+                    <div class="dupe-img">
+                        💊
+                        <span class="price-badge">$12</span>
+                    </div>
+                </div>
+                <div class="dupe-info">
+                    <h3 class="dupe-title">Skincare Serum → K-Beauty Alt</h3>
+                    <span class="dupe-score">91% Match</span>
+                    <div class="savings">Saved $77</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2 style="text-align: center; font-size: 3rem; margin-bottom: 60px;">
+            Dupe Hunting Made Easy
+        </h2>
+        <div class="steps-container">
+            <div class="step">
+                <div class="step-icon">📱</div>
+                <div class="step-number">1</div>
+                <h3>Point Camera</h3>
+                <p>See something expensive? Open DupeRadar and point your camera at it.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">🔍</div>
+                <div class="step-number">2</div>
+                <h3>AI Identifies</h3>
+                <p>Our AI instantly recognizes the product and searches millions of alternatives.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">💰</div>
+                <div class="step-number">3</div>
+                <h3>Get Dupes</h3>
+                <p>See cheaper alternatives ranked by similarity, reviews, and savings potential.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon">🎉</div>
+                <div class="step-number">4</div>
+                <h3>Flex Savings</h3>
+                <p>Share your dupe wins with the community. Saving money is the new flex.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Stats -->
+    <section class="stats-section">
+        <h2 style="font-size: 3rem; margin-bottom: 40px;">The Dupe Revolution</h2>
+        <div class="stats-grid">
+            <div class="stat">
+                <div class="stat-number">$847M</div>
+                <div class="stat-label">Saved by our users</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">2.3M</div>
+                <div class="stat-label">Active dupe hunters</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">89%</div>
+                <div class="stat-label">Average savings</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">12.5M</div>
+                <div class="stat-label">Dupes discovered</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Community -->
+    <section class="community">
+        <h2 style="text-align: center; font-size: 3rem; margin-bottom: 60px;">
+            Dupe Hunters Unite 🔥
+        </h2>
+        <div class="community-feed">
+            <div class="community-post">
+                <div class="post-header">
+                    <span class="username">@sarah_saves</span>
+                    <span class="saved-amount">Saved $2,840</span>
+                </div>
+                <div class="post-content">
+                    "Found the PERFECT dupe for that viral Stanley cup. $8 at Walmart and it's literally identical. My coworkers think I spent $45 😂"
+                </div>
+                <div class="post-stats">
+                    <span>👍 2.3k</span>
+                    <span>💬 189</span>
+                    <span>🔄 Share</span>
+                </div>
+            </div>
+            
+            <div class="community-post">
+                <div class="post-header">
+                    <span class="username">@budgetboss</span>
+                    <span class="saved-amount">Saved $450</span>
+                </div>
+                <div class="post-content">
+                    "DupeRadar found me Zara versions of EVERY Reformation dress I wanted. Same vibe, 90% cheaper. Hot girl summer on a budget!"
+                </div>
+                <div class="post-stats">
+                    <span>👍 4.1k</span>
+                    <span>💬 412</span>
+                    <span>🔄 Share</span>
+                </div>
+            </div>
+            
+            <div class="community-post">
+                <div class="post-header">
+                    <span class="username">@techdeals</span>
+                    <span class="saved-amount">Saved $1,200</span>
+                </div>
+                <div class="post-content">
+                    "Why did nobody tell me about Anker??? Found dupes for all my Apple accessories. Same quality, 80% cheaper. Never paying the Apple tax again."
+                </div>
+                <div class="post-stats">
+                    <span>👍 5.7k</span>
+                    <span>💬 623</span>
+                    <span>🔄 Share</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2 class="cta-title">Never Overpay Again</h2>
+        <p class="cta-subtitle">Join the smartest shoppers on the internet</p>
+        <a href="#" class="cta-button" style="background: white; color: #ff006e;">
+            Get DupeRadar Free
+        </a>
+        <p style="margin-top: 20px; opacity: 0.8;">
+            Available on iOS & Android • No ads • No catch
+        </p>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>DupeRadar • Because paying full price is so last year</p>
+        <p>© 2025 Smart Shopping Revolution</p>
+    </footer>
+    
+    <script>
+        // Animate scan line
+        const scanLine = document.querySelector('.scan-line');
+        
+        // Simulate dupe found
+        setInterval(() => {
+            const scanTarget = document.querySelector('.scan-target');
+            scanTarget.style.borderColor = '#f00';
+            setTimeout(() => {
+                scanTarget.style.borderColor = '#0f0';
+            }, 500);
+        }, 3000);
+        
+        // CTA handlers
+        document.querySelectorAll('.cta-button').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('DupeRadar Coming Soon!\n\nJoin the waitlist at duperadar.app\n\nFirst 10,000 users get lifetime Pro features free!');
+            });
+        });
+        
+        // Add floating animation to price tags
+        const priceTags = document.querySelectorAll('.price-tag');
+        priceTags.forEach((tag, index) => {
+            tag.style.left = Math.random() * 90 + '%';
+            tag.style.animationDelay = index * 2 + 's';
+            tag.style.animationDuration = 15 + Math.random() * 10 + 's';
+        });
+    </script>
+</body>
+</html>

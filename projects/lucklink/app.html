@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuckLink - Digital Omamori for Modern Life</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, 'Noto Sans JP', sans-serif;
+            background: #1a0f1f;
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 215, 0, 0.6);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8c42, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .japanese-title {
+            font-size: 2rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        /* Charm Selection */
+        .charm-selection {
+            margin-bottom: 50px;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #ffd700;
+        }
+        
+        .charm-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .charm-type {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 15px;
+            padding: 30px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .charm-type:hover {
+            transform: translateY(-5px);
+            border-color: #ffd700;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+        
+        .charm-type.selected {
+            background: rgba(255, 215, 0, 0.1);
+            border-color: #ffd700;
+        }
+        
+        .charm-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+        }
+        
+        .charm-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .charm-purpose {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Personalization */
+        .personalization {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #ffd700;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff6b6b, #ff8c42, #ffd700);
+            color: #000;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+        
+        /* Omamori Display */
+        .omamori-display {
+            display: none;
+            text-align: center;
+            margin-top: 50px;
+        }
+        
+        .omamori-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        
+        .omamori {
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8c42);
+            border-radius: 15px 15px 100px 100px;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            animation: gentle-swing 3s ease-in-out infinite;
+        }
+        
+        @keyframes gentle-swing {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+        
+        .omamori-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.2;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.1) 10px,
+                rgba(255, 255, 255, 0.1) 20px
+            );
+        }
+        
+        .omamori-symbol {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+        
+        .omamori-text {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+        }
+        
+        .omamori-wish {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .omamori-name {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .omamori-string {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 60px;
+            background: #8b4513;
+            border-radius: 20px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Blessing Text */
+        .blessing-section {
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .blessing-title {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ffd700;
+        }
+        
+        .blessing-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            text-align: center;
+            opacity: 0.9;
+        }
+        
+        /* Actions */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .download-btn {
+            background: #ff6b6b;
+        }
+        
+        .share-btn {
+            background: #4267B2;
+        }
+        
+        .new-btn {
+            background: #666;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Mobile Wallpaper */
+        .wallpaper-preview {
+            max-width: 300px;
+            margin: 40px auto;
+            text-align: center;
+        }
+        
+        .phone-mockup {
+            position: relative;
+            width: 100%;
+            background: #000;
+            border-radius: 30px;
+            padding: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .phone-screen {
+            background: #1a0f1f;
+            border-radius: 20px;
+            padding: 20px;
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Instructions */
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 40px;
+        }
+        
+        .instruction-item {
+            margin-bottom: 15px;
+            padding-left: 30px;
+            position: relative;
+        }
+        
+        .instruction-item::before {
+            content: '✨';
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>LuckLink</h1>
+            <div class="japanese-title">お守り</div>
+            <p class="tagline">Create your personal digital Omamori for protection and luck</p>
+        </div>
+        
+        <div class="charm-selection">
+            <h2 class="section-title">Choose Your Protection</h2>
+            <div class="charm-grid">
+                <div class="charm-type" onclick="selectCharm('success', '🎯')">
+                    <div class="charm-icon">🎯</div>
+                    <div class="charm-name">Success</div>
+                    <div class="charm-purpose">Career & Goals</div>
+                </div>
+                <div class="charm-type" onclick="selectCharm('love', '❤️')">
+                    <div class="charm-icon">❤️</div>
+                    <div class="charm-name">Love</div>
+                    <div class="charm-purpose">Relationships</div>
+                </div>
+                <div class="charm-type" onclick="selectCharm('health', '🌸')">
+                    <div class="charm-icon">🌸</div>
+                    <div class="charm-name">Health</div>
+                    <div class="charm-purpose">Wellness & Peace</div>
+                </div>
+                <div class="charm-type" onclick="selectCharm('wealth', '💰')">
+                    <div class="charm-icon">💰</div>
+                    <div class="charm-name">Wealth</div>
+                    <div class="charm-purpose">Prosperity</div>
+                </div>
+                <div class="charm-type" onclick="selectCharm('protection', '🛡️')">
+                    <div class="charm-icon">🛡️</div>
+                    <div class="charm-name">Protection</div>
+                    <div class="charm-purpose">Safety & Security</div>
+                </div>
+                <div class="charm-type" onclick="selectCharm('creativity', '✨')">
+                    <div class="charm-icon">✨</div>
+                    <div class="charm-name">Creativity</div>
+                    <div class="charm-purpose">Inspiration</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="personalization">
+            <h2 class="section-title">Personalize Your Omamori</h2>
+            
+            <div class="input-group">
+                <label class="input-label">Your Name</label>
+                <input type="text" id="user-name" placeholder="Enter your name">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Your Wish (Be specific - the universe is listening)</label>
+                <textarea id="user-wish" rows="3" placeholder="e.g., I wish to find my dream job at a company that values my creativity"></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Lucky Number (Optional)</label>
+                <input type="number" id="lucky-number" placeholder="Your special number">
+            </div>
+            
+            <button class="generate-btn" onclick="generateOmamori()">
+                ⛩️ CREATE MY OMAMORI
+            </button>
+        </div>
+        
+        <div class="omamori-display" id="omamori-display">
+            <div class="omamori-container">
+                <div class="omamori-string"></div>
+                <div class="omamori" id="omamori">
+                    <div class="omamori-pattern"></div>
+                    <div class="omamori-symbol" id="omamori-symbol">🎯</div>
+                    <div class="omamori-text">
+                        <div class="omamori-wish" id="omamori-wish">Success & Achievement</div>
+                        <div class="omamori-name" id="omamori-name">For: You</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="blessing-section">
+                <h3 class="blessing-title">Your Digital Blessing</h3>
+                <p class="blessing-text" id="blessing-text">
+                    May this digital Omamori bring you protection and guide you toward your goals.
+                </p>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn download-btn" onclick="downloadOmamori()">📱 Save as Wallpaper</button>
+                <button class="action-btn share-btn" onclick="shareOmamori()">🔗 Share My Luck</button>
+                <button class="action-btn new-btn" onclick="createNew()">✨ Create Another</button>
+            </div>
+            
+            <div class="wallpaper-preview">
+                <div class="phone-mockup">
+                    <div class="phone-screen">
+                        <div style="transform: scale(0.6);">
+                            <div class="omamori" style="animation: none;">
+                                <div class="omamori-pattern"></div>
+                                <div class="omamori-symbol" id="preview-symbol">🎯</div>
+                                <div class="omamori-text">
+                                    <div class="omamori-wish" id="preview-wish">Your Wish</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p style="margin-top: 15px; opacity: 0.8;">Preview as phone wallpaper</p>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3 style="margin-bottom: 20px; color: #ffd700;">How to Use Your Digital Omamori</h3>
+            <div class="instruction-item">Set it as your phone wallpaper to carry protection everywhere</div>
+            <div class="instruction-item">Look at it when you need strength or guidance</div>
+            <div class="instruction-item">Create a new one when your wishes change</div>
+            <div class="instruction-item">Share with friends who need luck</div>
+            <div class="instruction-item">The more specific your wish, the stronger the charm</div>
+        </div>
+    </div>
+    
+    <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 20) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+        createParticles();
+        
+        let selectedCharm = null;
+        let charmSymbol = '';
+        
+        const charmColors = {
+            success: 'linear-gradient(135deg, #4CAF50, #8BC34A)',
+            love: 'linear-gradient(135deg, #E91E63, #FF4081)',
+            health: 'linear-gradient(135deg, #FF6B9D, #FEC0CE)',
+            wealth: 'linear-gradient(135deg, #FFD700, #FFA500)',
+            protection: 'linear-gradient(135deg, #3F51B5, #5C6BC0)',
+            creativity: 'linear-gradient(135deg, #9C27B0, #BA68C8)'
+        };
+        
+        const blessings = {
+            success: [
+                "May every door open before you, and every path lead to triumph.",
+                "Your dedication shall bloom into achievement, your efforts into victory.",
+                "Success flows to you like a river to the sea - naturally and abundantly."
+            ],
+            love: [
+                "May your heart be a magnet for genuine connection and lasting affection.",
+                "Love surrounds you like morning light, warm and ever-present.",
+                "Your capacity to love and be loved grows stronger with each passing day."
+            ],
+            health: [
+                "May your body be strong, your mind clear, and your spirit peaceful.",
+                "Health and vitality flow through you like a gentle spring breeze.",
+                "Every cell in your body vibrates with wellness and harmony."
+            ],
+            wealth: [
+                "Prosperity finds you in expected and unexpected ways.",
+                "Your relationship with abundance is one of gratitude and flow.",
+                "Financial opportunities align with your highest good."
+            ],
+            protection: [
+                "You are surrounded by an invisible shield of safety and security.",
+                "Negative energy transforms into lessons, harm into growth.",
+                "Guardian forces watch over your every step."
+            ],
+            creativity: [
+                "Inspiration flows through you like electricity through wire.",
+                "Your creative well never runs dry, always refreshing with new ideas.",
+                "The muse dances at your fingertips, ready to manifest brilliance."
+            ]
+        };
+        
+        function selectCharm(type, symbol) {
+            selectedCharm = type;
+            charmSymbol = symbol;
+            
+            // Update UI
+            document.querySelectorAll('.charm-type').forEach(el => {
+                el.classList.remove('selected');
+            });
+            event.target.closest('.charm-type').classList.add('selected');
+        }
+        
+        function generateOmamori() {
+            const name = document.getElementById('user-name').value.trim();
+            const wish = document.getElementById('user-wish').value.trim();
+            const luckyNumber = document.getElementById('lucky-number').value;
+            
+            if (!selectedCharm) {
+                alert('Please select a charm type first!');
+                return;
+            }
+            
+            if (!name || !wish) {
+                alert('Please enter your name and wish!');
+                return;
+            }
+            
+            // Update omamori
+            const omamori = document.getElementById('omamori');
+            omamori.style.background = charmColors[selectedCharm];
+            
+            document.getElementById('omamori-symbol').textContent = charmSymbol;
+            document.getElementById('omamori-wish').textContent = wish.length > 50 ? wish.substring(0, 50) + '...' : wish;
+            document.getElementById('omamori-name').textContent = `For: ${name}`;
+            
+            // Update preview
+            document.getElementById('preview-symbol').textContent = charmSymbol;
+            document.getElementById('preview-wish').textContent = wish.length > 30 ? wish.substring(0, 30) + '...' : wish;
+            
+            // Generate blessing
+            const blessingOptions = blessings[selectedCharm];
+            const blessing = blessingOptions[Math.floor(Math.random() * blessingOptions.length)];
+            document.getElementById('blessing-text').textContent = blessing;
+            
+            // Add lucky number if provided
+            if (luckyNumber) {
+                const luckyElement = document.createElement('div');
+                luckyElement.style.position = 'absolute';
+                luckyElement.style.top = '30px';
+                luckyElement.style.right = '30px';
+                luckyElement.style.fontSize = '2rem';
+                luckyElement.style.opacity = '0.3';
+                luckyElement.textContent = luckyNumber;
+                omamori.appendChild(luckyElement);
+            }
+            
+            // Show display
+            document.getElementById('omamori-display').style.display = 'block';
+            document.getElementById('omamori-display').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function downloadOmamori() {
+            // In a real app, this would use html2canvas or similar
+            alert('📱 Omamori saved! Set it as your wallpaper for daily protection and luck.');
+        }
+        
+        function shareOmamori() {
+            const text = `I created my digital Omamori for ${selectedCharm}! 🎌 Create your own lucky charm:`;
+            window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent('https://lucklink.app')}`, '_blank');
+        }
+        
+        function createNew() {
+            document.getElementById('omamori-display').style.display = 'none';
+            document.getElementById('user-name').value = '';
+            document.getElementById('user-wish').value = '';
+            document.getElementById('lucky-number').value = '';
+            document.querySelectorAll('.charm-type').forEach(el => {
+                el.classList.remove('selected');
+            });
+            selectedCharm = null;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

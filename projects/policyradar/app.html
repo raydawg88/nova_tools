@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolicyRadar - Stop Overpaying for Insurance | Nova Systems</title>
+    <link rel="stylesheet" href="../../shared/retro-ui.css">
+    <script src="../../shared/retro-ui.js"></script>
+    <script src="../../shared/nova-auth.js" data-product="policyradar"></script>
+    <script src="../../shared/nova-analytics.js" data-product="policyradar"></script>
+    <style>
+        /* Product-specific styles */
+        .savings-counter {
+            font-size: 72px;
+            color: var(--retro-green);
+            text-shadow: 0 0 20px currentColor;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        
+        .policy-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .policy-card {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--retro-green);
+            padding: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .policy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3);
+        }
+        
+        .policy-card.overpaying {
+            border-color: var(--retro-amber);
+            animation: pulse 2s infinite;
+        }
+        
+        .policy-card.critical {
+            border-color: var(--retro-pink);
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .policy-type {
+            font-size: 24px;
+            color: var(--retro-cyan);
+            margin-bottom: 10px;
+        }
+        
+        .policy-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .status-good {
+            background: var(--retro-green);
+            color: #000;
+        }
+        
+        .status-warning {
+            background: var(--retro-amber);
+            color: #000;
+        }
+        
+        .status-critical {
+            background: var(--retro-pink);
+            color: #000;
+        }
+        
+        .scanner-section {
+            background: rgba(0, 255, 255, 0.05);
+            border: 2px solid var(--retro-cyan);
+            padding: 40px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .scan-animation {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            border: 3px solid var(--retro-cyan);
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: var(--retro-cyan);
+            top: 0;
+            box-shadow: 0 0 10px var(--retro-cyan);
+            animation: scan 2s linear infinite;
+        }
+        
+        @keyframes scan {
+            from { top: 0; }
+            to { top: 100%; }
+        }
+        
+        .finding-item {
+            background: rgba(255, 176, 0, 0.1);
+            border-left: 4px solid var(--retro-amber);
+            padding: 15px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        
+        .discount-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .discount-item {
+            padding: 15px;
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid var(--retro-green);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .discount-item.missing {
+            background: rgba(255, 0, 128, 0.1);
+            border-color: var(--retro-pink);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            margin: 20px 0;
+            border-collapse: collapse;
+        }
+        
+        .comparison-table th {
+            background: var(--retro-green);
+            color: #000;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        .comparison-table td {
+            padding: 10px;
+            border: 1px solid var(--retro-green);
+        }
+        
+        .quote-item {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 20px;
+            align-items: center;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            margin: 10px 0;
+            border: 1px solid var(--retro-green);
+        }
+        
+        .quote-savings {
+            color: var(--retro-green);
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .audit-progress {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 30px 0;
+        }
+        
+        .progress-step {
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--retro-green);
+            text-align: center;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+        
+        .progress-step.active {
+            opacity: 1;
+            background: rgba(0, 255, 0, 0.1);
+            animation: blink 1s infinite;
+        }
+        
+        .progress-step.complete {
+            opacity: 1;
+            background: rgba(0, 255, 0, 0.2);
+        }
+    </style>
+</head>
+<body class="retro-ui">
+    <div class="retro-container">
+        <!-- ASCII Header -->
+        <div class="retro-ascii-header retro-green">
+╔═══════════════════════════════════════════════════════════════╗
+║  ██████╗  ██████╗ ██╗     ██╗ ██████╗██╗   ██╗               ║
+║  ██╔══██╗██╔═══██╗██║     ██║██╔════╝╚██╗ ██╔╝               ║
+║  ██████╔╝██║   ██║██║     ██║██║      ╚████╔╝                ║
+║  ██╔═══╝ ██║   ██║██║     ██║██║       ╚██╔╝                 ║
+║  ██║     ╚██████╔╝███████╗██║╚██████╗   ██║                  ║
+║  ╚═╝      ╚═════╝ ╚══════╝╚═╝ ╚═════╝   ╚═╝                  ║
+║                                                                ║
+║    R A D A R   [ Insurance Overpayment Scanner v1.0 ]          ║
+╚═══════════════════════════════════════════════════════════════╗
+        </div>
+        
+        <p class="retro-center retro-cyan retro-blink">AVERAGE AMERICAN OVERPAYS $1,400/YEAR ON INSURANCE</p>
+        
+        <!-- Total Savings Display -->
+        <div class="retro-center">
+            <p style="font-size: 24px; margin: 20px 0;">Total Identified Savings:</p>
+            <div class="savings-counter">$<span id="total-savings">0</span>/year</div>
+        </div>
+        
+        <!-- Quick Scan Section -->
+        <div class="scanner-section">
+            <h2 class="retro-cyan">[ QUICK INSURANCE AUDIT ]</h2>
+            <p style="margin: 20px 0;">Add your policies to discover hidden overpayments</p>
+            <button class="retro-button retro-bg-cyan" onclick="startQuickScan()" style="font-size: 24px; padding: 20px 40px;">
+                [ START FREE AUDIT ]
+            </button>
+        </div>
+        
+        <!-- Policy Dashboard -->
+        <div id="policy-dashboard" style="display: none;">
+            <h2 class="retro-green">[ YOUR POLICIES ]</h2>
+            <div class="policy-grid" id="policy-grid">
+                <!-- Policies will be added here -->
+            </div>
+            
+            <div class="retro-center" style="margin: 30px 0;">
+                <button class="retro-button" onclick="addPolicy()">
+                    [ + ADD POLICY ]
+                </button>
+            </div>
+        </div>
+        
+        <!-- Audit Progress -->
+        <div id="audit-section" style="display: none;">
+            <h2 class="retro-green">[ SCANNING FOR OVERPAYMENTS ]</h2>
+            <div class="audit-progress">
+                <div class="progress-step" id="step-1">
+                    <div>📊</div>
+                    <div>Analyzing Coverage</div>
+                </div>
+                <div class="progress-step" id="step-2">
+                    <div>🔍</div>
+                    <div>Finding Discounts</div>
+                </div>
+                <div class="progress-step" id="step-3">
+                    <div>💰</div>
+                    <div>Comparing Rates</div>
+                </div>
+                <div class="progress-step" id="step-4">
+                    <div>📈</div>
+                    <div>Calculating Savings</div>
+                </div>
+            </div>
+            
+            <div class="scan-animation">
+                <div class="scan-line"></div>
+            </div>
+        </div>
+        
+        <!-- Findings Section -->
+        <div id="findings-section" style="display: none;">
+            <div class="retro-border">
+                <h2 class="retro-amber">[ CRITICAL FINDINGS ]</h2>
+                <div id="findings-list">
+                    <!-- Findings will be added here -->
+                </div>
+            </div>
+            
+            <!-- Missing Discounts -->
+            <div class="retro-border" style="margin-top: 30px;">
+                <h3 class="retro-pink">[ MISSING DISCOUNTS DETECTED ]</h3>
+                <div class="discount-grid" id="discount-grid">
+                    <!-- Discounts will be added here -->
+                </div>
+            </div>
+            
+            <!-- Better Rates Found -->
+            <div class="retro-border" style="margin-top: 30px;">
+                <h3 class="retro-green">[ BETTER RATES AVAILABLE ]</h3>
+                <div id="quotes-list">
+                    <!-- Quotes will be added here -->
+                </div>
+            </div>
+            
+            <!-- Action Plan -->
+            <div class="retro-center" style="margin: 40px 0;">
+                <button class="retro-button retro-bg-green" onclick="generateActionPlan()" style="font-size: 20px; padding: 20px 40px;">
+                    [ GENERATE SAVINGS ACTION PLAN ]
+                </button>
+                <button class="retro-button retro-amber" onclick="scheduleExpert()" style="margin-left: 20px;">
+                    [ TALK TO EXPERT ]
+                </button>
+            </div>
+        </div>
+        
+        <!-- Success Stories -->
+        <div class="retro-border" style="margin-top: 60px;">
+            <h2 class="retro-green retro-center">[ REAL SAVINGS FROM REAL USERS ]</h2>
+            <div class="retro-grid retro-grid-3" style="margin-top: 20px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 36px; color: var(--retro-green);">$2,400</div>
+                    <div>Sarah M. - Auto + Home</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 36px; color: var(--retro-green);">$1,850</div>
+                    <div>Mike T. - Full Coverage</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 36px; color: var(--retro-green);">$3,200</div>
+                    <div>Lisa K. - Business Insurance</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="retro-center" style="margin-top: 60px;">
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p class="retro-amber">NOVA POLICYRADAR v1.0</p>
+            <p style="font-size: 14px;">Stop letting insurance companies overcharge you</p>
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+        </div>
+    </div>
+    
+    <script>
+        let policies = [];
+        let totalSavings = 0;
+        let auditCount = parseInt(localStorage.getItem('nova_policyradar_audits') || '0');
+        
+        // Check auth
+        window.addEventListener('nova-auth-changed', (e) => {
+            if (!e.detail.user && auditCount >= 2) {
+                Retro.showModal({
+                    title: 'FREE AUDITS USED',
+                    content: '<p class="retro-amber">You\'ve used your 2 free audits. Login for unlimited access!</p>',
+                    buttons: [
+                        { text: 'LOGIN', action: () => { Retro.closeModal(); NovaAuth.showAuthModal(); } },
+                        { text: 'LATER', action: () => Retro.closeModal() }
+                    ]
+                });
+            }
+        });
+        
+        function startQuickScan() {
+            if (!NovaAuth.isAuthenticated() && auditCount >= 2) {
+                NovaAuth.showAuthModal();
+                return;
+            }
+            
+            // Show policy input modal
+            Retro.showModal({
+                title: 'ADD YOUR POLICIES',
+                content: `
+                    <div style="text-align: left;">
+                        <p class="retro-green" style="margin-bottom: 20px;">What insurance do you currently have?</p>
+                        
+                        <div style="display: grid; gap: 15px;">
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="policy-auto" checked>
+                                <span>Auto Insurance - $<input type="number" id="auto-amount" value="150" style="width: 80px; margin-left: 10px;">/month</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="policy-home">
+                                <span>Home/Renters - $<input type="number" id="home-amount" value="120" style="width: 80px; margin-left: 10px;">/month</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="policy-life">
+                                <span>Life Insurance - $<input type="number" id="life-amount" value="50" style="width: 80px; margin-left: 10px;">/month</span>
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 10px;">
+                                <input type="checkbox" id="policy-health">
+                                <span>Health Insurance - $<input type="number" id="health-amount" value="400" style="width: 80px; margin-left: 10px;">/month</span>
+                            </label>
+                        </div>
+                        
+                        <p style="margin-top: 20px; color: #666; font-size: 14px;">
+                            💡 Average person has 3-4 policies
+                        </p>
+                    </div>
+                `,
+                buttons: [
+                    { 
+                        text: 'ANALYZE POLICIES', 
+                        action: () => {
+                            collectPolicies();
+                            Retro.closeModal();
+                            runAudit();
+                        }
+                    },
+                    { text: 'CANCEL', action: () => Retro.closeModal() }
+                ]
+            });
+        }
+        
+        function collectPolicies() {
+            policies = [];
+            
+            if (document.getElementById('policy-auto')?.checked) {
+                policies.push({
+                    type: 'Auto Insurance',
+                    icon: '🚗',
+                    amount: parseFloat(document.getElementById('auto-amount').value),
+                    status: 'scanning'
+                });
+            }
+            
+            if (document.getElementById('policy-home')?.checked) {
+                policies.push({
+                    type: 'Home/Renters',
+                    icon: '🏠',
+                    amount: parseFloat(document.getElementById('home-amount').value),
+                    status: 'scanning'
+                });
+            }
+            
+            if (document.getElementById('policy-life')?.checked) {
+                policies.push({
+                    type: 'Life Insurance',
+                    icon: '💚',
+                    amount: parseFloat(document.getElementById('life-amount').value),
+                    status: 'scanning'
+                });
+            }
+            
+            if (document.getElementById('policy-health')?.checked) {
+                policies.push({
+                    type: 'Health Insurance',
+                    icon: '🏥',
+                    amount: parseFloat(document.getElementById('health-amount').value),
+                    status: 'scanning'
+                });
+            }
+        }
+        
+        function runAudit() {
+            // Show audit section
+            document.getElementById('policy-dashboard').style.display = 'block';
+            document.getElementById('audit-section').style.display = 'block';
+            document.querySelector('.scanner-section').style.display = 'none';
+            
+            // Display policies
+            displayPolicies();
+            
+            // Animate progress steps
+            const steps = ['step-1', 'step-2', 'step-3', 'step-4'];
+            steps.forEach((step, index) => {
+                setTimeout(() => {
+                    document.getElementById(step).classList.add('active');
+                    
+                    setTimeout(() => {
+                        document.getElementById(step).classList.remove('active');
+                        document.getElementById(step).classList.add('complete');
+                    }, 2000);
+                }, index * 2000);
+            });
+            
+            // Generate findings after animation
+            setTimeout(() => {
+                generateFindings();
+                document.getElementById('audit-section').style.display = 'none';
+                document.getElementById('findings-section').style.display = 'block';
+                
+                // Increment audit count
+                auditCount++;
+                localStorage.setItem('nova_policyradar_audits', auditCount);
+                
+                // Track
+                NovaAnalytics.track('insurance_audit_complete', {
+                    policies: policies.length,
+                    savings: totalSavings
+                });
+            }, 8000);
+        }
+        
+        function displayPolicies() {
+            const grid = document.getElementById('policy-grid');
+            grid.innerHTML = '';
+            
+            policies.forEach(policy => {
+                const card = document.createElement('div');
+                card.className = 'policy-card';
+                
+                card.innerHTML = `
+                    <div class="policy-status ${getStatusClass(policy)}">
+                        ${getStatusText(policy)}
+                    </div>
+                    <div class="policy-type">${policy.icon} ${policy.type}</div>
+                    <p>Current: $${policy.amount}/month</p>
+                    <p>Annual: $${(policy.amount * 12).toLocaleString()}</p>
+                `;
+                
+                grid.appendChild(card);
+            });
+        }
+        
+        function getStatusClass(policy) {
+            if (policy.overpayment > 30) return 'status-critical';
+            if (policy.overpayment > 15) return 'status-warning';
+            return 'status-good';
+        }
+        
+        function getStatusText(policy) {
+            if (policy.status === 'scanning') return 'SCANNING...';
+            if (policy.overpayment > 30) return 'OVERPAYING!';
+            if (policy.overpayment > 15) return 'CHECK THIS';
+            return 'OK';
+        }
+        
+        function generateFindings() {
+            const findingsList = document.getElementById('findings-list');
+            findingsList.innerHTML = '';
+            
+            totalSavings = 0;
+            
+            // Generate findings for each policy
+            policies.forEach(policy => {
+                const overpayPercent = 15 + Math.random() * 25; // 15-40% overpayment
+                policy.overpayment = overpayPercent;
+                const savingsAmount = Math.round(policy.amount * 12 * overpayPercent / 100);
+                totalSavings += savingsAmount;
+                
+                const finding = document.createElement('div');
+                finding.className = 'finding-item';
+                finding.innerHTML = `
+                    <strong>${policy.icon} ${policy.type}</strong><br>
+                    You're overpaying by approximately ${overpayPercent.toFixed(0)}% 
+                    <span class="retro-amber">(~$${savingsAmount}/year)</span>
+                `;
+                findingsList.appendChild(finding);
+            });
+            
+            // Update total savings display
+            animateNumber('total-savings', totalSavings);
+            
+            // Generate missing discounts
+            generateDiscounts();
+            
+            // Generate quotes
+            generateQuotes();
+            
+            // Update policy display
+            displayPolicies();
+        }
+        
+        function generateDiscounts() {
+            const discountGrid = document.getElementById('discount-grid');
+            discountGrid.innerHTML = '';
+            
+            const allDiscounts = [
+                { name: 'Multi-Policy Bundle', savings: '$240/year', missing: true },
+                { name: 'Good Driver', savings: '$180/year', missing: false },
+                { name: 'Anti-Theft Device', savings: '$120/year', missing: true },
+                { name: 'Paperless Billing', savings: '$60/year', missing: true },
+                { name: 'Automatic Payment', savings: '$84/year', missing: true },
+                { name: 'Low Mileage', savings: '$156/year', missing: false }
+            ];
+            
+            allDiscounts.forEach(discount => {
+                const item = document.createElement('div');
+                item.className = `discount-item ${discount.missing ? 'missing' : ''}`;
+                item.innerHTML = `
+                    <span>${discount.missing ? '❌' : '✓'} ${discount.name}</span>
+                    <span style="color: ${discount.missing ? 'var(--retro-pink)' : 'var(--retro-green)'}">
+                        ${discount.savings}
+                    </span>
+                `;
+                discountGrid.appendChild(item);
+            });
+        }
+        
+        function generateQuotes() {
+            const quotesList = document.getElementById('quotes-list');
+            quotesList.innerHTML = '';
+            
+            const companies = ['Progressive', 'GEICO', 'State Farm', 'Allstate'];
+            
+            policies.forEach(policy => {
+                const baseQuote = policy.amount * 0.7; // 30% cheaper base
+                
+                companies.forEach(company => {
+                    const variance = 0.9 + Math.random() * 0.2; // ±10% variance
+                    const quoteAmount = Math.round(baseQuote * variance);
+                    const savings = policy.amount - quoteAmount;
+                    
+                    if (savings > 10) {
+                        const quote = document.createElement('div');
+                        quote.className = 'quote-item';
+                        quote.innerHTML = `
+                            <div>
+                                <strong>${company}</strong> - ${policy.type}
+                            </div>
+                            <div>
+                                $${quoteAmount}/month
+                            </div>
+                            <div class="quote-savings">
+                                Save $${savings * 12}/year
+                            </div>
+                        `;
+                        quotesList.appendChild(quote);
+                    }
+                });
+            });
+        }
+        
+        function animateNumber(id, target) {
+            const element = document.getElementById(id);
+            let current = 0;
+            const increment = target / 50;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.round(current).toLocaleString();
+            }, 20);
+        }
+        
+        function generateActionPlan() {
+            if (!NovaAuth.isAuthenticated()) {
+                Retro.showModal({
+                    title: 'LOGIN REQUIRED',
+                    content: '<p>Login to generate your personalized savings action plan</p>',
+                    buttons: [
+                        { text: 'LOGIN', action: () => { Retro.closeModal(); NovaAuth.showAuthModal(); } },
+                        { text: 'CANCEL', action: () => Retro.closeModal() }
+                    ]
+                });
+                return;
+            }
+            
+            Retro.showToast('Generating your action plan...');
+            NovaAnalytics.conversion('action_plan', 15);
+            
+            setTimeout(() => {
+                Retro.showModal({
+                    title: 'YOUR SAVINGS ACTION PLAN',
+                    content: `
+                        <div style="text-align: left;">
+                            <h3 class="retro-green">Total Potential Savings: $${totalSavings}/year</h3>
+                            
+                            <p class="retro-amber" style="margin: 20px 0;">IMMEDIATE ACTIONS:</p>
+                            <ol>
+                                <li>Call current insurer about missing discounts (30 min)</li>
+                                <li>Get quotes from top 3 competitors (45 min)</li>
+                                <li>Bundle policies for additional 15% off</li>
+                                <li>Review coverage levels for over-insurance</li>
+                            </ol>
+                            
+                            <p class="retro-cyan" style="margin-top: 20px;">
+                                💡 Pro tip: Mention competitor quotes to current insurer for instant discounts
+                            </p>
+                        </div>
+                    `,
+                    buttons: [
+                        { text: 'DOWNLOAD PLAN', action: () => { Retro.showToast('Plan downloaded!'); Retro.closeModal(); } },
+                        { text: 'CLOSE', action: () => Retro.closeModal() }
+                    ]
+                });
+            }, 1500);
+        }
+        
+        function scheduleExpert() {
+            Retro.showModal({
+                title: 'TALK TO INSURANCE EXPERT',
+                content: `
+                    <p class="retro-green">Our experts average $1,400 in savings per client</p>
+                    <p style="margin: 20px 0;">Free 15-minute consultation includes:</p>
+                    <ul style="text-align: left;">
+                        <li>Policy review</li>
+                        <li>Coverage optimization</li>
+                        <li>Discount maximization</li>
+                        <li>Carrier negotiation tips</li>
+                    </ul>
+                `,
+                buttons: [
+                    { text: 'SCHEDULE CALL', action: () => { Retro.showToast('Scheduling feature coming soon!'); Retro.closeModal(); } },
+                    { text: 'MAYBE LATER', action: () => Retro.closeModal() }
+                ]
+            });
+        }
+        
+        function addPolicy() {
+            Retro.showToast('Add policy feature coming soon!');
+        }
+        
+        // Show welcome
+        if (auditCount === 0) {
+            setTimeout(() => {
+                Retro.showModal({
+                    title: 'STOP OVERPAYING FOR INSURANCE',
+                    content: `
+                        <p class="retro-green">Did you know?</p>
+                        <p style="margin: 20px 0;">The average American overpays $1,400/year on insurance due to:</p>
+                        <ul style="text-align: left;">
+                            <li>Missing discounts (avg 23 available)</li>
+                            <li>Outdated coverage levels</li>
+                            <li>Not comparing rates annually</li>
+                            <li>Loyalty tax from staying too long</li>
+                        </ul>
+                        <p class="retro-amber" style="margin-top: 20px;">Our free audit finds your overpayments in 2 minutes.</p>
+                    `,
+                    buttons: [
+                        { text: 'START SAVING', action: () => Retro.closeModal() }
+                    ]
+                });
+            }, 1000);
+        }
+    </script>
+</body>
+</html>

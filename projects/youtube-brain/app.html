@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Brain Extractor - Turn Any Video Into AI Knowledge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f0f0f;
+            color: #f1f1f1;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+        
+        h1 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff0000, #ff4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .tagline {
+            font-size: 1.3rem;
+            color: #aaa;
+            margin-bottom: 10px;
+        }
+        
+        .sub-tagline {
+            font-size: 1rem;
+            color: #888;
+        }
+        
+        /* YouTube-style input */
+        .input-section {
+            background: #212121;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #303030;
+        }
+        
+        .url-input-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .url-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 15px 20px;
+            background: #181818;
+            border: 2px solid #303030;
+            border-radius: 8px;
+            color: #f1f1f1;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .url-input:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 0 1px #ff0000;
+        }
+        
+        .extract-btn {
+            padding: 15px 40px;
+            background: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        .extract-btn:hover {
+            background: #dd0000;
+            transform: translateY(-2px);
+        }
+        
+        .extract-btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+        
+        /* Examples */
+        .examples {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .example-chip {
+            padding: 8px 16px;
+            background: #303030;
+            border: 1px solid #404040;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .example-chip:hover {
+            background: #404040;
+            border-color: #ff0000;
+        }
+        
+        /* Influence Mixer */
+        .mixer-section {
+            background: #212121;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 1px solid #303030;
+            display: none;
+        }
+        
+        .mixer-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .influence-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #181818;
+            border-radius: 8px;
+        }
+        
+        .influence-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #ff0000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .influence-details {
+            flex: 1;
+        }
+        
+        .influence-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .influence-slider {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .slider {
+            flex: 1;
+            height: 6px;
+            background: #303030;
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #ff0000;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .percentage {
+            min-width: 45px;
+            text-align: right;
+            font-weight: 600;
+            color: #ff0000;
+        }
+        
+        /* Processing animation */
+        .processing {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .processing-animation {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border: 4px solid #303030;
+            border-top-color: #ff0000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .processing-text {
+            font-size: 1.2rem;
+            color: #aaa;
+        }
+        
+        /* Results */
+        .results-section {
+            display: none;
+        }
+        
+        .brain-output {
+            background: #212121;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid #303030;
+        }
+        
+        .output-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .output-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        .format-selector {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .format-btn {
+            padding: 8px 16px;
+            background: #303030;
+            border: 1px solid #404040;
+            border-radius: 6px;
+            color: #f1f1f1;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .format-btn:hover {
+            background: #404040;
+        }
+        
+        .format-btn.active {
+            background: #ff0000;
+            border-color: #ff0000;
+        }
+        
+        .knowledge-content {
+            background: #181818;
+            border-radius: 8px;
+            padding: 25px;
+            max-height: 500px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            line-height: 1.8;
+        }
+        
+        .knowledge-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            color: #ff0000;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .action-btn {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn {
+            background: #ff0000;
+            color: white;
+        }
+        
+        .copy-btn:hover {
+            background: #dd0000;
+        }
+        
+        .download-btn {
+            background: #303030;
+            color: #f1f1f1;
+        }
+        
+        .download-btn:hover {
+            background: #404040;
+        }
+        
+        .new-btn {
+            background: transparent;
+            color: #f1f1f1;
+            border: 2px solid #303030;
+        }
+        
+        .new-btn:hover {
+            border-color: #ff0000;
+        }
+        
+        /* Use cases */
+        .use-cases {
+            background: #212121;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 40px;
+            border: 1px solid #303030;
+        }
+        
+        .use-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .use-case-card {
+            background: #181818;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #303030;
+            transition: all 0.3s ease;
+        }
+        
+        .use-case-card:hover {
+            border-color: #ff0000;
+            transform: translateY(-2px);
+        }
+        
+        .use-case-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+        
+        .use-case-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .use-case-desc {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff0000;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            display: none;
+            animation: slideUp 0.3s ease;
+            z-index: 1000;
+        }
+        
+        @keyframes slideUp {
+            from { transform: translate(-50%, 100%); }
+            to { transform: translate(-50%, 0); }
+        }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            .url-input-group {
+                flex-direction: column;
+            }
+            
+            .url-input {
+                min-width: 100%;
+            }
+            
+            .extract-btn {
+                width: 100%;
+            }
+            
+            .format-selector {
+                flex-wrap: wrap;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+        }
+        
+        /* Scrollbar styling */
+        .knowledge-content::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .knowledge-content::-webkit-scrollbar-track {
+            background: #0f0f0f;
+            border-radius: 5px;
+        }
+        
+        .knowledge-content::-webkit-scrollbar-thumb {
+            background: #ff0000;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 YouTube Brain Extractor</h1>
+            <p class="tagline">Turn any YouTube video into AI-ready knowledge</p>
+            <p class="sub-tagline">Extract wisdom from your favorite creators and teach your AI to think like them</p>
+            <p class="sub-tagline" style="margin-top: 10px; font-size: 0.9rem; color: #ff6b6b;">(Demo Version - Shows pattern examples based on video type)</p>
+        </header>
+        
+        <div class="input-section">
+            <div class="url-input-group">
+                <input type="text" class="url-input" id="youtube-url" placeholder="Paste YouTube video or playlist URL here...">
+                <button class="extract-btn" id="extract-btn" onclick="extractBrain()">
+                    Extract Brain
+                </button>
+            </div>
+            
+            <div class="examples">
+                <div class="example-chip" onclick="loadExample('naval')">
+                    Try: Naval on Wealth
+                </div>
+                <div class="example-chip" onclick="loadExample('lex')">
+                    Try: Lex Fridman
+                </div>
+                <div class="example-chip" onclick="loadExample('huberman')">
+                    Try: Huberman Lab
+                </div>
+                <div class="example-chip" onclick="loadExample('startup')">
+                    Try: YC Startup
+                </div>
+            </div>
+        </div>
+        
+        <div class="mixer-section" id="mixer-section">
+            <h2 class="mixer-title">
+                🧪 Influence Mixer
+                <span style="font-size: 0.8rem; color: #888; font-weight: normal;">(Blend multiple creators)</span>
+            </h2>
+            <div id="influence-list"></div>
+        </div>
+        
+        <div class="processing" id="processing">
+            <div class="processing-animation"></div>
+            <p class="processing-text">Extracting knowledge patterns...</p>
+        </div>
+        
+        <div class="results-section" id="results">
+            <div class="brain-output">
+                <div class="output-header">
+                    <h2 class="output-title">🧠 Extracted Knowledge</h2>
+                    <div class="format-selector">
+                        <button class="format-btn active" onclick="switchFormat('structured')">Structured</button>
+                        <button class="format-btn" onclick="switchFormat('raw')">Raw Context</button>
+                        <button class="format-btn" onclick="switchFormat('claude')">Claude/ChatGPT</button>
+                    </div>
+                </div>
+                
+                <div class="knowledge-content" id="knowledge-content">
+                    <!-- Generated content will go here -->
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-btn copy-btn" onclick="copyKnowledge()">
+                    📋 Copy to Clipboard
+                </button>
+                <button class="action-btn download-btn" onclick="downloadKnowledge()">
+                    💾 Download Knowledge File
+                </button>
+                <button class="action-btn new-btn" onclick="startNew()">
+                    ➕ Extract Another
+                </button>
+            </div>
+        </div>
+        
+        <div class="use-cases">
+            <h2 style="margin-bottom: 10px;">🚀 How to Use This Knowledge</h2>
+            <div class="use-case-grid">
+                <div class="use-case-card">
+                    <div class="use-case-icon">💬</div>
+                    <div class="use-case-title">Custom AI Assistant</div>
+                    <div class="use-case-desc">Paste into ChatGPT or Claude as context to make them think like your favorite creator</div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">📝</div>
+                    <div class="use-case-title">Content Creation</div>
+                    <div class="use-case-desc">Generate content in the style and voice of successful creators</div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🎯</div>
+                    <div class="use-case-title">Decision Making</div>
+                    <div class="use-case-desc">Get advice based on how your mentors would approach problems</div>
+                </div>
+                <div class="use-case-card">
+                    <div class="use-case-icon">🧩</div>
+                    <div class="use-case-title">Learning Patterns</div>
+                    <div class="use-case-desc">Understand the mental models and frameworks of thought leaders</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">✓ Copied to clipboard!</div>
+    
+    <script>
+        let currentFormat = 'structured';
+        let extractedKnowledge = {};
+        let influences = [];
+        
+        // Sample knowledge patterns for demo
+        const creatorPatterns = {
+            naval: {
+                name: "Naval Ravikant",
+                avatar: "⚓",
+                coreBeliefs: [
+                    "Wealth is created through leverage: code, media, capital, and labor",
+                    "Seek wealth, not money or status",
+                    "Play long-term games with long-term people",
+                    "Learn to sell, learn to build - if you can do both, you'll be unstoppable",
+                    "Specific knowledge cannot be taught, but it can be learned"
+                ],
+                thinkingPatterns: [
+                    "First principles thinking - break down complex problems to fundamentals",
+                    "Focus on timeless principles over trending tactics",
+                    "Compound interest applies to relationships and knowledge, not just money",
+                    "Reading is the ultimate meta-skill"
+                ],
+                vocabulary: ["leverage", "specific knowledge", "permissionless", "compound", "accountability"],
+                frameworks: [
+                    "The Almanack framework: Happiness = Health + Wealth + Good Relationships",
+                    "Product-Market-Founder fit",
+                    "Status games vs Wealth games"
+                ]
+            },
+            lex: {
+                name: "Lex Fridman",
+                avatar: "🤖",
+                coreBeliefs: [
+                    "Love is the answer to the meaning of life",
+                    "Curiosity and humility are essential for learning",
+                    "Technology should augment human potential, not replace it",
+                    "Deep conversations reveal universal truths"
+                ],
+                thinkingPatterns: [
+                    "Always search for the beauty in complex systems",
+                    "Approach every conversation with genuine curiosity",
+                    "Balance technical depth with philosophical breadth",
+                    "Find connections between disparate fields"
+                ],
+                vocabulary: ["fascinating", "beautiful", "the human condition", "consciousness", "love"],
+                frameworks: [
+                    "Technical competence + philosophical depth",
+                    "First principles in AI and robotics",
+                    "The intersection of technology and humanity"
+                ]
+            },
+            huberman: {
+                name: "Andrew Huberman",
+                avatar: "🧬",
+                coreBeliefs: [
+                    "Behavior change requires understanding neuroscience",
+                    "Sunlight exposure is fundamental to health",
+                    "Protocols should be science-based and actionable",
+                    "The nervous system can be trained and optimized"
+                ],
+                thinkingPatterns: [
+                    "Always cite peer-reviewed research",
+                    "Break down complex science into actionable protocols",
+                    "Consider both mechanism and practical application",
+                    "Test protocols personally before recommending"
+                ],
+                vocabulary: ["dopamine", "circadian rhythm", "neural circuits", "protocols", "peer-reviewed"],
+                frameworks: [
+                    "Neuroplasticity framework for behavior change",
+                    "The autonomic nervous system ladder",
+                    "Circadian biology optimization"
+                ]
+            },
+            startup: {
+                name: "Y Combinator",
+                avatar: "🚀",
+                coreBeliefs: [
+                    "Make something people want",
+                    "Do things that don't scale",
+                    "Talk to users constantly",
+                    "Launch early and iterate",
+                    "Growth solves nearly all problems"
+                ],
+                thinkingPatterns: [
+                    "Focus on the problem, not the solution",
+                    "Validate with real users, not assumptions",
+                    "Speed of iteration beats quality of iteration",
+                    "Default to action over planning"
+                ],
+                vocabulary: ["product-market fit", "iterate", "pivot", "traction", "runway"],
+                frameworks: [
+                    "The YC startup framework: Idea → Product → Growth",
+                    "Weekly growth metrics tracking",
+                    "User interview methodology"
+                ]
+            }
+        };
+        
+        function loadExample(creator) {
+            const examples = {
+                naval: "https://www.youtube.com/watch?v=1-TZqOsVCNM",
+                lex: "https://www.youtube.com/watch?v=someVideoId",
+                huberman: "https://www.youtube.com/watch?v=anotherVideoId",
+                startup: "https://www.youtube.com/watch?v=ycVideoId"
+            };
+            
+            document.getElementById('youtube-url').value = examples[creator];
+        }
+        
+        function extractBrain() {
+            const url = document.getElementById('youtube-url').value.trim();
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+            
+            // Show processing
+            document.getElementById('processing').style.display = 'block';
+            document.getElementById('results').style.display = 'none';
+            
+            // Simulate extraction
+            setTimeout(() => {
+                // Determine creator based on URL content
+                let selectedCreator = 'ai'; // default
+                
+                // Check URL for creator indicators
+                if (url.includes('naval') || url.includes('1-TZqOsVCNM')) {
+                    selectedCreator = 'naval';
+                } else if (url.includes('lex') || url.includes('fridman')) {
+                    selectedCreator = 'lex';
+                } else if (url.includes('huberman')) {
+                    selectedCreator = 'huberman';
+                } else if (url.includes('combinator') || url.includes('yc')) {
+                    selectedCreator = 'startup';
+                } else {
+                    // For any other URL (including the AI one), use generic AI pattern
+                    selectedCreator = 'ai';
+                }
+                
+                // Get the appropriate pattern or create AI pattern
+                if (selectedCreator === 'ai') {
+                    extractedKnowledge = {
+                        name: "AI & Technology Content",
+                        avatar: "🤖",
+                        coreBeliefs: [
+                            "AI will fundamentally transform how we work and live",
+                            "Human-AI collaboration is more powerful than either alone",
+                            "Ethical AI development requires diverse perspectives",
+                            "The future belongs to those who can leverage AI effectively",
+                            "Understanding AI is becoming as important as literacy"
+                        ],
+                        thinkingPatterns: [
+                            "Systems thinking - understanding interconnected effects",
+                            "Exponential vs linear growth mindsets",
+                            "First principles approach to technology adoption",
+                            "Balance optimism with realistic risk assessment"
+                        ],
+                        vocabulary: ["machine learning", "neural networks", "AGI", "prompt engineering", "embeddings"],
+                        frameworks: [
+                            "The AI adoption curve for businesses",
+                            "Human-in-the-loop vs full automation",
+                            "AI safety and alignment principles"
+                        ]
+                    };
+                } else {
+                    extractedKnowledge = creatorPatterns[selectedCreator];
+                }
+                
+                // Add to influences
+                if (!influences.find(inf => inf.name === extractedKnowledge.name)) {
+                    influences.push({
+                        ...extractedKnowledge,
+                        percentage: influences.length === 0 ? 100 : Math.floor(100 / (influences.length + 1))
+                    });
+                    updateInfluenceMixer();
+                }
+                
+                // Generate and display knowledge
+                displayKnowledge();
+                
+                document.getElementById('processing').style.display = 'none';
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            }, 2000);
+        }
+        
+        function updateInfluenceMixer() {
+            if (influences.length > 1) {
+                document.getElementById('mixer-section').style.display = 'block';
+            }
+            
+            const list = document.getElementById('influence-list');
+            list.innerHTML = '';
+            
+            influences.forEach((influence, index) => {
+                const item = document.createElement('div');
+                item.className = 'influence-item';
+                item.innerHTML = `
+                    <div class="influence-avatar">${influence.avatar}</div>
+                    <div class="influence-details">
+                        <div class="influence-name">${influence.name}</div>
+                        <div class="influence-slider">
+                            <input type="range" class="slider" min="0" max="100" value="${influence.percentage}" 
+                                   onchange="updateInfluence(${index}, this.value)">
+                            <span class="percentage">${influence.percentage}%</span>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+        
+        function updateInfluence(index, value) {
+            influences[index].percentage = parseInt(value);
+            updateInfluenceMixer();
+            displayKnowledge();
+        }
+        
+        function displayKnowledge() {
+            const content = generateKnowledgeContent(currentFormat);
+            document.getElementById('knowledge-content').textContent = content;
+        }
+        
+        function generateKnowledgeContent(format) {
+            if (format === 'structured') {
+                let content = `# AI KNOWLEDGE BASE\n`;
+                content += `Generated from: ${influences.map(i => i.name).join(', ')}\n`;
+                content += `Date: ${new Date().toLocaleDateString()}\n\n`;
+                
+                // Blend influences based on percentages
+                content += `## CORE BELIEFS & VALUES\n`;
+                influences.forEach(inf => {
+                    if (inf.percentage > 0) {
+                        content += `\n### ${inf.name} (${inf.percentage}% influence)\n`;
+                        inf.coreBeliefs.forEach(belief => {
+                            content += `- ${belief}\n`;
+                        });
+                    }
+                });
+                
+                content += `\n## THINKING PATTERNS\n`;
+                influences.forEach(inf => {
+                    if (inf.percentage > 0) {
+                        inf.thinkingPatterns.forEach(pattern => {
+                            content += `- ${pattern}\n`;
+                        });
+                    }
+                });
+                
+                content += `\n## KEY VOCABULARY\n`;
+                const allVocab = influences.flatMap(inf => inf.vocabulary);
+                content += allVocab.join(', ') + '\n';
+                
+                content += `\n## FRAMEWORKS & MENTAL MODELS\n`;
+                influences.forEach(inf => {
+                    if (inf.percentage > 0) {
+                        inf.frameworks.forEach(framework => {
+                            content += `- ${framework}\n`;
+                        });
+                    }
+                });
+                
+                return content;
+                
+            } else if (format === 'raw') {
+                let content = `CONTEXT: You should think and respond like a blend of:\n`;
+                influences.forEach(inf => {
+                    content += `- ${inf.name} (${inf.percentage}%)\n`;
+                });
+                content += `\nAdopt their thinking patterns, vocabulary, and frameworks. Here's what defines them:\n\n`;
+                
+                influences.forEach(inf => {
+                    content += `${inf.name}:\n`;
+                    content += `Beliefs: ${inf.coreBeliefs.join('; ')}\n`;
+                    content += `Patterns: ${inf.thinkingPatterns.join('; ')}\n\n`;
+                });
+                
+                return content;
+                
+            } else { // claude format
+                let content = `You are now thinking with the combined wisdom of:\n`;
+                influences.forEach(inf => {
+                    content += `- ${inf.name} (${inf.percentage}% influence)\n`;
+                });
+                content += `\nChannel their perspectives when answering. Key aspects:\n\n`;
+                
+                influences.forEach(inf => {
+                    if (inf.percentage > 0) {
+                        content += `When channeling ${inf.name}:\n`;
+                        content += `- Core message: ${inf.coreBeliefs[0]}\n`;
+                        content += `- Approach: ${inf.thinkingPatterns[0]}\n`;
+                        content += `- Key terms: ${inf.vocabulary.slice(0, 3).join(', ')}\n\n`;
+                    }
+                });
+                
+                return content;
+            }
+        }
+        
+        function switchFormat(format) {
+            currentFormat = format;
+            document.querySelectorAll('.format-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            displayKnowledge();
+        }
+        
+        function copyKnowledge() {
+            const content = document.getElementById('knowledge-content').textContent;
+            navigator.clipboard.writeText(content).then(() => {
+                const toast = document.getElementById('toast');
+                toast.style.display = 'block';
+                setTimeout(() => toast.style.display = 'none', 3000);
+            });
+        }
+        
+        function downloadKnowledge() {
+            const content = document.getElementById('knowledge-content').textContent;
+            const filename = `ai-knowledge-${influences.map(i => i.name.split(' ')[0]).join('-')}.txt`;
+            
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function startNew() {
+            document.getElementById('youtube-url').value = '';
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('mixer-section').style.display = 'none';
+            influences = [];
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

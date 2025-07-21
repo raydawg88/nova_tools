@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;700&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      width: 400px;
+      font-family: 'Noto Sans JP', -apple-system, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #0f0f1e 100%);
+      color: #fff;
+      overflow: hidden;
+    }
+    
+    /* Animated background */
+    .bg-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.1;
+      pointer-events: none;
+    }
+    
+    .bg-animation::before {
+      content: '✨';
+      position: absolute;
+      font-size: 20px;
+      animation: float 10s linear infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(100vh) translateX(0); }
+      100% { transform: translateY(-100px) translateX(100px); }
+    }
+    
+    /* Header */
+    .header {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .header h1 {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 5px;
+      background: linear-gradient(135deg, #ffd700, #ff69b4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .header p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    /* Omamori Grid */
+    .omamori-container {
+      padding: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .omamori-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    
+    .omamori-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .omamori-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, var(--charm-color) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    
+    .omamori-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--charm-color);
+    }
+    
+    .omamori-card:hover::before {
+      opacity: 0.2;
+    }
+    
+    .omamori-card.owned {
+      border-color: var(--charm-color);
+      background: rgba(255, 255, 255, 0.1);
+    }
+    
+    .omamori-card.owned::after {
+      content: '✓';
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      font-size: 16px;
+      color: #90ee90;
+    }
+    
+    .charm-emoji {
+      font-size: 48px;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 0 10px var(--charm-color));
+    }
+    
+    .charm-name {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    .charm-price {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    /* My Omamori Section */
+    .my-omamori {
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .my-omamori h2 {
+      font-size: 16px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .active-charms {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .active-charm {
+      position: relative;
+      font-size: 32px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .active-charm:hover {
+      transform: scale(1.2);
+    }
+    
+    .charm-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 40px;
+      height: 40px;
+      background: radial-gradient(circle, var(--charm-color) 0%, transparent 70%);
+      filter: blur(15px);
+      opacity: 0.6;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.2); }
+    }
+    
+    /* Bundle Offer */
+    .bundle-offer {
+      margin: 20px;
+      padding: 15px;
+      background: linear-gradient(135deg, #ff69b4, #ffd700);
+      border-radius: 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    
+    .bundle-offer:hover {
+      transform: scale(1.02);
+    }
+    
+    .bundle-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+    
+    .bundle-price {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    
+    .bundle-savings {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    
+    /* Footer */
+    .footer {
+      padding: 15px;
+      text-align: center;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-animation"></div>
+  
+  <div class="header">
+    <h1>LuckLink</h1>
+    <p>Digital Omamori for Modern Life</p>
+  </div>
+  
+  <div class="omamori-container">
+    <div class="omamori-grid" id="omamori-grid">
+      <!-- Omamori cards will be injected here -->
+    </div>
+  </div>
+  
+  <div class="bundle-offer" id="bundle-offer">
+    <div class="bundle-title">🎁 Complete Protection Bundle</div>
+    <div class="bundle-price">$9.99</div>
+    <div class="bundle-savings">Save $7.95 - All 6 Omamori</div>
+  </div>
+  
+  <div class="my-omamori">
+    <h2>My Active Omamori</h2>
+    <div class="active-charms" id="active-charms">
+      <div class="active-charm">
+        <div class="charm-glow" style="--charm-color: #FFD700"></div>
+        <span>💰</span>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer">
+    <p>Omamori expire after 1 year, just like traditional ones</p>
+    <p>Bringing ancient wisdom to digital life ✨</p>
+  </div>
+  
+  <script src="popup.js" type="module"></script>
+</body>
+</html>

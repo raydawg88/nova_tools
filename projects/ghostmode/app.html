@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostMode - Digital Privacy Checklist</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            line-height: 1.6;
+        }
+        
+        /* Ghost animation */
+        .ghost-bg {
+            position: fixed;
+            font-size: 200px;
+            opacity: 0.02;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: float 6s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+            50% { transform: translate(-50%, -50%) translateY(-20px); }
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 1.3rem;
+            opacity: 0.8;
+            margin-bottom: 50px;
+        }
+        
+        /* Privacy Score */
+        .privacy-score {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .score-display {
+            font-size: 5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            transition: all 0.5s ease;
+        }
+        
+        .score-label {
+            font-size: 1.5rem;
+            opacity: 0.8;
+            margin-bottom: 10px;
+        }
+        
+        .score-message {
+            font-size: 1.1rem;
+            opacity: 0.7;
+        }
+        
+        /* Categories */
+        .category {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .category:hover {
+            border-color: rgba(255,255,255,0.3);
+        }
+        
+        .category-header {
+            padding: 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .category-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .category-icon {
+            font-size: 2rem;
+        }
+        
+        .category-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .category-progress {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .progress-bar {
+            width: 100px;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #00ff88;
+            transition: width 0.5s ease;
+        }
+        
+        .expand-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .category.expanded .expand-icon {
+            transform: rotate(180deg);
+        }
+        
+        .category-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .category.expanded .category-content {
+            max-height: 1000px;
+        }
+        
+        /* Checklist Items */
+        .checklist {
+            padding: 20px 25px 25px;
+        }
+        
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .checklist-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
+        
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .checklist-item.checked .checkbox {
+            background: #00ff88;
+            border-color: #00ff88;
+        }
+        
+        .checkbox::after {
+            content: '✓';
+            color: #000;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .checklist-item.checked .checkbox::after {
+            display: block;
+        }
+        
+        .checklist-content {
+            flex: 1;
+        }
+        
+        .checklist-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .checklist-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .difficulty.easy {
+            background: rgba(0,255,136,0.2);
+            color: #00ff88;
+        }
+        
+        .difficulty.medium {
+            background: rgba(255,193,7,0.2);
+            color: #ffc107;
+        }
+        
+        .difficulty.hard {
+            background: rgba(255,68,68,0.2);
+            color: #ff4444;
+        }
+        
+        /* Action Buttons */
+        .actions {
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .action-btn {
+            padding: 15px 40px;
+            margin: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .export-btn {
+            background: #00ff88;
+            color: #000;
+        }
+        
+        .reset-btn {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        /* Tips Section */
+        .tips-section {
+            background: rgba(0,255,136,0.05);
+            border: 2px solid rgba(0,255,136,0.2);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 50px;
+        }
+        
+        .tips-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #00ff88;
+        }
+        
+        .tip {
+            margin-bottom: 15px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .tip::before {
+            content: '👻';
+            position: absolute;
+            left: 0;
+        }
+        
+        /* Resources */
+        .resources {
+            margin-top: 50px;
+            text-align: center;
+        }
+        
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .resource-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .resource-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff88;
+        }
+        
+        .resource-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        
+        .resource-desc {
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="ghost-bg">👻</div>
+    
+    <div class="container">
+        <h1>GhostMode</h1>
+        <p class="tagline">Your complete guide to digital invisibility</p>
+        
+        <div class="privacy-score">
+            <div class="score-display" id="privacy-score">0%</div>
+            <div class="score-label">Privacy Score</div>
+            <div class="score-message" id="score-message">You're basically naked online</div>
+        </div>
+        
+        <!-- Browser Privacy -->
+        <div class="category" id="browser">
+            <div class="category-header" onclick="toggleCategory('browser')">
+                <div class="category-title">
+                    <span class="category-icon">🌐</span>
+                    <span class="category-name">Browser Privacy</span>
+                </div>
+                <div class="category-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="browser-progress" style="width: 0%"></div>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="checklist">
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Use a privacy-focused browser
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Switch to Brave, Firefox, or Tor for better privacy defaults</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Install uBlock Origin
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Block ads, trackers, and malicious scripts</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Enable HTTPS Everywhere
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Force encrypted connections whenever possible</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Disable third-party cookies
+                                <span class="difficulty medium">Medium</span>
+                            </div>
+                            <div class="checklist-desc">Prevent cross-site tracking (may break some sites)</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Use privacy-respecting search engine
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Switch to DuckDuckGo, Startpage, or Searx</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Social Media -->
+        <div class="category" id="social">
+            <div class="category-header" onclick="toggleCategory('social')">
+                <div class="category-title">
+                    <span class="category-icon">👥</span>
+                    <span class="category-name">Social Media Privacy</span>
+                </div>
+                <div class="category-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="social-progress" style="width: 0%"></div>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="checklist">
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Review privacy settings
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Make profiles private, limit who can see your posts</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Disable location tracking
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Turn off location services for social apps</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Limit ad tracking
+                                <span class="difficulty medium">Medium</span>
+                            </div>
+                            <div class="checklist-desc">Opt out of personalized ads on all platforms</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Remove old posts and photos
+                                <span class="difficulty hard">Hard</span>
+                            </div>
+                            <div class="checklist-desc">Clean up your digital footprint from the past</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Use pseudonyms when possible
+                                <span class="difficulty medium">Medium</span>
+                            </div>
+                            <div class="checklist-desc">Don't use your real name everywhere</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Device Security -->
+        <div class="category" id="device">
+            <div class="category-header" onclick="toggleCategory('device')">
+                <div class="category-title">
+                    <span class="category-icon">📱</span>
+                    <span class="category-name">Device Security</span>
+                </div>
+                <div class="category-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="device-progress" style="width: 0%"></div>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="checklist">
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Enable full disk encryption
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Encrypt your phone and computer storage</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Use strong unique passwords
+                                <span class="difficulty medium">Medium</span>
+                            </div>
+                            <div class="checklist-desc">Different password for every account</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Enable 2FA everywhere
+                                <span class="difficulty medium">Medium</span>
+                            </div>
+                            <div class="checklist-desc">Use authenticator apps, not SMS</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Review app permissions
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Revoke unnecessary permissions from apps</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Use a VPN
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Encrypt your internet traffic, hide your IP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Communications -->
+        <div class="category" id="comms">
+            <div class="category-header" onclick="toggleCategory('comms')">
+                <div class="category-title">
+                    <span class="category-icon">💬</span>
+                    <span class="category-name">Private Communications</span>
+                </div>
+                <div class="category-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="comms-progress" style="width: 0%"></div>
+                    </div>
+                    <span class="expand-icon">▼</span>
+                </div>
+            </div>
+            <div class="category-content">
+                <div class="checklist">
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Use Signal for messaging
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">End-to-end encrypted messaging</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Use ProtonMail for email
+                                <span class="difficulty medium">Medium</span>
+                            </div>
+                            <div class="checklist-desc">Encrypted email service based in Switzerland</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Avoid SMS for sensitive info
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">SMS is not encrypted and easily intercepted</div>
+                        </div>
+                    </div>
+                    <div class="checklist-item" onclick="toggleItem(this)">
+                        <div class="checkbox"></div>
+                        <div class="checklist-content">
+                            <div class="checklist-title">
+                                Use burner emails
+                                <span class="difficulty easy">Easy</span>
+                            </div>
+                            <div class="checklist-desc">Create temporary emails for signups</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="tips-section">
+            <h2 class="tips-title">👻 Pro Ghost Tips</h2>
+            <div class="tip">The best privacy practice is to share less in the first place</div>
+            <div class="tip">Assume everything you post online is permanent</div>
+            <div class="tip">Privacy is a journey, not a destination - start small</div>
+            <div class="tip">Your phone is the biggest privacy leak - treat it accordingly</div>
+            <div class="tip">Free services aren't free - you're paying with your data</div>
+        </div>
+        
+        <div class="actions">
+            <button class="action-btn export-btn" onclick="exportChecklist()">📋 Export Checklist</button>
+            <button class="action-btn reset-btn" onclick="resetProgress()">🔄 Reset Progress</button>
+        </div>
+        
+        <div class="resources">
+            <h2 style="margin-bottom: 10px;">Privacy Resources</h2>
+            <p style="opacity: 0.7;">Click to learn more about each tool</p>
+            <div class="resource-grid">
+                <div class="resource-card" onclick="window.open('https://privacytools.io', '_blank')">
+                    <div class="resource-title">PrivacyTools.io</div>
+                    <div class="resource-desc">Comprehensive privacy tool recommendations</div>
+                </div>
+                <div class="resource-card" onclick="window.open('https://www.eff.org/privacybadger', '_blank')">
+                    <div class="resource-title">Privacy Badger</div>
+                    <div class="resource-desc">EFF's tracker blocking extension</div>
+                </div>
+                <div class="resource-card" onclick="window.open('https://haveibeenpwned.com', '_blank')">
+                    <div class="resource-title">Have I Been Pwned</div>
+                    <div class="resource-desc">Check if your data has been breached</div>
+                </div>
+                <div class="resource-card" onclick="window.open('https://tosdr.org', '_blank')">
+                    <div class="resource-title">Terms of Service; Didn't Read</div>
+                    <div class="resource-desc">Privacy ratings for websites</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Load saved progress
+        let progress = JSON.parse(localStorage.getItem('ghostModeProgress') || '{}');
+        
+        // Initialize checklist items
+        document.querySelectorAll('.checklist-item').forEach((item, index) => {
+            item.dataset.id = index;
+            if (progress[index]) {
+                item.classList.add('checked');
+            }
+        });
+        
+        // Update initial scores
+        updateAllScores();
+        
+        function toggleCategory(id) {
+            const category = document.getElementById(id);
+            category.classList.toggle('expanded');
+        }
+        
+        function toggleItem(item) {
+            const id = item.dataset.id;
+            item.classList.toggle('checked');
+            progress[id] = item.classList.contains('checked');
+            localStorage.setItem('ghostModeProgress', JSON.stringify(progress));
+            updateAllScores();
+        }
+        
+        function updateAllScores() {
+            // Update category progress bars
+            const categories = ['browser', 'social', 'device', 'comms'];
+            categories.forEach(cat => {
+                updateCategoryProgress(cat);
+            });
+            
+            // Update overall privacy score
+            updatePrivacyScore();
+        }
+        
+        function updateCategoryProgress(categoryId) {
+            const category = document.getElementById(categoryId);
+            const items = category.querySelectorAll('.checklist-item');
+            const checked = category.querySelectorAll('.checklist-item.checked');
+            const percentage = items.length > 0 ? (checked.length / items.length) * 100 : 0;
+            
+            const progressBar = document.getElementById(categoryId + '-progress');
+            progressBar.style.width = percentage + '%';
+        }
+        
+        function updatePrivacyScore() {
+            const allItems = document.querySelectorAll('.checklist-item');
+            const checkedItems = document.querySelectorAll('.checklist-item.checked');
+            const score = Math.round((checkedItems.length / allItems.length) * 100);
+            
+            const scoreDisplay = document.getElementById('privacy-score');
+            scoreDisplay.textContent = score + '%';
+            
+            // Update color based on score
+            if (score < 25) {
+                scoreDisplay.style.color = '#ff4444';
+            } else if (score < 50) {
+                scoreDisplay.style.color = '#ff8844';
+            } else if (score < 75) {
+                scoreDisplay.style.color = '#ffcc00';
+            } else {
+                scoreDisplay.style.color = '#00ff88';
+            }
+            
+            // Update message
+            const messages = {
+                0: "You're basically naked online",
+                25: "You're wearing digital underwear",
+                50: "Half ghost, half human",
+                75: "Nearly invisible!",
+                100: "Full ghost mode activated! 👻"
+            };
+            
+            let message = messages[0];
+            for (let threshold in messages) {
+                if (score >= threshold) {
+                    message = messages[threshold];
+                }
+            }
+            
+            document.getElementById('score-message').textContent = message;
+        }
+        
+        function exportChecklist() {
+            const checkedItems = document.querySelectorAll('.checklist-item.checked');
+            let text = "GhostMode Privacy Checklist\n\n";
+            text += `Privacy Score: ${document.getElementById('privacy-score').textContent}\n\n`;
+            text += "Completed Items:\n";
+            
+            checkedItems.forEach(item => {
+                const title = item.querySelector('.checklist-title').textContent.trim();
+                text += `✓ ${title}\n`;
+            });
+            
+            const uncheckedItems = document.querySelectorAll('.checklist-item:not(.checked)');
+            if (uncheckedItems.length > 0) {
+                text += "\nTodo Items:\n";
+                uncheckedItems.forEach(item => {
+                    const title = item.querySelector('.checklist-title').textContent.trim();
+                    text += `○ ${title}\n`;
+                });
+            }
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Checklist copied to clipboard!');
+            });
+        }
+        
+        function resetProgress() {
+            if (confirm('Reset all progress? This cannot be undone.')) {
+                localStorage.removeItem('ghostModeProgress');
+                progress = {};
+                document.querySelectorAll('.checklist-item').forEach(item => {
+                    item.classList.remove('checked');
+                });
+                updateAllScores();
+            }
+        }
+    </script>
+</body>
+</html>

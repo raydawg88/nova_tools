@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CancelBot v2.0 - Retro Edition | Nova Systems</title>
+    <link rel="stylesheet" href="../../shared/retro-ui.css">
+    <style>
+        /* Product-specific styles */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .service-btn {
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+            background: transparent;
+        }
+        
+        .service-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .tone-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .tone-card {
+            padding: 20px;
+            border: 2px solid var(--retro-green);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .tone-card:hover {
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+        }
+        
+        .tone-card.selected {
+            background: var(--retro-green);
+            color: var(--terminal-bg);
+        }
+        
+        .email-output {
+            background: #000;
+            border: 2px solid var(--retro-green);
+            padding: 20px;
+            margin: 20px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            min-height: 200px;
+            position: relative;
+        }
+        
+        .cursor-blink {
+            animation: blink 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="retro-container">
+        <!-- ASCII Header -->
+        <div class="retro-ascii-header retro-green">
+╔═══════════════════════════════════════════════════════╗
+║  ▄████▄   ▄▄▄       ███▄    █  ▄████▄  ▓█████  ██▓    ║
+║ ▒██▀ ▀█  ▒████▄     ██ ▀█   █ ▒██▀ ▀█  ▓█   ▀ ▓██▒    ║
+║ ▒▓█    ▄ ▒██  ▀█▄  ▓██  ▀█ ██▒▒▓█    ▄ ▒███   ▒██░    ║
+║ ▒▓▓▄ ▄██▒░██▄▄▄▄██ ▓██▒  ▐▌██▒▒▓▓▄ ▄██▒▒▓█  ▄ ▒██░    ║
+║ ▒ ▓███▀ ░ ▓█   ▓██▒▒██░   ▓██░▒ ▓███▀ ░░▒████▒░██████▒║
+║ ░ ░▒ ▒  ░ ▒▒   ▓▒█░░ ▒░   ▒ ▒ ░ ░▒ ▒  ░░░ ▒░ ░░ ▒░▓  ░║
+║   ░  ▒     ▒   ▒▒ ░░ ░░   ░ ▒░  ░  ▒    ░ ░  ░░ ░ ▒  ░║
+║                                                          ║
+║            B O T   v 2 . 0   [ R E T R O ]              ║
+╚═══════════════════════════════════════════════════════╝
+        </div>
+        
+        <p class="retro-center retro-cyan retro-blink">SUBSCRIPTION TERMINATION PROTOCOL ACTIVATED</p>
+        
+        <!-- Service Selection -->
+        <div class="retro-border">
+            <h2 class="retro-green">[ SELECT TARGET SERVICE ]</h2>
+            <div class="service-grid">
+                <button class="retro-button service-btn" onclick="selectService('netflix')">NETFLIX</button>
+                <button class="retro-button service-btn" onclick="selectService('spotify')">SPOTIFY</button>
+                <button class="retro-button service-btn" onclick="selectService('gym')">GYM</button>
+                <button class="retro-button service-btn" onclick="selectService('amazon')">PRIME</button>
+                <button class="retro-button service-btn" onclick="selectService('disney')">DISNEY+</button>
+                <button class="retro-button service-btn" onclick="selectService('apple')">APPLE</button>
+                <button class="retro-button service-btn" onclick="selectService('adobe')">ADOBE</button>
+                <button class="retro-button service-btn" onclick="selectService('other')">OTHER</button>
+            </div>
+        </div>
+        
+        <!-- Tone Selection -->
+        <div class="retro-border">
+            <h2 class="retro-green">[ SELECT TERMINATION MODE ]</h2>
+            <div class="tone-selector">
+                <div class="tone-card" onclick="selectTone('polite')">
+                    <h3 class="retro-cyan">POLITE</h3>
+                    <p style="font-size: 14px;">Professional & Courteous</p>
+                </div>
+                <div class="tone-card" onclick="selectTone('firm')">
+                    <h3 class="retro-amber">FIRM</h3>
+                    <p style="font-size: 14px;">Direct & No-Nonsense</p>
+                </div>
+                <div class="tone-card" onclick="selectTone('karen')">
+                    <h3 class="retro-pink">KAREN MODE</h3>
+                    <p style="font-size: 14px;">Maximum Escalation</p>
+                </div>
+                <div class="tone-card" onclick="selectTone('legal')">
+                    <h3 class="retro-purple">LEGAL-ISH</h3>
+                    <p style="font-size: 14px;">Pseudo-Legal Threats</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Generate Button -->
+        <div class="retro-center" style="margin: 30px 0;">
+            <button class="retro-button retro-bg-green" onclick="generateEmail()" style="font-size: 24px; padding: 20px 40px;">
+                [ EXECUTE CANCELLATION PROTOCOL ]
+            </button>
+        </div>
+        
+        <!-- Email Output -->
+        <div id="output-section" style="display: none;">
+            <div class="retro-border">
+                <h2 class="retro-green">[ GENERATED TERMINATION MESSAGE ]</h2>
+                <div class="email-output" id="email-output"></div>
+                <div class="retro-center">
+                    <button class="retro-button" onclick="copyEmail()">[ COPY TO CLIPBOARD ]</button>
+                    <button class="retro-button retro-cyan" onclick="reset()" style="margin-left: 20px;">[ NEW TARGET ]</button>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="retro-border" style="margin-top: 30px;">
+                <h3 class="retro-amber">[ TERMINATION STATISTICS ]</h3>
+                <p>Subscriptions Terminated: <span class="retro-green" id="term-count">0</span></p>
+                <p>Money Saved: <span class="retro-green">$<span id="money-saved">0</span>/month</span></p>
+                <p>Corporate Tears Generated: <span class="retro-green" id="tears">0</span> gallons</p>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="retro-center" style="margin-top: 60px;">
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p class="retro-amber">NOVA SYSTEMS CANCELBOT v2.0</p>
+            <p style="font-size: 14px;">Fighting subscription tyranny since 2025</p>
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+        </div>
+    </div>
+    
+    <script src="../../shared/retro-ui.js"></script>
+    <script>
+        let selectedService = '';
+        let selectedTone = '';
+        let terminationCount = parseInt(localStorage.getItem('nova_cancelbot_count') || '0');
+        let moneySaved = parseInt(localStorage.getItem('nova_cancelbot_saved') || '0');
+        
+        // Update stats on load
+        document.getElementById('term-count').textContent = terminationCount;
+        document.getElementById('money-saved').textContent = moneySaved;
+        document.getElementById('tears').textContent = terminationCount * 2.5;
+        
+        // Email templates with retro flair
+        const templates = {
+            polite: {
+                netflix: `Subject: Subscription Cancellation Request - Account #[ACCOUNT]
+
+Dear Netflix Support Team,
+
+I am writing to request the immediate cancellation of my Netflix subscription associated with this email address.
+
+Please confirm the cancellation and ensure no further charges are applied to my payment method.
+
+Thank you for your service.
+
+Best regards,
+[YOUR NAME]
+
+---
+GENERATED BY NOVA CANCELBOT v2.0`,
+                
+                default: `Subject: Subscription Cancellation - Effective Immediately
+
+To Whom It May Concern,
+
+Please cancel my subscription to your service immediately. 
+
+Account details:
+- Email: [THIS EMAIL]
+- Last 4 digits: [XXXX]
+
+I expect confirmation within 24 hours.
+
+Regards,
+[YOUR NAME]`
+            },
+            
+            firm: {
+                gym: `CANCEL MY MEMBERSHIP. NOW.
+
+No, I don't want to "pause" it.
+No, I don't want a "special offer."
+No, I don't want to "think about it."
+
+CANCEL. IT. TODAY.
+
+If I see one more charge, we're going to have problems.
+
+- [YOUR NAME]
+
+P.S. Your cancellation process is why people hate gyms.`,
+                
+                default: `This is my FINAL cancellation request.
+
+Cancel my subscription immediately or I will:
+1. Dispute all charges with my bank
+2. Leave reviews on every platform
+3. Report you to consumer protection
+
+You have 24 hours.
+
+NO FURTHER COMMUNICATION NEEDED.`
+            },
+            
+            karen: {
+                default: `I WANT TO SPEAK TO YOUR MANAGER!!!
+
+This is UNACCEPTABLE! I've been trying to cancel for WEEKS and your TERRIBLE website keeps "having errors"!!!
+
+I am DONE with your SCAM of a service! CANCEL IT NOW or I'm calling my lawyer, the BBB, the FBI, and my cousin who works at the newspaper!!!
+
+I KNOW MY RIGHTS!!!
+
+DO YOU KNOW WHO I AM?!?!
+
+CANCELLED!!!! IMMEDIATELY!!!!
+
+- [YOUR NAME]
+(A VERY ANGRY CUSTOMER WHO WILL TELL EVERYONE)`
+            },
+            
+            legal: {
+                default: `NOTICE OF SUBSCRIPTION TERMINATION
+Pursuant to Consumer Protection Act § 1234.5
+
+Dear Sir/Madam,
+
+This constitutes formal notice of termination of services per our user agreement section 12.3.4 (which I definitely read).
+
+Any further charges will be considered unauthorized under:
+- The Fair Credit Billing Act
+- The Electronic Fund Transfer Act  
+- That law I saw on TikTok
+- Maritime Law (probably)
+
+My team of lawyers (my roommate's cousin went to law school) has advised me that continued billing constitutes fraud, mail fraud, wire fraud, and possibly treason.
+
+Consider yourself LEGALLY NOTIFIED.
+
+Respectfully hostile,
+[YOUR NAME], Esq.*
+*Not actually an Esquire
+
+cc: My lawyer (Steve)
+cc: The Internet
+cc: Judge Judy`
+            }
+        };
+        
+        function selectService(service) {
+            selectedService = service;
+            document.querySelectorAll('.service-btn').forEach(btn => {
+                btn.classList.remove('retro-bg-green');
+            });
+            event.target.classList.add('retro-bg-green');
+            Retro.playClick();
+        }
+        
+        function selectTone(tone) {
+            selectedTone = tone;
+            document.querySelectorAll('.tone-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.tone-card').classList.add('selected');
+            Retro.playClick();
+        }
+        
+        function generateEmail() {
+            if (!selectedService || !selectedTone) {
+                Retro.showModal({
+                    title: 'ERROR: INCOMPLETE PARAMETERS',
+                    content: '<p class="retro-amber">Select both SERVICE and TONE to proceed.</p>',
+                    buttons: [{ text: 'ACKNOWLEDGED', action: () => Retro.closeModal() }]
+                });
+                return;
+            }
+            
+            // Get template
+            const toneTemplates = templates[selectedTone];
+            const emailText = toneTemplates[selectedService] || toneTemplates.default;
+            
+            // Show output with typewriter effect
+            document.getElementById('output-section').style.display = 'block';
+            const outputDiv = document.getElementById('email-output');
+            outputDiv.textContent = '';
+            
+            Retro.typeText(outputDiv, emailText, 20);
+            
+            // Update stats
+            terminationCount++;
+            moneySaved += Math.floor(Math.random() * 50) + 10;
+            localStorage.setItem('nova_cancelbot_count', terminationCount);
+            localStorage.setItem('nova_cancelbot_saved', moneySaved);
+            
+            document.getElementById('term-count').textContent = terminationCount;
+            document.getElementById('money-saved').textContent = moneySaved;
+            document.getElementById('tears').textContent = (terminationCount * 2.5).toFixed(1);
+            
+            // Scroll to output
+            outputDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function copyEmail() {
+            const emailText = document.getElementById('email-output').textContent;
+            navigator.clipboard.writeText(emailText);
+            Retro.showToast('COPIED TO CLIPBOARD - READY TO DEPLOY!');
+        }
+        
+        function reset() {
+            selectedService = '';
+            selectedTone = '';
+            document.querySelectorAll('.service-btn').forEach(btn => {
+                btn.classList.remove('retro-bg-green');
+            });
+            document.querySelectorAll('.tone-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.getElementById('output-section').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // Easter egg
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+        
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+            
+            if (konamiCode.join(',') === konamiSequence.join(',')) {
+                Retro.showModal({
+                    title: 'ACHIEVEMENT UNLOCKED',
+                    content: '<p class="retro-green">KONAMI CODE DETECTED!</p><p>You found the secret! +1000 XP</p>',
+                    buttons: [{ text: 'RADICAL!', action: () => Retro.closeModal() }]
+                });
+            }
+        });
+    </script>
+</body>
+</html>
