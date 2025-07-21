@@ -654,6 +654,8 @@
     <script src="knowledge-engine.js"></script>
     
     <script>
+    // Wait for all scripts to load
+    window.addEventListener('DOMContentLoaded', function() {
         let currentKnowledgeBase = null;
         let currentTab = 'overview';
         
@@ -1002,14 +1004,20 @@
         }
         
         // Check URL parameter on load
-        window.addEventListener('load', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoUrl = urlParams.get('url');
-            if (videoUrl) {
-                document.getElementById('youtube-url').value = videoUrl;
-                startExtraction();
-            }
-        });
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoUrl = urlParams.get('url');
+        if (videoUrl) {
+            document.getElementById('youtube-url').value = videoUrl;
+            startExtraction();
+        }
+        
+        // Make functions available globally
+        window.loadExample = loadExample;
+        window.startExtraction = startExtraction;
+        window.switchTab = switchTab;
+        window.exportFormat = exportFormat;
+        window.copyToClipboard = copyToClipboard;
+    });
     </script>
 </body>
 </html>

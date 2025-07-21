@@ -1125,27 +1125,28 @@ class KnowledgeEngine {
     }
     
     generateMarkdown(data) {
-        const { metadata, knowledge, synthesis } = data;
+        const { metadata = {}, knowledge = {}, synthesis = {} } = data;
+        const { summary = {}, keyTakeaways = [] } = synthesis;
         
-        return `# ${metadata.title}
+        return `# ${metadata.title || 'YouTube Video Analysis'}
         
 ## Summary
-${synthesis.summary.oneLiner}
+${summary.oneLiner || 'Analysis complete'}
 
 ## Key Themes
-${knowledge.themes.map(t => `- **${t.name}** (confidence: ${Math.round(t.confidence * 100)}%)`).join('\n')}
+${(knowledge.themes || []).map(t => `- **${t.name}** (confidence: ${Math.round(t.confidence * 100)}%)`).join('\n')}
 
 ## Top Insights
-${knowledge.insights.slice(0, 5).map(i => `1. ${i.text}`).join('\n')}
+${(knowledge.insights || []).slice(0, 5).map((i, idx) => `${idx + 1}. ${i.text}`).join('\n')}
 
 ## Mental Models
-${knowledge.mentalModels.map(m => `### ${m.name}\n${m.description}\n`).join('\n')}
+${(knowledge.mentalModels || []).map(m => `### ${m.name}\n${m.description}\n`).join('\n')}
 
 ## Action Items
-${knowledge.actionableItems.slice(0, 5).map(a => `- [ ] ${a.action}`).join('\n')}
+${(knowledge.actionableItems || []).slice(0, 5).map(a => `- [ ] ${a.action}`).join('\n')}
 
 ## Memorable Quotes
-${knowledge.quotes.map(q => `> "${q.text}"`).join('\n\n')}
+${(knowledge.quotes || []).map(q => `> "${q.text}"`).join('\n\n')}
 `;
     }
     
