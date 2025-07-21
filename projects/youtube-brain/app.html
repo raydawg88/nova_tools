@@ -507,6 +507,31 @@
                 <span>Extract Knowledge</span>
             </button>
             
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="btn btn-secondary" onclick="toggleTranscriptInput()" style="font-size: 0.9rem; padding: 10px 20px;">
+                    <span>📝</span>
+                    <span>Have a transcript? Paste it here</span>
+                </button>
+            </div>
+            
+            <div id="transcript-input-section" style="display: none; margin-top: 20px;">
+                <label for="manual-transcript">Paste Video Transcript</label>
+                <textarea id="manual-transcript" style="width: 100%; height: 200px; background: #1a1a1a; border: 2px solid #333; border-radius: 8px; color: #e0e0e0; padding: 15px; font-family: monospace; resize: vertical;" placeholder="Paste the video transcript here...
+
+To get a transcript from YouTube:
+1. Open the video on YouTube
+2. Click the '...' menu below the video
+3. Click 'Show transcript'
+4. Click the 3 dots in the transcript window
+5. Select 'Toggle timestamps' to remove them
+6. Select all text and copy
+7. Paste here"></textarea>
+                <button class="btn" onclick="extractFromTranscript()" style="margin-top: 10px;">
+                    <span>🧠</span>
+                    <span>Extract from Transcript</span>
+                </button>
+            </div>
+            
             <div class="channel-mode" id="channel-mode">
                 <p>📺 <strong>Channel Mode:</strong> This will analyze the last 10 videos to build a comprehensive creator profile.</p>
             </div>
@@ -1038,12 +1063,77 @@
             startExtraction();
         }
         
+        // Toggle transcript input section
+        function toggleTranscriptInput() {
+            const section = document.getElementById('transcript-input-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Extract from manually pasted transcript
+        async function extractFromTranscript() {
+            const transcript = document.getElementById('manual-transcript').value.trim();
+            
+            if (!transcript) {
+                alert('Please paste a transcript first');
+                return;
+            }
+            
+            // Get URL if provided
+            const url = document.getElementById('youtube-url').value.trim();
+            let videoInfo = {
+                title: 'Manual Transcript Analysis',
+                channel: 'Unknown Channel',
+                duration: Math.round(transcript.length / 150), // Estimate based on words per minute
+            };
+            
+            // If URL provided, try to get video info
+            if (url) {
+                try {
+                    const videoId = window.YouTubeAPI.extractVideoId(url);
+                    if (videoId) {
+                        videoInfo = await window.YouTubeAPI.getVideoInfo(videoId);
+                    }
+                } catch (e) {
+                    console.log('Could not extract video info from URL');
+                }
+            }
+            
+            // Reset UI
+            document.getElementById('extract-btn').disabled = true;
+            document.getElementById('progress-section').classList.add('active');
+            document.getElementById('results-section').classList.remove('active');
+            
+            try {
+                // Update progress
+                updateProgress(50, 'Analyzing transcript...');
+                
+                // Extract knowledge directly
+                updateProgress(70, 'Extracting insights and mental models...');
+                const knowledgeBase = await window.KnowledgeEngine.extractKnowledge(transcript, videoInfo);
+                
+                updateProgress(100, 'Complete!');
+                
+                // Display results
+                currentKnowledgeBase = knowledgeBase;
+                displayResults(knowledgeBase);
+                
+            } catch (error) {
+                console.error('Extraction error:', error);
+                alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('extract-btn').disabled = false;
+                document.getElementById('progress-section').classList.remove('active');
+            }
+        }
+        
         // Make functions available globally
         window.loadExample = loadExample;
         window.startExtraction = startExtraction;
         window.switchTab = switchTab;
         window.exportFormat = exportFormat;
         window.copyToClipboard = copyToClipboard;
+        window.toggleTranscriptInput = toggleTranscriptInput;
+        window.extractFromTranscript = extractFromTranscript;
     });
     </script>
 </body>
