@@ -10,18 +10,25 @@ class KnowledgeEngine {
     // Main extraction pipeline
     async extractKnowledge(transcript, videoInfo = {}) {
         console.log('Starting knowledge extraction...');
+        console.log('Transcript length:', transcript ? transcript.length : 0);
+        console.log('Video info:', videoInfo);
         
         // Pre-process transcript
         const processed = this.preprocessTranscript(transcript);
+        console.log('Processed sentences:', processed.sentences.length);
         
         // Layer 1: Basic extraction
         const basicAnalysis = this.performBasicAnalysis(processed);
+        console.log('Basic analysis - themes:', basicAnalysis.themes.length);
+        console.log('Basic analysis - insights:', basicAnalysis.insights.length);
         
         // Layer 2: Deep analysis
         const deepAnalysis = await this.performDeepAnalysis(processed, basicAnalysis);
+        console.log('Deep analysis complete');
         
         // Layer 3: Synthesis
         const synthesis = this.synthesizeKnowledge(basicAnalysis, deepAnalysis);
+        console.log('Synthesis complete');
         
         // Generate final knowledge base
         const knowledgeBase = this.buildKnowledgeBase({
@@ -31,6 +38,7 @@ class KnowledgeEngine {
             synthesis
         });
         
+        console.log('Knowledge base built successfully');
         return knowledgeBase;
     }
     
@@ -859,7 +867,7 @@ class KnowledgeEngine {
     buildKnowledgeBase(data) {
         const { videoInfo, basicAnalysis, deepAnalysis, synthesis } = data;
         
-        return {
+        const knowledgeBase = {
             metadata: {
                 title: videoInfo.title || 'Unknown Video',
                 channel: videoInfo.channel || 'Unknown Channel',
@@ -896,11 +904,20 @@ class KnowledgeEngine {
             references: basicAnalysis.references,
             
             exportFormats: {
-                json: this.generateJSON(data),
-                markdown: this.generateMarkdown(data),
-                aiContext: this.generateAIContext(data)
+                json: '',
+                markdown: '',
+                aiContext: ''
             }
         };
+        
+        // Now generate export formats with the complete knowledge base
+        knowledgeBase.exportFormats = {
+            json: this.generateJSON(knowledgeBase),
+            markdown: this.generateMarkdown(knowledgeBase),
+            aiContext: this.generateAIContext(knowledgeBase)
+        };
+        
+        return knowledgeBase;
     }
     
     // Helper methods
@@ -1117,6 +1134,114 @@ class KnowledgeEngine {
         });
         
         return Array.from(topics);
+    }
+    
+    // Calculate overall confidence score
+    calculateOverallConfidence(basicAnalysis, deepAnalysis) {
+        const scores = [];
+        
+        if (basicAnalysis.themes.length > 0) {
+            scores.push(basicAnalysis.themes.reduce((sum, t) => sum + t.confidence, 0) / basicAnalysis.themes.length);
+        }
+        
+        if (basicAnalysis.insights.length > 0) {
+            scores.push(basicAnalysis.insights.reduce((sum, i) => sum + i.confidence, 0) / basicAnalysis.insights.length);
+        }
+        
+        if (deepAnalysis.credibilityMarkers && deepAnalysis.credibilityMarkers.score) {
+            scores.push(deepAnalysis.credibilityMarkers.score);
+        }
+        
+        return scores.length > 0 ? scores.reduce((sum, s) => sum + s, 0) / scores.length : 0.5;
+    }
+    
+    // Profile communication style
+    profileCommunicationStyle(patterns) {
+        const style = {
+            sentenceStyle: 'Standard communication',
+            engagement: 'Normal engagement level'
+        };
+        
+        if (patterns) {
+            if (patterns.vocabulary && patterns.vocabulary.complexity > 0.7) {
+                style.sentenceStyle = 'Complex and technical communication';
+            } else if (patterns.vocabulary && patterns.vocabulary.complexity < 0.3) {
+                style.sentenceStyle = 'Simple and accessible communication';
+            }
+            
+            if (patterns.engagement && patterns.engagement.questions > 5) {
+                style.engagement = 'Highly interactive and questioning';
+            } else if (patterns.emotional && patterns.emotional.tone === 'passionate') {
+                style.engagement = 'Passionate and enthusiastic';
+            }
+        }
+        
+        return style;
+    }
+    
+    // Determine approach based on patterns
+    determineApproach(patterns) {
+        if (!patterns) return 'General discussion';
+        
+        if (patterns.structure && patterns.structure.type === 'tutorial') {
+            return 'Step-by-step tutorial approach';
+        } else if (patterns.structure && patterns.structure.type === 'story') {
+            return 'Narrative and storytelling approach';
+        } else if (patterns.structure && patterns.structure.type === 'argument') {
+            return 'Argumentative and persuasive approach';
+        }
+        
+        return 'Informative discussion approach';
+    }
+    
+    // Suggest learning path
+    suggestLearningPath(basicAnalysis, deepAnalysis) {
+        const path = [];
+        
+        // Start with basic concepts
+        if (deepAnalysis.knowledgeGaps && deepAnalysis.knowledgeGaps.length > 0) {
+            path.push({
+                step: 1,
+                focus: 'Fill knowledge gaps',
+                items: deepAnalysis.knowledgeGaps.slice(0, 3).map(g => g.term || g.context)
+            });
+        }
+        
+        // Move to core concepts
+        if (basicAnalysis.themes.length > 0) {
+            path.push({
+                step: 2,
+                focus: 'Master core themes',
+                items: basicAnalysis.themes.slice(0, 3).map(t => t.name)
+            });
+        }
+        
+        // Apply mental models
+        if (basicAnalysis.mentalModels.length > 0) {
+            path.push({
+                step: 3,
+                focus: 'Apply mental models',
+                items: basicAnalysis.mentalModels.slice(0, 3).map(m => m.name)
+            });
+        }
+        
+        return path;
+    }
+    
+    // Suggest applications
+    suggestApplications(basicAnalysis, deepAnalysis) {
+        const applications = [];
+        
+        deepAnalysis.actionableInsights.forEach(insight => {
+            applications.push({
+                area: insight.type,
+                suggestion: insight.action,
+                difficulty: insight.difficulty,
+                impact: insight.impact
+            });
+        });
+        
+        return applications.slice(0, 5);
     }
     
     // Export format generators
