@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CancelBot 2.0 - Subscription Termination System</title>
+    <link rel="stylesheet" href="https://unpkg.com/sakofchit-system.css@latest">
+    <style>
+        body {
+            padding: 20px;
+            background: #f0f0f0;
+            background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d0d0d0' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .app-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .service-btn {
+            padding: 10px;
+            font-size: 12px;
+        }
+        
+        .service-btn.selected {
+            background: #000;
+            color: #fff;
+        }
+        
+        .tone-options {
+            margin: 20px 0;
+        }
+        
+        .tone-option {
+            margin: 10px 0;
+            padding: 15px;
+            border: 1px solid #000;
+            background: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tone-option:hover {
+            background: #000;
+            color: #fff;
+        }
+        
+        .tone-option.selected {
+            background: #000;
+            color: #fff;
+        }
+        
+        .tone-emoji {
+            font-size: 24px;
+        }
+        
+        .email-output {
+            font-family: monospace;
+            font-size: 12px;
+            padding: 15px;
+            background: #fff;
+            border: 1px solid #000;
+            min-height: 200px;
+            white-space: pre-wrap;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            padding: 10px;
+            border: 1px solid #000;
+            background: #fff;
+            font-size: 11px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 18px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .custom-service {
+            display: none;
+            margin-top: 10px;
+        }
+        
+        .alert-box {
+            margin: 20px 0;
+            padding: 15px;
+            border: 2px solid #000;
+            background: #fff;
+            display: none;
+        }
+        
+        .alert-box.success {
+            border-style: double;
+            border-width: 3px;
+        }
+        
+        h2 {
+            font-size: 12px;
+            margin: 15px 0 10px 0;
+        }
+        
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Main Window -->
+        <div class="window">
+            <div class="title-bar">
+                <button class="close" onclick="if(confirm('Really quit CancelBot? Your subscriptions will continue to drain your bank account.')) window.close()"></button>
+                <h1 class="title">CancelBot 2.0</h1>
+                <button class="resize"></button>
+            </div>
+            <div class="separator"></div>
+            
+            <!-- Stats Bar -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-number" id="total-canceled">247</span>
+                    <small>Subscriptions Killed</small>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">$<span id="money-saved">18,432</span></span>
+                    <small>Money Saved</small>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="companies-defeated">52</span>
+                    <small>Companies Defeated</small>
+                </div>
+            </div>
+            
+            <div class="separator"></div>
+            
+            <div class="window-pane">
+                <!-- Step 1: Service Selection -->
+                <div id="step1">
+                    <h2>Step 1: Select Service to Terminate</h2>
+                    <div class="service-grid">
+                        <button class="btn service-btn" onclick="selectService('netflix')">Netflix</button>
+                        <button class="btn service-btn" onclick="selectService('spotify')">Spotify</button>
+                        <button class="btn service-btn" onclick="selectService('gym')">Gym</button>
+                        <button class="btn service-btn" onclick="selectService('amazon')">Prime</button>
+                        <button class="btn service-btn" onclick="selectService('disney')">Disney+</button>
+                        <button class="btn service-btn" onclick="selectService('apple')">Apple</button>
+                        <button class="btn service-btn" onclick="selectService('adobe')">Adobe</button>
+                        <button class="btn service-btn" onclick="selectService('hulu')">Hulu</button>
+                        <button class="btn service-btn" onclick="selectService('youtube')">YouTube</button>
+                        <button class="btn service-btn" onclick="selectService('news')">News</button>
+                        <button class="btn service-btn" onclick="selectService('dating')">Dating</button>
+                        <button class="btn service-btn" onclick="selectService('other')">Other...</button>
+                    </div>
+                    
+                    <div id="custom-service" class="custom-service">
+                        <div class="field-row">
+                            <label for="custom-name">Service Name:</label>
+                            <input id="custom-name" type="text" placeholder="Enter service name">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Tone Selection -->
+                <div id="step2" style="display: none;">
+                    <h2>Step 2: Select Termination Tone</h2>
+                    <div class="tone-options">
+                        <div class="tone-option" onclick="selectTone('polite')">
+                            <span class="tone-emoji">😊</span>
+                            <div>
+                                <strong>Polite</strong><br>
+                                <small>Professional and courteous</small>
+                            </div>
+                        </div>
+                        <div class="tone-option" onclick="selectTone('firm')">
+                            <span class="tone-emoji">😐</span>
+                            <div>
+                                <strong>Firm</strong><br>
+                                <small>Direct and no-nonsense</small>
+                            </div>
+                        </div>
+                        <div class="tone-option" onclick="selectTone('karen')">
+                            <span class="tone-emoji">😤</span>
+                            <div>
+                                <strong>Karen Mode</strong><br>
+                                <small>I need to speak to the manager!</small>
+                            </div>
+                        </div>
+                        <div class="tone-option" onclick="selectTone('legal')">
+                            <span class="tone-emoji">⚖️</span>
+                            <div>
+                                <strong>Legal-ish</strong><br>
+                                <small>Sounds official and scary</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 3: Details -->
+                <div id="step3" style="display: none;">
+                    <h2>Step 3: Optional Details (More Ammunition)</h2>
+                    <div class="field-row">
+                        <label for="reason">Reason:</label>
+                        <select id="reason">
+                            <option value="">Select reason...</option>
+                            <option value="expensive">Too expensive</option>
+                            <option value="unused">Not using it</option>
+                            <option value="alternative">Found better alternative</option>
+                            <option value="poor-service">Poor service</option>
+                            <option value="data-concerns">Privacy concerns</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="field-row">
+                        <label for="account-number">Account #:</label>
+                        <input id="account-number" type="text" placeholder="Optional">
+                    </div>
+                    
+                    <button class="btn generate-btn" onclick="generateEmail()">
+                        🚀 Generate Termination Email
+                    </button>
+                </div>
+                
+                <!-- Step 4: Output -->
+                <div id="step4" style="display: none;">
+                    <h2>Your Termination Email</h2>
+                    <div class="email-output" id="email-output"></div>
+                    
+                    <div class="field-row" style="margin-top: 20px;">
+                        <button class="btn" onclick="copyEmail()" style="flex: 1;">📋 Copy to Clipboard</button>
+                        <button class="btn" onclick="startOver()" style="flex: 1;">🔄 Start Over</button>
+                    </div>
+                    
+                    <div class="alert-box success" id="success-alert">
+                        <strong>✓ Success!</strong><br>
+                        Email copied to clipboard. Now paste it into your email client and send to the company's support address. Remember to save their confirmation!
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dialog for copy confirmation -->
+        <div class="window modeless-dialog" id="copy-dialog" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px;">
+            <div class="title-bar">
+                <h1 class="title">CancelBot</h1>
+            </div>
+            <div class="separator"></div>
+            <div class="window-pane" style="text-align: center; padding: 20px;">
+                <p>Email copied to clipboard!</p>
+                <button class="btn" onclick="document.getElementById('copy-dialog').style.display='none'">OK</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let selectedService = '';
+        let selectedTone = '';
+        
+        // Initialize stats
+        document.addEventListener('DOMContentLoaded', () => {
+            const stats = JSON.parse(localStorage.getItem('cancelbot_stats') || '{}');
+            if (stats.canceled) document.getElementById('total-canceled').textContent = stats.canceled;
+            if (stats.saved) document.getElementById('money-saved').textContent = stats.saved.toLocaleString();
+            if (stats.companies) document.getElementById('companies-defeated').textContent = stats.companies;
+        });
+        
+        function selectService(service) {
+            selectedService = service;
+            
+            // Update UI
+            document.querySelectorAll('.service-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            
+            // Show/hide custom input
+            document.getElementById('custom-service').style.display = 
+                service === 'other' ? 'block' : 'none';
+            
+            // Show next step
+            document.getElementById('step2').style.display = 'block';
+            document.getElementById('step2').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function selectTone(tone) {
+            selectedTone = tone;
+            
+            // Update UI
+            document.querySelectorAll('.tone-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.closest('.tone-option').classList.add('selected');
+            
+            // Show next step
+            document.getElementById('step3').style.display = 'block';
+            document.getElementById('step3').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function generateEmail() {
+            const reason = document.getElementById('reason').value;
+            const accountNumber = document.getElementById('account-number').value;
+            const serviceName = selectedService === 'other' ? 
+                document.getElementById('custom-name').value || 'Your Service' : 
+                selectedService.charAt(0).toUpperCase() + selectedService.slice(1);
+            
+            const templates = {
+                polite: {
+                    subject: `Request to Cancel ${serviceName} Subscription`,
+                    body: `Dear ${serviceName} Support Team,
+
+I hope this email finds you well. I am writing to request the immediate cancellation of my ${serviceName} subscription.
+
+${accountNumber ? `Account Number: ${accountNumber}` : ''}
+${reason ? `Reason for cancellation: ${getReason(reason)}` : ''}
+
+I would appreciate confirmation that my subscription has been cancelled and that no further charges will be applied to my account.
+
+Thank you for your assistance in this matter.
+
+Best regards,
+[Your Name]`
+                },
+                firm: {
+                    subject: `Cancel My ${serviceName} Account - Effective Immediately`,
+                    body: `To Whom It May Concern,
+
+Cancel my ${serviceName} subscription immediately.
+
+${accountNumber ? `Account: ${accountNumber}` : ''}
+${reason ? `Reason: ${getReason(reason)}` : ''}
+
+Confirm cancellation within 24 hours. No further charges are authorized.
+
+[Your Name]`
+                },
+                karen: {
+                    subject: `URGENT: IMMEDIATE CANCELLATION REQUIRED - SUPERVISOR ATTENTION NEEDED`,
+                    body: `I NEED TO SPEAK TO A MANAGER IMMEDIATELY!!!
+
+This is COMPLETELY UNACCEPTABLE! I have been trying to cancel my ${serviceName} subscription and NO ONE is helping me! 
+
+${accountNumber ? `My account number is ${accountNumber} - LOOK IT UP!` : ''}
+
+I am DISGUSTED by ${reason ? getReason(reason) : 'your terrible service'} and I want this cancelled RIGHT NOW! Not tomorrow, not next week, RIGHT NOW!
+
+If this is not cancelled within the next 2 hours, I will be contacting my credit card company, the Better Business Bureau, and leaving reviews on EVERY SINGLE WEBSITE I can find!
+
+I expect a call from a SUPERVISOR within the hour confirming my cancellation!
+
+DO NOT IGNORE THIS EMAIL!
+
+[Your Name]
+P.S. I'm taking screenshots of EVERYTHING for my lawyer!`
+                },
+                legal: {
+                    subject: `Notice of Subscription Termination - ${serviceName} - Pursuant to Consumer Rights`,
+                    body: `NOTICE OF TERMINATION
+
+To: ${serviceName} Legal Department
+Re: Immediate Termination of Subscription Services
+${accountNumber ? `Account Reference: ${accountNumber}` : ''}
+
+Dear Sir/Madam,
+
+This communication serves as formal written notice of my intention to terminate all subscription services with ${serviceName}, effective immediately.
+
+${reason ? `Grounds for termination: ${getReason(reason)}` : ''}
+
+Pursuant to consumer protection regulations and the terms of service agreement, I hereby exercise my right to cancel this subscription. Any attempt to charge my payment method following receipt of this notice will be considered unauthorized and may result in legal action.
+
+Please acknowledge receipt of this termination notice within 48 hours and provide written confirmation that:
+1. The subscription has been terminated
+2. No further charges will be processed
+3. Any remaining service period will be honored without renewal
+
+Failure to comply with this request may result in formal complaints being filed with relevant consumer protection agencies and financial institutions.
+
+This notice is dated and time-stamped for legal record-keeping purposes.
+
+Sincerely,
+[Your Name]
+
+cc: Consumer Protection Bureau
+cc: Payment Processor`
+                }
+            };
+            
+            const template = templates[selectedTone];
+            const emailContent = `Subject: ${template.subject}\n\n${template.body}`;
+            
+            // Show output
+            document.getElementById('email-output').textContent = emailContent;
+            document.getElementById('step4').style.display = 'block';
+            document.getElementById('step4').scrollIntoView({ behavior: 'smooth' });
+            
+            // Update stats
+            updateStats();
+        }
+        
+        function getReason(reason) {
+            const reasons = {
+                expensive: "It's become too expensive",
+                unused: "I'm not using the service",
+                alternative: "I've found a better alternative",
+                'poor-service': "The service quality has declined",
+                'data-concerns': "I have privacy and data security concerns",
+                other: "Personal reasons"
+            };
+            return reasons[reason] || "Personal reasons";
+        }
+        
+        function copyEmail() {
+            const emailText = document.getElementById('email-output').textContent;
+            navigator.clipboard.writeText(emailText).then(() => {
+                document.getElementById('copy-dialog').style.display = 'block';
+                document.getElementById('success-alert').style.display = 'block';
+            });
+        }
+        
+        function updateStats() {
+            const stats = JSON.parse(localStorage.getItem('cancelbot_stats') || '{"canceled":247,"saved":18432,"companies":52}');
+            stats.canceled = (stats.canceled || 247) + 1;
+            stats.saved = (stats.saved || 18432) + Math.floor(Math.random() * 50 + 10);
+            
+            localStorage.setItem('cancelbot_stats', JSON.stringify(stats));
+            
+            document.getElementById('total-canceled').textContent = stats.canceled;
+            document.getElementById('money-saved').textContent = stats.saved.toLocaleString();
+        }
+        
+        function startOver() {
+            selectedService = '';
+            selectedTone = '';
+            document.getElementById('step2').style.display = 'none';
+            document.getElementById('step3').style.display = 'none';
+            document.getElementById('step4').style.display = 'none';
+            document.getElementById('success-alert').style.display = 'none';
+            document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

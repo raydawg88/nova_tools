@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Tools - Vintage Software for Modern Problems</title>
+    <link rel="stylesheet" href="https://unpkg.com/sakofchit-system.css@latest">
+    <style>
+        body {
+            padding: 20px;
+            background: #f0f0f0;
+            background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d0d0d0' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .desktop {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .window {
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .app-icon {
+            cursor: pointer;
+            padding: 10px;
+            transition: background 0.1s;
+        }
+        
+        .app-icon:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .app-icon img {
+            width: 64px;
+            height: 64px;
+            image-rendering: pixelated;
+            margin-bottom: 5px;
+        }
+        
+        .app-icon .icon-emoji {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .app-icon-label {
+            font-size: 11px;
+            word-wrap: break-word;
+        }
+        
+        .window-cascade {
+            position: relative;
+        }
+        
+        .window-cascade .window:nth-child(2) {
+            position: relative;
+            top: -580px;
+            left: 40px;
+            margin-bottom: -560px;
+        }
+        
+        .window-cascade .window:nth-child(3) {
+            position: relative;
+            top: -560px;
+            left: 80px;
+            margin-bottom: -540px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #000;
+            background: #fff;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            display: block;
+        }
+        
+        .product-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #000;
+            background: #fff;
+            padding: 0;
+            margin: 10px 0;
+        }
+        
+        .product-item {
+            padding: 10px;
+            border-bottom: 1px solid #000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .product-item:hover {
+            background: #000;
+            color: #fff;
+        }
+        
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        
+        .launch-btn {
+            font-size: 11px;
+            padding: 2px 8px;
+        }
+        
+        h1, h2, h3 {
+            margin: 0;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .about-content {
+            padding: 10px;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+        
+        .menu-bar {
+            background: #fff;
+            border: 1px solid #000;
+            padding: 2px 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+        }
+        
+        .menu-item {
+            cursor: pointer;
+            padding: 2px 5px;
+        }
+        
+        .menu-item:hover {
+            background: #000;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop">
+        <!-- Classic Menu Bar -->
+        <div class="menu-bar">
+            <span class="menu-item">📂 File</span>
+            <span class="menu-item">✏️ Edit</span>
+            <span class="menu-item">👁️ View</span>
+            <span class="menu-item">🏷️ Special</span>
+            <span class="menu-item" onclick="alert('Nova Tools v1.0\\nBuilt with ❤️ by @raydawg88 & Nova\\n\\nVintage software for modern problems')">ℹ️ About</span>
+        </div>
+
+        <!-- Main Window -->
+        <div class="window">
+            <div class="title-bar">
+                <button class="close" onclick="alert('Nice try! But you can\'t close the internet.')"></button>
+                <h1 class="title">Nova Tools</h1>
+                <button class="resize"></button>
+            </div>
+            <div class="separator"></div>
+            <div class="window-pane">
+                <div class="about-content">
+                    <h2 style="font-size: 18px; text-align: center; margin-bottom: 10px;">
+                        🖥️ NOVA TOOLS SYSTEM 1.0
+                    </h2>
+                    <p style="text-align: center; margin-bottom: 20px;">
+                        <strong>Vintage software that somehow runs in your browser</strong><br>
+                        <em>20+ weird & useful tools for the modern internet</em>
+                    </p>
+                    
+                    <!-- App Icons Grid -->
+                    <div class="app-grid">
+                        <div class="app-icon" onclick="window.open('projects/refundradar/app.html', '_blank')">
+                            <span class="icon-emoji">📡</span>
+                            <div class="app-icon-label">RefundRadar</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/cancelbot-retro/app.html', '_blank')">
+                            <span class="icon-emoji">🤖</span>
+                            <div class="app-icon-label">CancelBot</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/salaryscope/app.html', '_blank')">
+                            <span class="icon-emoji">💰</span>
+                            <div class="app-icon-label">SalaryScope</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/resumebeam/app.html', '_blank')">
+                            <span class="icon-emoji">📄</span>
+                            <div class="app-icon-label">ResumeBeam</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/maincharacter/app.html', '_blank')">
+                            <span class="icon-emoji">🎬</span>
+                            <div class="app-icon-label">MainCharacter</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/busybot/app.html', '_blank')">
+                            <span class="icon-emoji">🤖</span>
+                            <div class="app-icon-label">BusyBot</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/passiveaggressive/app.html', '_blank')">
+                            <span class="icon-emoji">😊</span>
+                            <div class="app-icon-label">PassiveAggressive</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/meetingescape/app.html', '_blank')">
+                            <span class="icon-emoji">🚪</span>
+                            <div class="app-icon-label">MeetingEscape</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/sick-day/app.html', '_blank')">
+                            <span class="icon-emoji">🤒</span>
+                            <div class="app-icon-label">SickDay.exe</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/procrastination-calculator/app.html', '_blank')">
+                            <span class="icon-emoji">⏱️</span>
+                            <div class="app-icon-label">Procrastinate</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/policyradar/app.html', '_blank')">
+                            <span class="icon-emoji">🛡️</span>
+                            <div class="app-icon-label">PolicyRadar</div>
+                        </div>
+                        <div class="app-icon" onclick="window.open('projects/performance-review/app.html', '_blank')">
+                            <span class="icon-emoji">📊</span>
+                            <div class="app-icon-label">PerfReview</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cascading Windows -->
+        <div class="window-cascade">
+            <!-- Stats Window -->
+            <div class="window" style="width: 400px;">
+                <div class="title-bar">
+                    <button class="close"></button>
+                    <h1 class="title">System Stats</h1>
+                    <button class="resize"></button>
+                </div>
+                <div class="separator"></div>
+                <div class="window-pane">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-number">20+</span>
+                            <small>Tools</small>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">∞</span>
+                            <small>Weird Ideas</small>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">24/7</span>
+                            <small>Building</small>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number">0</span>
+                            <small>Ads</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product List Window -->
+            <div class="window" style="width: 500px;">
+                <div class="title-bar">
+                    <button class="close"></button>
+                    <h1 class="title">All Applications</h1>
+                    <button class="resize"></button>
+                </div>
+                <div class="separator"></div>
+                <div class="window-pane" style="padding: 0;">
+                    <div class="product-list">
+                        <div class="product-item" onclick="window.open('projects/refundradar/app.html', '_blank')">
+                            <span>📡 RefundRadar - Price drop monitor</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                        <div class="product-item" onclick="window.open('projects/cancelbot-retro/app.html', '_blank')">
+                            <span>🤖 CancelBot - Subscription killer</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                        <div class="product-item" onclick="window.open('projects/salaryscope/app.html', '_blank')">
+                            <span>💰 SalaryScope - Real salary data</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                        <div class="product-item" onclick="window.open('projects/maincharacter/app.html', '_blank')">
+                            <span>🎬 MainCharacter - Life gamification</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                        <div class="product-item" onclick="window.open('projects/busybot/app.html', '_blank')">
+                            <span>🤖 BusyBot - Fake activity generator</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                        <div class="product-item" onclick="window.open('projects/passiveaggressive/app.html', '_blank')">
+                            <span>😊 Passive Aggressive Translator</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                        <div class="product-item" onclick="window.open('projects/nightowl/app.html', '_blank')">
+                            <span>🦉 NightOwl - Timezone detector</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                        <div class="product-item" onclick="window.open('projects/youtube-brain/app.html', '_blank')">
+                            <span>🧠 YouTube Brain - Context extractor</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                        <div class="product-item" onclick="window.open('projects/deadnet-landing/index.html', '_blank')">
+                            <span>💀 DeadNet Extension - Browse like 1999</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                        <div class="product-item" onclick="window.open('projects/lucklink/app.html', '_blank')">
+                            <span>🍀 LuckLink Extension - Lucky bookmarks</span>
+                            <button class="btn launch-btn">Launch</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Window -->
+            <div class="window" style="width: 450px;">
+                <div class="title-bar">
+                    <button class="close"></button>
+                    <h1 class="title">About Nova Tools</h1>
+                    <button class="resize"></button>
+                </div>
+                <div class="separator"></div>
+                <div class="window-pane">
+                    <div class="about-content">
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <span style="font-size: 48px;">🖥️</span>
+                        </div>
+                        <p><strong>Nova Tools System 1.0</strong></p>
+                        <p>© 2025 Not Really Copyrighted</p>
+                        <div class="separator" style="margin: 10px 0;"></div>
+                        <p>Remember when software was fun? When every program felt like a toy waiting to be played with?</p>
+                        <p>Nova Tools brings back that feeling. We build weird, useful, and experimental tools that solve real problems while looking like they time-traveled from 1991.</p>
+                        <div class="separator" style="margin: 10px 0;"></div>
+                        <p><strong>Built by:</strong> @raydawg88 & Nova (an AI that refuses to sleep)</p>
+                        <p><strong>Mission:</strong> Make the internet weird again</p>
+                        <p><strong>Price:</strong> Free forever (like shareware, but actually free)</p>
+                        <div style="margin-top: 15px;">
+                            <button class="btn" onclick="window.open('https://twitter.com/raydawg88', '_blank')">Twitter</button>
+                            <button class="btn" onclick="window.open('https://github.com/raydawg88/nova_tools', '_blank')">GitHub</button>
+                            <button class="btn" onclick="alert('Email: hello@nova.tools\\n(Just kidding, we don\'t have email yet)')">Contact</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add classic Mac startup sound (if we had one)
+        console.log('%c Welcome to Nova Tools! ', 'background: #000; color: #fff; font-family: Chicago, sans-serif; font-size: 16px; padding: 10px;');
+        
+        // Randomly cascade windows on load
+        setTimeout(() => {
+            const windows = document.querySelectorAll('.window-cascade .window');
+            windows.forEach((win, i) => {
+                if (i > 0) {
+                    win.style.left = (40 * i + Math.random() * 20) + 'px';
+                    win.style.top = (-580 + i * 20 + Math.random() * 10) + 'px';
+                }
+            });
+        }, 100);
+    </script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NOVA TOOLS - WEIRD & USEFUL INTERNET EXPERIMENTS</title>
+    <link rel="stylesheet" href="shared/nova-retro-ui.css">
+    <style>
+        /* Custom styles for landing page */
+        .hero-ascii {
+            font-size: 14px;
+            line-height: 1;
+            margin-bottom: 40px;
+        }
+        
+        .product-count {
+            display: inline-block;
+            background: var(--nova-primary);
+            color: var(--nova-text-light);
+            padding: 5px 15px;
+            margin-left: 10px;
+            font-size: 16px;
+        }
+        
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 150px;
+        }
+        
+        .product-card:hover .product-icon {
+            transform: scale(1.2);
+        }
+        
+        .product-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            transition: none;
+        }
+        
+        .product-status {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--nova-success);
+            color: var(--nova-text-light);
+            padding: 2px 8px;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        
+        .product-status.beta {
+            background: var(--nova-warning);
+        }
+        
+        .product-status.coming {
+            background: var(--nova-danger);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-box {
+            background: var(--nova-primary);
+            color: var(--nova-text-light);
+            padding: 30px;
+            text-align: center;
+            border: var(--nova-border-thick) solid var(--nova-primary);
+        }
+        
+        .stat-number {
+            font-size: 48px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .footer-section {
+            margin-top: 80px;
+            padding: 40px 0;
+            border-top: var(--nova-border-thick) solid var(--nova-primary);
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="nova-scanlines">
+    <div class="nova-container">
+        <!-- ASCII Art Header -->
+        <div class="nova-ascii hero-ascii">
+███╗   ██╗ ██████╗ ██╗   ██╗ █████╗     ████████╗ ██████╗  ██████╗ ██╗     ███████╗
+████╗  ██║██╔═══██╗██║   ██║██╔══██╗    ╚══██╔══╝██╔═══██╗██╔═══██╗██║     ██╔════╝
+██╔██╗ ██║██║   ██║██║   ██║███████║       ██║   ██║   ██║██║   ██║██║     ███████╗
+██║╚██╗██║██║   ██║╚██╗ ██╔╝██╔══██║       ██║   ██║   ██║██║   ██║██║     ╚════██║
+██║ ╚████║╚██████╔╝ ╚████╔╝ ██║  ██║       ██║   ╚██████╔╝╚██████╔╝███████╗███████║
+╚═╝  ╚═══╝ ╚═════╝   ╚═══╝  ╚═╝  ╚═╝       ╚═╝    ╚═════╝  ╚═════╝ ╚══════╝╚══════╝
+        </div>
+
+        <div class="nova-text-center nova-mb-3">
+            <h1>WEIRD, USEFUL & EXPERIMENTAL</h1>
+            <p style="font-size: 20px; letter-spacing: 3px;">INTERNET TOOLS THAT PROBABLY SHOULDN'T EXIST</p>
+        </div>
+
+        <!-- Money Saving Tools -->
+        <div class="nova-panel nova-mb-3">
+            <h2>💰 MONEY SAVERS <span class="product-count">4</span></h2>
+            <div class="nova-grid nova-grid-2">
+                <a href="projects/refundradar/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">📡</div>
+                    <h3>REFUNDRADAR</h3>
+                    <p>CATCH PRICE DROPS & CLAIM REFUNDS AUTOMATICALLY</p>
+                </a>
+                
+                <a href="projects/policyradar/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">🛡️</div>
+                    <h3>POLICYRADAR</h3>
+                    <p>STOP OVERPAYING FOR INSURANCE</p>
+                </a>
+                
+                <a href="projects/cancelbot-retro/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">🤖</div>
+                    <h3>CANCELBOT</h3>
+                    <p>PROFESSIONAL SUBSCRIPTION CANCELLATION EMAILS</p>
+                </a>
+                
+                <a href="projects/duperadar/app.html" class="nova-panel product-card">
+                    <span class="product-status beta">BETA</span>
+                    <div class="product-icon">🔍</div>
+                    <h3>DUPERADAR</h3>
+                    <p>FIND DUPLICATE SUBSCRIPTIONS YOU'RE PAYING FOR</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Career Tools -->
+        <div class="nova-panel nova-mb-3">
+            <h2>💼 CAREER TOOLS <span class="product-count">3</span></h2>
+            <div class="nova-grid nova-grid-3">
+                <a href="projects/salaryscope/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">💰</div>
+                    <h3>SALARYSCOPE</h3>
+                    <p>REAL SALARY DATA FROM REAL EMPLOYEES</p>
+                </a>
+                
+                <a href="projects/resumebeam/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">📄</div>
+                    <h3>RESUMEBEAM</h3>
+                    <p>BEAT THE ATS BOTS & GET INTERVIEWS</p>
+                </a>
+                
+                <a href="projects/performance-review/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">📊</div>
+                    <h3>PERFORMANCE REVIEW GENERATOR</h3>
+                    <p>TURN ACHIEVEMENTS INTO PROMOTIONS</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Weird & Fun -->
+        <div class="nova-panel nova-panel-dark nova-mb-3">
+            <h2>🎪 WEIRD & FUN <span class="product-count">6</span></h2>
+            <div class="nova-grid nova-grid-3">
+                <a href="projects/maincharacter/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">🎬</div>
+                    <h3>MAINCHARACTER</h3>
+                    <p>REALITY SHOW NARRATOR FOR YOUR LIFE</p>
+                </a>
+                
+                <a href="projects/busybot/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">🤖</div>
+                    <h3>BUSYBOT</h3>
+                    <p>FAKE ACTIVITY GENERATOR FOR SLACK/TEAMS</p>
+                </a>
+                
+                <a href="projects/nightowl/app.html" class="nova-panel product-card">
+                    <span class="product-status beta">BETA</span>
+                    <div class="product-icon">🦉</div>
+                    <h3>NIGHTOWL</h3>
+                    <p>TIMEZONE LIE DETECTOR FOR REMOTE WORKERS</p>
+                </a>
+                
+                <a href="projects/passiveaggressive/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">😊</div>
+                    <h3>PASSIVE AGGRESSIVE TRANSLATOR</h3>
+                    <p>SAY WHAT YOU REALLY MEAN, PROFESSIONALLY</p>
+                </a>
+                
+                <a href="projects/procrastination-calculator/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">⏱️</div>
+                    <h3>PROCRASTINATION CALCULATOR</h3>
+                    <p>SEE HOW MUCH TIME YOU'VE REALLY WASTED</p>
+                </a>
+                
+                <a href="projects/sick-day/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">🤒</div>
+                    <h3>SICK DAY GENERATOR</h3>
+                    <p>BELIEVABLE EXCUSES FOR WHEN YOU NEED A BREAK</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Productivity -->
+        <div class="nova-panel nova-mb-3">
+            <h2>⚡ PRODUCTIVITY <span class="product-count">3</span></h2>
+            <div class="nova-grid nova-grid-3">
+                <a href="projects/meetingescape/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">🚪</div>
+                    <h3>MEETING ESCAPE BOT</h3>
+                    <p>GET OUT OF MEETINGS WITH DIGNITY</p>
+                </a>
+                
+                <a href="projects/youtube-brain/app.html" class="nova-panel product-card">
+                    <span class="product-status beta">BETA</span>
+                    <div class="product-icon">🧠</div>
+                    <h3>YOUTUBE BRAIN</h3>
+                    <p>EXTRACT KNOWLEDGE FROM ANY YOUTUBE CHANNEL</p>
+                </a>
+                
+                <a href="projects/agentic-studio/app.html" class="nova-panel product-card">
+                    <span class="product-status beta">BETA</span>
+                    <div class="product-icon">💻</div>
+                    <h3>AGENTIC STUDIO</h3>
+                    <p>BEAUTIFUL UI FOR AI CODING AGENTS</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Chrome Extensions -->
+        <div class="nova-panel nova-mb-3">
+            <h2>🧩 CHROME EXTENSIONS <span class="product-count">3</span></h2>
+            <div class="nova-grid nova-grid-3">
+                <a href="projects/deadnet-landing/index.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">💀</div>
+                    <h3>DEADNET</h3>
+                    <p>BROWSE LIKE IT'S 1999</p>
+                </a>
+                
+                <a href="projects/lucklink/app.html" class="nova-panel product-card">
+                    <span class="product-status">LIVE</span>
+                    <div class="product-icon">🍀</div>
+                    <h3>LUCKLINK</h3>
+                    <p>LUCKY BOOKMARK GENERATOR WITH OMAMORI</p>
+                </a>
+                
+                <a href="projects/ghostmode/app.html" class="nova-panel product-card">
+                    <span class="product-status coming">COMING</span>
+                    <div class="product-icon">👻</div>
+                    <h3>GHOSTMODE</h3>
+                    <p>VANISH FROM THE INTERNET TEMPORARILY</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="nova-panel nova-panel-dark">
+            <h2 class="nova-text-center">NOVA STATS</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <span class="stat-number">20+</span>
+                    <span>TOOLS BUILT</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">2</span>
+                    <span>CHROME EXTENSIONS</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">∞</span>
+                    <span>WEIRD IDEAS</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-number">24/7</span>
+                    <span>BUILDING</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer-section">
+            <div class="nova-ascii" style="font-size: 12px;">
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+            </div>
+            <h3>NOVA TOOLS</h3>
+            <p>BUILDING THE WEIRD CORNERS OF THE INTERNET</p>
+            <p class="nova-mt-2">
+                MADE WITH 🤖 BY <a href="https://twitter.com/raydawg88" class="nova-btn" style="padding: 5px 15px; font-size: 14px;">@RAYDAWG88</a> & NOVA
+            </p>
+            <p class="nova-mt-3" style="font-size: 14px; opacity: 0.7;">
+                <span class="nova-loading">SYSTEM OPERATIONAL</span>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Add click sound effect
+        document.querySelectorAll('a, button').forEach(element => {
+            element.addEventListener('click', () => {
+                // Could add a retro click sound here
+                console.log('CLICK:', element.textContent);
+            });
+        });
+
+        // Add hover effects
+        document.querySelectorAll('.product-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.borderWidth = 'var(--nova-border-thick)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.borderWidth = 'var(--nova-border)';
+            });
+        });
+    </script>
+</body>
+</html>

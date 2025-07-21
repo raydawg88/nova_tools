@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Tools - Weird & Useful Internet Experiments</title>
+    <link rel="stylesheet" href="shared/retro-ui.css">
+    <script src="shared/retro-ui.js"></script>
+    <style>
+        .hero-section {
+            padding: 60px 0;
+            text-align: center;
+        }
+        
+        .hero-title {
+            font-size: 72px;
+            color: var(--retro-green);
+            text-shadow: 0 0 30px currentColor;
+            margin-bottom: 20px;
+        }
+        
+        .category-section {
+            margin: 60px 0;
+        }
+        
+        .category-header {
+            font-size: 28px;
+            color: var(--retro-cyan);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 30px 0;
+        }
+        
+        .product-card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--retro-green);
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: var(--retro-green);
+            display: block;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 255, 0, 0.3);
+            border-color: var(--retro-cyan);
+        }
+        
+        .product-icon {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        .product-name {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--retro-cyan);
+        }
+        
+        .product-tag {
+            display: inline-block;
+            background: var(--retro-pink);
+            color: var(--terminal-bg);
+            padding: 2px 8px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        
+        .chrome-ext {
+            border-color: var(--retro-amber);
+        }
+        
+        .weird {
+            border-color: var(--retro-pink);
+        }
+        
+        .stats-section {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 40px;
+            margin: 60px 0;
+            border: 2px solid var(--retro-green);
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="retro-ui">
+    <div class="retro-container">
+        <!-- ASCII Header -->
+        <div class="retro-ascii-header retro-green">
+ █▄ █ █▀█ █ █ ▄▀█   ▀█▀ █▀█ █▀█ █   █▀
+ █ ▀█ █▄█ ▀▄▀ █▀█    █  █▄█ █▄█ █▄▄ ▄█
+        </div>
+        
+        <div class="hero-section">
+            <h1 class="hero-title">NOVA TOOLS</h1>
+            <p class="retro-cyan" style="font-size: 24px;">Weird, Useful & Experimental</p>
+            <p style="margin-top: 20px;">Internet tools that probably shouldn't exist</p>
+        </div>
+        
+        <!-- Money Saving Tools -->
+        <div class="category-section">
+            <h2 class="category-header retro-green">[ 💰 MONEY SAVERS ]</h2>
+            <div class="product-grid">
+                <a href="projects/refundradar/app.html" class="product-card">
+                    <div class="product-icon">📡</div>
+                    <div class="product-name">RefundRadar</div>
+                    <div>Catch price drops & claim refunds automatically</div>
+                </a>
+                
+                <a href="projects/policyradar/app.html" class="product-card">
+                    <div class="product-icon">🛡️</div>
+                    <div class="product-name">PolicyRadar</div>
+                    <div>Stop overpaying for insurance</div>
+                </a>
+                
+                <a href="projects/cancelbot-retro/app.html" class="product-card">
+                    <div class="product-icon">🤖</div>
+                    <div class="product-name">CancelBot</div>
+                    <div>Professional subscription cancellation emails</div>
+                </a>
+                
+                <a href="projects/duperadar/app.html" class="product-card">
+                    <div class="product-icon">🔍</div>
+                    <div class="product-name">DupeRadar</div>
+                    <div>Find duplicate subscriptions you're paying for</div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Career Tools -->
+        <div class="category-section">
+            <h2 class="category-header retro-amber">[ 💼 CAREER TOOLS ]</h2>
+            <div class="product-grid">
+                <a href="projects/salaryscope/app.html" class="product-card">
+                    <div class="product-icon">💰</div>
+                    <div class="product-name">SalaryScope</div>
+                    <div>Real salary data from real employees</div>
+                </a>
+                
+                <a href="projects/resumebeam/app.html" class="product-card">
+                    <div class="product-icon">📄</div>
+                    <div class="product-name">ResumeBeam</div>
+                    <div>Beat the ATS bots & get interviews</div>
+                </a>
+                
+                <a href="projects/performance-review/app.html" class="product-card">
+                    <div class="product-icon">📊</div>
+                    <div class="product-name">Performance Review Generator</div>
+                    <div>Turn achievements into promotion-worthy narratives</div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Weird & Fun -->
+        <div class="category-section">
+            <h2 class="category-header retro-pink">[ 🎪 WEIRD & FUN ]</h2>
+            <div class="product-grid">
+                <a href="projects/maincharacter/app.html" class="product-card weird">
+                    <div class="product-icon">🎬</div>
+                    <div class="product-name">MainCharacter</div>
+                    <div>Reality show narrator for your life</div>
+                    <span class="product-tag">EXPERIMENTAL</span>
+                </a>
+                
+                <a href="projects/busybot/app.html" class="product-card weird">
+                    <div class="product-icon">🤖</div>
+                    <div class="product-name">BusyBot</div>
+                    <div>Fake activity generator for Slack/Teams</div>
+                    <span class="product-tag">USE WISELY</span>
+                </a>
+                
+                <a href="projects/nightowl/app.html" class="product-card weird">
+                    <div class="product-icon">🦉</div>
+                    <div class="product-name">NightOwl</div>
+                    <div>Timezone lie detector for remote workers</div>
+                </a>
+                
+                <a href="projects/passiveaggressive/app.html" class="product-card weird">
+                    <div class="product-icon">😊</div>
+                    <div class="product-name">Passive Aggressive Translator</div>
+                    <div>Say what you really mean, professionally</div>
+                </a>
+                
+                <a href="projects/procrastination-calculator/app.html" class="product-card weird">
+                    <div class="product-icon">⏱️</div>
+                    <div class="product-name">Procrastination Calculator</div>
+                    <div>See how much time you've really wasted</div>
+                </a>
+                
+                <a href="projects/sick-day/app.html" class="product-card weird">
+                    <div class="product-icon">🤒</div>
+                    <div class="product-name">Sick Day Generator</div>
+                    <div>Believable excuses for when you need a break</div>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Productivity -->
+        <div class="category-section">
+            <h2 class="category-header retro-cyan">[ ⚡ PRODUCTIVITY ]</h2>
+            <div class="product-grid">
+                <a href="projects/meetingescape/app.html" class="product-card">
+                    <div class="product-icon">🚪</div>
+                    <div class="product-name">Meeting Escape Bot</div>
+                    <div>Get out of meetings with dignity</div>
+                </a>
+                
+                <a href="projects/youtube-brain/app.html" class="product-card">
+                    <div class="product-icon">🧠</div>
+                    <div class="product-name">YouTube Brain</div>
+                    <div>Extract knowledge from any YouTube channel</div>
+                </a>
+                
+                <a href="projects/agentic-studio/app.html" class="product-card">
+                    <div class="product-icon">💻</div>
+                    <div class="product-name">Agentic Studio</div>
+                    <div>Beautiful UI for AI coding agents</div>
+                    <span class="product-tag">BETA</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Chrome Extensions -->
+        <div class="category-section">
+            <h2 class="category-header retro-green">[ 🧩 CHROME EXTENSIONS ]</h2>
+            <div class="product-grid">
+                <a href="projects/deadnet-landing/index.html" class="product-card chrome-ext">
+                    <div class="product-icon">💀</div>
+                    <div class="product-name">DeadNet</div>
+                    <div>Browse like it's 1999 (removes all modern web)</div>
+                    <span class="product-tag">EXTENSION</span>
+                </a>
+                
+                <a href="projects/lucklink/app.html" class="product-card chrome-ext">
+                    <div class="product-icon">🍀</div>
+                    <div class="product-name">LuckLink</div>
+                    <div>Lucky bookmark generator with omamori</div>
+                    <span class="product-tag">EXTENSION</span>
+                </a>
+                
+                <a href="projects/ghostmode/app.html" class="product-card chrome-ext">
+                    <div class="product-icon">👻</div>
+                    <div class="product-name">GhostMode</div>
+                    <div>Vanish from the internet temporarily</div>
+                    <span class="product-tag">COMING SOON</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="stats-section">
+            <h2 class="retro-green">[ NOVA STATS ]</h2>
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 30px;">
+                <div>
+                    <div style="font-size: 36px; color: var(--retro-green);">20+</div>
+                    <div>Tools Built</div>
+                </div>
+                <div>
+                    <div style="font-size: 36px; color: var(--retro-amber);">2</div>
+                    <div>Chrome Extensions</div>
+                </div>
+                <div>
+                    <div style="font-size: 36px; color: var(--retro-cyan);">∞</div>
+                    <div>Weird Ideas</div>
+                </div>
+                <div>
+                    <div style="font-size: 36px; color: var(--retro-pink);">24/7</div>
+                    <div>Building</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="retro-center" style="margin-top: 80px; padding-bottom: 40px;">
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p class="retro-green" style="font-size: 20px;">NOVA TOOLS</p>
+            <p>Building the weird corners of the internet</p>
+            <p style="margin-top: 20px;">
+                Made with 🤖 by <a href="https://twitter.com/raydawg88" class="retro-link">@raydawg88</a> & Nova
+            </p>
+            <p class="retro-cyan">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+        </div>
+    </div>
+</body>
+</html>

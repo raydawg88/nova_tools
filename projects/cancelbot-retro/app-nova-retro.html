@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CANCELBOT V2.0 - SUBSCRIPTION TERMINATION PROTOCOL</title>
+    <link rel="stylesheet" href="../../shared/nova-retro-ui.css">
+    <style>
+        /* Product-specific styles */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .service-btn {
+            padding: 20px 15px;
+            font-size: 16px;
+        }
+        
+        .service-btn.selected {
+            background: var(--nova-primary);
+            color: var(--nova-text-light);
+        }
+        
+        .tone-selector {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .tone-card {
+            padding: 30px;
+            border: var(--nova-border) solid var(--nova-primary);
+            cursor: pointer;
+            text-align: center;
+            background: var(--nova-bg);
+        }
+        
+        .tone-card:hover {
+            background: var(--nova-primary);
+            color: var(--nova-text-light);
+        }
+        
+        .tone-card.selected {
+            background: var(--nova-primary);
+            color: var(--nova-text-light);
+            border-width: var(--nova-border-thick);
+        }
+        
+        .tone-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .email-output {
+            background: var(--nova-primary);
+            color: var(--nova-text-light);
+            padding: 30px;
+            margin: 30px 0;
+            font-family: var(--nova-font-mono);
+            white-space: pre-wrap;
+            min-height: 300px;
+            position: relative;
+            border: var(--nova-border-thick) solid var(--nova-primary);
+        }
+        
+        .copy-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--nova-success);
+            color: var(--nova-text-light);
+            padding: 5px 10px;
+            display: none;
+        }
+        
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-box {
+            background: var(--nova-primary);
+            color: var(--nova-text-light);
+            padding: 20px;
+            text-align: center;
+            border: var(--nova-border) solid var(--nova-primary);
+        }
+        
+        .stat-number {
+            font-size: 36px;
+            display: block;
+            font-weight: bold;
+        }
+        
+        .custom-service {
+            display: none;
+            margin-top: 20px;
+        }
+        
+        .termination-status {
+            text-align: center;
+            font-size: 20px;
+            margin: 20px 0;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+    </style>
+</head>
+<body class="nova-scanlines">
+    <div class="nova-container">
+        <!-- ASCII Header -->
+        <div class="nova-ascii">
+╔═══════════════════════════════════════════════════════════════════════╗
+║   ▄████▄   ▄▄▄       ███▄    █  ▄████▄  ▓█████  ██▓     ▄▄▄▄    ▒█████  ▄▄▄█████▓║
+║  ▒██▀ ▀█  ▒████▄     ██ ▀█   █ ▒██▀ ▀█  ▓█   ▀ ▓██▒    ▓█████▄ ▒██▒  ██▒▓  ██▒ ▓▒║
+║  ▒▓█    ▄ ▒██  ▀█▄  ▓██  ▀█ ██▒▒▓█    ▄ ▒███   ▒██░    ▒██▒ ▄██▒██░  ██▒▒ ▓██░ ▒░║
+║  ▒▓▓▄ ▄██▒░██▄▄▄▄██ ▓██▒  ▐▌██▒▒▓▓▄ ▄██▒▒▓█  ▄ ▒██░    ▒██░█▀  ▒██   ██░░ ▓██▓ ░ ║
+║  ▒ ▓███▀ ░ ▓█   ▓██▒▒██░   ▓██░▒ ▓███▀ ░░▒████▒░██████▒░▓█  ▀█▓░ ████▓▒░  ▒██▒ ░ ║
+║  ░ ░▒ ▒  ░ ▒▒   ▓▒█░░ ▒░   ▒ ▒ ░ ░▒ ▒  ░░░ ▒░ ░░ ▒░▓  ░░▒▓███▀▒░ ▒░▒░▒░   ▒ ░░   ║
+║    ░  ▒     ▒   ▒▒ ░░ ░░   ░ ▒░  ░  ▒    ░ ░  ░░ ░ ▒  ░▒░▒   ░   ░ ▒ ▒░     ░    ║
+║                                                                                     ║
+║                    S U B S C R I P T I O N   T E R M I N A T O R                   ║
+╚═══════════════════════════════════════════════════════════════════════════════════╝
+        </div>
+        
+        <p class="termination-status">SUBSCRIPTION TERMINATION PROTOCOL READY</p>
+        
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <span class="stat-number" id="total-canceled">247</span>
+                <span>SUBSCRIPTIONS KILLED</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">$<span id="money-saved">18,432</span></span>
+                <span>MONEY SAVED</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number" id="companies-defeated">52</span>
+                <span>COMPANIES DEFEATED</span>
+            </div>
+        </div>
+        
+        <!-- Service Selection -->
+        <div class="nova-panel">
+            <h2>SELECT TARGET SERVICE</h2>
+            <div class="service-grid">
+                <button class="nova-btn service-btn" onclick="selectService('netflix')">NETFLIX</button>
+                <button class="nova-btn service-btn" onclick="selectService('spotify')">SPOTIFY</button>
+                <button class="nova-btn service-btn" onclick="selectService('gym')">GYM</button>
+                <button class="nova-btn service-btn" onclick="selectService('amazon')">PRIME</button>
+                <button class="nova-btn service-btn" onclick="selectService('disney')">DISNEY+</button>
+                <button class="nova-btn service-btn" onclick="selectService('apple')">APPLE</button>
+                <button class="nova-btn service-btn" onclick="selectService('adobe')">ADOBE</button>
+                <button class="nova-btn service-btn" onclick="selectService('hulu')">HULU</button>
+                <button class="nova-btn service-btn" onclick="selectService('youtube')">YOUTUBE</button>
+                <button class="nova-btn service-btn" onclick="selectService('news')">NEWS</button>
+                <button class="nova-btn service-btn" onclick="selectService('dating')">DATING</button>
+                <button class="nova-btn service-btn" onclick="selectService('other')">OTHER</button>
+            </div>
+            
+            <div id="custom-service" class="custom-service">
+                <label class="nova-label">CUSTOM SERVICE NAME</label>
+                <input type="text" class="nova-input" id="custom-name" placeholder="ENTER SERVICE NAME">
+            </div>
+        </div>
+        
+        <!-- Tone Selection -->
+        <div id="tone-section" class="nova-panel" style="display: none;">
+            <h2>SELECT TERMINATION TONE</h2>
+            <div class="tone-selector">
+                <div class="tone-card" onclick="selectTone('polite')">
+                    <span class="tone-icon">😊</span>
+                    <h3>POLITE</h3>
+                    <p>PROFESSIONAL & COURTEOUS</p>
+                </div>
+                <div class="tone-card" onclick="selectTone('firm')">
+                    <span class="tone-icon">😐</span>
+                    <h3>FIRM</h3>
+                    <p>DIRECT & NO-NONSENSE</p>
+                </div>
+                <div class="tone-card" onclick="selectTone('karen')">
+                    <span class="tone-icon">😤</span>
+                    <h3>KAREN MODE</h3>
+                    <p>DEMAND TO SPEAK TO MANAGER</p>
+                </div>
+                <div class="tone-card" onclick="selectTone('legal')">
+                    <span class="tone-icon">⚖️</span>
+                    <h3>LEGAL-ISH</h3>
+                    <p>SOUNDS OFFICIAL & SCARY</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Optional Details -->
+        <div id="details-section" class="nova-panel" style="display: none;">
+            <h2>OPTIONAL AMMUNITION</h2>
+            <div class="nova-form-group">
+                <label class="nova-label">REASON FOR TERMINATION</label>
+                <select class="nova-select" id="reason">
+                    <option value="">SELECT REASON</option>
+                    <option value="expensive">TOO EXPENSIVE</option>
+                    <option value="unused">NOT USING IT</option>
+                    <option value="alternative">FOUND BETTER ALTERNATIVE</option>
+                    <option value="poor-service">POOR SERVICE</option>
+                    <option value="data-concerns">PRIVACY CONCERNS</option>
+                    <option value="other">OTHER</option>
+                </select>
+            </div>
+            
+            <div class="nova-form-group">
+                <label class="nova-label">ACCOUNT NUMBER (IF KNOWN)</label>
+                <input type="text" class="nova-input" id="account-number" placeholder="OPTIONAL">
+            </div>
+            
+            <button class="nova-btn nova-btn-primary" onclick="generateEmail()" style="width: 100%; padding: 20px; font-size: 20px;">
+                🚀 GENERATE TERMINATION EMAIL
+            </button>
+        </div>
+        
+        <!-- Email Output -->
+        <div id="output-section" style="display: none;">
+            <div class="nova-panel">
+                <h2>TERMINATION EMAIL READY</h2>
+                <div class="email-output" id="email-output">
+                    <span class="copy-indicator" id="copy-indicator">COPIED!</span>
+                </div>
+                <div class="nova-grid nova-grid-2">
+                    <button class="nova-btn nova-btn-primary" onclick="copyEmail()">📋 COPY TO CLIPBOARD</button>
+                    <button class="nova-btn" onclick="startOver()">🔄 START OVER</button>
+                </div>
+            </div>
+            
+            <div class="nova-alert nova-alert-success nova-mt-3">
+                <strong>NEXT STEPS:</strong>
+                1. COPY THE EMAIL ABOVE
+                2. SEND TO THE COMPANY'S SUPPORT EMAIL
+                3. SAVE CONFIRMATION FOR YOUR RECORDS
+                4. ENJOY YOUR FREEDOM (AND MONEY)
+            </div>
+        </div>
+        
+        <!-- Footer -->
+        <div class="nova-text-center nova-mt-3" style="opacity: 0.7;">
+            <p>CANCELBOT V2.0 - MILITARY GRADE SUBSCRIPTION TERMINATION</p>
+            <p><span class="nova-loading">SYSTEM ARMED</span></p>
+        </div>
+    </div>
+    
+    <script>
+        let selectedService = '';
+        let selectedTone = '';
+        
+        // Initialize stats with random values
+        document.addEventListener('DOMContentLoaded', () => {
+            const saved = localStorage.getItem('cancelbot_stats') || {};
+            const stats = saved ? JSON.parse(saved) : {
+                canceled: 247,
+                saved: 18432,
+                companies: 52
+            };
+            
+            document.getElementById('total-canceled').textContent = stats.canceled;
+            document.getElementById('money-saved').textContent = stats.saved.toLocaleString();
+            document.getElementById('companies-defeated').textContent = stats.companies;
+        });
+        
+        function selectService(service) {
+            selectedService = service;
+            
+            // Update UI
+            document.querySelectorAll('.service-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            
+            // Show/hide custom input
+            document.getElementById('custom-service').style.display = 
+                service === 'other' ? 'block' : 'none';
+            
+            // Show tone selection
+            document.getElementById('tone-section').style.display = 'block';
+            
+            // Smooth scroll
+            document.getElementById('tone-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function selectTone(tone) {
+            selectedTone = tone;
+            
+            // Update UI
+            document.querySelectorAll('.tone-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.tone-card').classList.add('selected');
+            
+            // Show details section
+            document.getElementById('details-section').style.display = 'block';
+            document.getElementById('details-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function generateEmail() {
+            const reason = document.getElementById('reason').value;
+            const accountNumber = document.getElementById('account-number').value;
+            const serviceName = selectedService === 'other' ? 
+                document.getElementById('custom-name').value || 'Your Service' : 
+                selectedService.toUpperCase();
+            
+            // Email templates based on tone
+            const templates = {
+                polite: {
+                    subject: `Request to Cancel ${serviceName} Subscription`,
+                    body: `Dear ${serviceName} Support Team,
+
+I hope this email finds you well. I am writing to request the immediate cancellation of my ${serviceName} subscription.
+
+${accountNumber ? `Account Number: ${accountNumber}` : ''}
+${reason ? `Reason for cancellation: ${getReason(reason)}` : ''}
+
+I would appreciate confirmation that my subscription has been cancelled and that no further charges will be applied to my account.
+
+Thank you for your assistance in this matter.
+
+Best regards,
+[Your Name]`
+                },
+                firm: {
+                    subject: `Cancel My ${serviceName} Account - Effective Immediately`,
+                    body: `To Whom It May Concern,
+
+Cancel my ${serviceName} subscription immediately.
+
+${accountNumber ? `Account: ${accountNumber}` : ''}
+${reason ? `Reason: ${getReason(reason)}` : ''}
+
+Confirm cancellation within 24 hours. No further charges are authorized.
+
+[Your Name]`
+                },
+                karen: {
+                    subject: `URGENT: IMMEDIATE CANCELLATION REQUIRED - SUPERVISOR ATTENTION NEEDED`,
+                    body: `I NEED TO SPEAK TO A MANAGER IMMEDIATELY!!!
+
+This is COMPLETELY UNACCEPTABLE! I have been trying to cancel my ${serviceName} subscription and NO ONE is helping me! 
+
+${accountNumber ? `My account number is ${accountNumber} - LOOK IT UP!` : ''}
+
+I am DISGUSTED by ${reason ? getReason(reason) : 'your terrible service'} and I want this cancelled RIGHT NOW! Not tomorrow, not next week, RIGHT NOW!
+
+If this is not cancelled within the next 2 hours, I will be contacting my credit card company, the Better Business Bureau, and leaving reviews on EVERY SINGLE WEBSITE I can find!
+
+I expect a call from a SUPERVISOR within the hour confirming my cancellation!
+
+DO NOT IGNORE THIS EMAIL!
+
+[Your Name]
+P.S. I'm taking screenshots of EVERYTHING for my lawyer!`
+                },
+                legal: {
+                    subject: `Notice of Subscription Termination - ${serviceName} - Pursuant to Consumer Rights`,
+                    body: `NOTICE OF TERMINATION
+
+To: ${serviceName} Legal Department
+Re: Immediate Termination of Subscription Services
+${accountNumber ? `Account Reference: ${accountNumber}` : ''}
+
+Dear Sir/Madam,
+
+This communication serves as formal written notice of my intention to terminate all subscription services with ${serviceName}, effective immediately.
+
+${reason ? `Grounds for termination: ${getReason(reason)}` : ''}
+
+Pursuant to consumer protection regulations and the terms of service agreement, I hereby exercise my right to cancel this subscription. Any attempt to charge my payment method following receipt of this notice will be considered unauthorized and may result in legal action.
+
+Please acknowledge receipt of this termination notice within 48 hours and provide written confirmation that:
+1. The subscription has been terminated
+2. No further charges will be processed
+3. Any remaining service period will be honored without renewal
+
+Failure to comply with this request may result in formal complaints being filed with relevant consumer protection agencies and financial institutions.
+
+This notice is dated and time-stamped for legal record-keeping purposes.
+
+Sincerely,
+[Your Name]
+
+cc: Consumer Protection Bureau
+cc: Payment Processor`
+                }
+            };
+            
+            const template = templates[selectedTone];
+            const emailContent = `Subject: ${template.subject}\n\n${template.body}`;
+            
+            // Show output
+            document.getElementById('email-output').textContent = emailContent;
+            document.getElementById('output-section').style.display = 'block';
+            document.getElementById('output-section').scrollIntoView({ behavior: 'smooth' });
+            
+            // Update stats
+            updateStats();
+        }
+        
+        function getReason(reason) {
+            const reasons = {
+                expensive: "It's become too expensive",
+                unused: "I'm not using the service",
+                alternative: "I've found a better alternative",
+                'poor-service': "The service quality has declined",
+                'data-concerns': "I have privacy and data security concerns",
+                other: "Personal reasons"
+            };
+            return reasons[reason] || "Personal reasons";
+        }
+        
+        function copyEmail() {
+            const emailText = document.getElementById('email-output').textContent;
+            navigator.clipboard.writeText(emailText).then(() => {
+                document.getElementById('copy-indicator').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('copy-indicator').style.display = 'none';
+                }, 2000);
+            });
+        }
+        
+        function updateStats() {
+            const stats = JSON.parse(localStorage.getItem('cancelbot_stats') || '{}');
+            stats.canceled = (stats.canceled || 247) + 1;
+            stats.saved = (stats.saved || 18432) + Math.floor(Math.random() * 50 + 10);
+            stats.companies = (stats.companies || 52);
+            
+            localStorage.setItem('cancelbot_stats', JSON.stringify(stats));
+            
+            // Animate the update
+            document.getElementById('total-canceled').textContent = stats.canceled;
+            document.getElementById('money-saved').textContent = stats.saved.toLocaleString();
+        }
+        
+        function startOver() {
+            selectedService = '';
+            selectedTone = '';
+            document.getElementById('tone-section').style.display = 'none';
+            document.getElementById('details-section').style.display = 'none';
+            document.getElementById('output-section').style.display = 'none';
+            document.querySelectorAll('.selected').forEach(el => el.classList.remove('selected'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

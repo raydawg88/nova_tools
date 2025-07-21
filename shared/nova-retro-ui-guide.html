@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Retro UI Guide - Military Terminal Aesthetic</title>
+    <link rel="stylesheet" href="nova-retro-ui.css">
+</head>
+<body class="nova-scanlines">
+    <div class="nova-container">
+        <!-- ASCII Header -->
+        <div class="nova-ascii">
+███╗   ██╗ ██████╗ ██╗   ██╗ █████╗     ██████╗ ███████╗████████╗██████╗  ██████╗ 
+████╗  ██║██╔═══██╗██║   ██║██╔══██╗    ██╔══██╗██╔════╝╚══██╔══╝██╔══██╗██╔═══██╗
+██╔██╗ ██║██║   ██║██║   ██║███████║    ██████╔╝█████╗     ██║   ██████╔╝██║   ██║
+██║╚██╗██║██║   ██║╚██╗ ██╔╝██╔══██║    ██╔══██╗██╔══╝     ██║   ██╔══██╗██║   ██║
+██║ ╚████║╚██████╔╝ ╚████╔╝ ██║  ██║    ██║  ██║███████╗   ██║   ██║  ██║╚██████╔╝
+╚═╝  ╚═══╝ ╚═════╝   ╚═══╝  ╚═╝  ╚═╝    ╚═╝  ╚═╝╚══════╝   ╚═╝   ╚═╝  ╚═╝ ╚═════╝ 
+        </div>
+
+        <h1>NOVA RETRO UI SYSTEM</h1>
+        <p>MILITARY TERMINAL AESTHETIC - 90S BRUTALIST DIGITAL</p>
+
+        <!-- Panels -->
+        <div class="nova-panel">
+            <h2>BASIC PANEL</h2>
+            <p>This is a standard Nova panel with thick borders and military green color scheme.</p>
+        </div>
+
+        <div class="nova-panel nova-panel-dark">
+            <h2>DARK PANEL</h2>
+            <p>Dark variant for emphasis or alternate sections.</p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="nova-panel">
+            <h2>BUTTON STYLES</h2>
+            <button class="nova-btn">STANDARD BUTTON</button>
+            <button class="nova-btn nova-btn-primary">PRIMARY BUTTON</button>
+            <button class="nova-btn" disabled>DISABLED BUTTON</button>
+            <a href="#" class="nova-btn">LINK BUTTON</a>
+        </div>
+
+        <!-- Forms -->
+        <div class="nova-panel">
+            <h2>FORM ELEMENTS</h2>
+            
+            <div class="nova-form-group">
+                <label class="nova-label">TEXT INPUT</label>
+                <input type="text" class="nova-input" placeholder="ENTER TEXT HERE">
+            </div>
+
+            <div class="nova-form-group">
+                <label class="nova-label">TEXTAREA</label>
+                <textarea class="nova-textarea" placeholder="ENTER LONG TEXT HERE"></textarea>
+            </div>
+
+            <div class="nova-form-group">
+                <label class="nova-label">SELECT DROPDOWN</label>
+                <select class="nova-select">
+                    <option>OPTION ONE</option>
+                    <option>OPTION TWO</option>
+                    <option>OPTION THREE</option>
+                </select>
+            </div>
+
+            <div class="nova-form-group">
+                <label class="nova-label">CHECKBOXES</label>
+                <label class="nova-checkbox">
+                    <input type="checkbox">
+                    <span>CHECK THIS</span>
+                </label>
+                <label class="nova-checkbox">
+                    <input type="checkbox" checked>
+                    <span>ALREADY CHECKED</span>
+                </label>
+            </div>
+
+            <div class="nova-form-group">
+                <label class="nova-label">RADIO BUTTONS</label>
+                <label class="nova-radio">
+                    <input type="radio" name="radio-demo">
+                    <span>OPTION A</span>
+                </label>
+                <label class="nova-radio">
+                    <input type="radio" name="radio-demo" checked>
+                    <span>OPTION B</span>
+                </label>
+            </div>
+
+            <div class="nova-form-group">
+                <label class="nova-label">TOGGLE SWITCH</label>
+                <label class="nova-toggle">
+                    <input type="checkbox">
+                    <div class="nova-toggle-slider">
+                        <span>OFF</span>
+                        <span>ON</span>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="nova-panel">
+            <h2>TAB NAVIGATION</h2>
+            <div class="nova-tabs">
+                <button class="nova-tab active">ACTIVE TAB</button>
+                <button class="nova-tab">INACTIVE TAB</button>
+                <button class="nova-tab">ANOTHER TAB</button>
+            </div>
+            <p>Tab content goes here. Active tab has solid background, inactive tabs use dotted underline.</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="nova-panel">
+            <h2>PROGRESS INDICATORS</h2>
+            <div class="nova-progress">
+                <div class="nova-progress-bar" style="width: 65%"></div>
+            </div>
+            <p class="nova-mt-2">LOADING: 65% COMPLETE</p>
+        </div>
+
+        <!-- Slider -->
+        <div class="nova-panel">
+            <h2>RANGE SLIDER</h2>
+            <div class="nova-slider">
+                <input type="range" min="0" max="100" value="50">
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="nova-panel">
+            <h2>DATA TABLE</h2>
+            <table class="nova-table">
+                <thead>
+                    <tr>
+                        <th>ITEM</th>
+                        <th>STATUS</th>
+                        <th>VALUE</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>SYSTEM CHECK</td>
+                        <td>OPERATIONAL</td>
+                        <td>100%</td>
+                    </tr>
+                    <tr>
+                        <td>MEMORY USAGE</td>
+                        <td>NOMINAL</td>
+                        <td>47%</td>
+                    </tr>
+                    <tr>
+                        <td>CPU LOAD</td>
+                        <td>MODERATE</td>
+                        <td>63%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Alerts -->
+        <div class="nova-panel">
+            <h2>ALERT MESSAGES</h2>
+            <div class="nova-alert nova-alert-success">SUCCESS: OPERATION COMPLETED</div>
+            <div class="nova-alert nova-alert-warning">WARNING: CHECK SYSTEM STATUS</div>
+            <div class="nova-alert nova-alert-danger">ERROR: CRITICAL FAILURE DETECTED</div>
+            <div class="nova-alert nova-alert-info">INFO: SYSTEM UPDATE AVAILABLE</div>
+        </div>
+
+        <!-- Grid Layout -->
+        <div class="nova-panel">
+            <h2>GRID LAYOUTS</h2>
+            <div class="nova-grid nova-grid-3">
+                <div class="nova-panel">GRID ITEM 1</div>
+                <div class="nova-panel">GRID ITEM 2</div>
+                <div class="nova-panel">GRID ITEM 3</div>
+            </div>
+        </div>
+
+        <!-- Modal Example -->
+        <div class="nova-panel">
+            <h2>MODAL DIALOG</h2>
+            <button class="nova-btn" onclick="document.getElementById('demo-modal').style.display='block'">
+                OPEN MODAL
+            </button>
+        </div>
+
+        <div id="demo-modal" class="nova-modal" onclick="if(event.target === this) this.style.display='none'">
+            <div class="nova-modal-content">
+                <span class="nova-modal-close" onclick="this.parentElement.parentElement.style.display='none'">×</span>
+                <h3 class="nova-modal-header">SYSTEM MESSAGE</h3>
+                <p>This is a modal dialog box with military terminal styling.</p>
+                <div class="nova-mt-3">
+                    <button class="nova-btn nova-btn-primary" onclick="this.parentElement.parentElement.parentElement.style.display='none'">
+                        ACKNOWLEDGE
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usage Example -->
+        <div class="nova-panel nova-panel-dark nova-mt-3">
+            <h2>IMPLEMENTATION GUIDE</h2>
+            <pre style="font-family: var(--nova-font-mono); overflow-x: auto;">
+&lt;!-- Include the CSS file --&gt;
+&lt;link rel="stylesheet" href="shared/nova-retro-ui.css"&gt;
+
+&lt;!-- Basic structure --&gt;
+&lt;body class="nova-scanlines"&gt; &lt;!-- Optional scanlines effect --&gt;
+    &lt;div class="nova-container"&gt;
+        &lt;div class="nova-panel"&gt;
+            &lt;h1&gt;YOUR CONTENT&lt;/h1&gt;
+            &lt;button class="nova-btn"&gt;CLICK ME&lt;/button&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+            </pre>
+        </div>
+
+        <!-- Color Reference -->
+        <div class="nova-panel nova-mt-3">
+            <h2>COLOR REFERENCE</h2>
+            <div class="nova-grid nova-grid-4">
+                <div style="background: var(--nova-bg); border: 3px solid var(--nova-primary); padding: 20px; text-align: center;">
+                    <strong>BACKGROUND</strong><br>
+                    #8B9574
+                </div>
+                <div style="background: var(--nova-primary); color: var(--nova-text-light); padding: 20px; text-align: center;">
+                    <strong>PRIMARY</strong><br>
+                    #2C3A28
+                </div>
+                <div style="background: var(--nova-success); color: var(--nova-text-light); padding: 20px; text-align: center;">
+                    <strong>SUCCESS</strong><br>
+                    #4A5C3A
+                </div>
+                <div style="background: var(--nova-danger); color: var(--nova-text-light); padding: 20px; text-align: center;">
+                    <strong>DANGER</strong><br>
+                    #5C3A3A
+                </div>
+            </div>
+        </div>
+
+        <div class="nova-text-center nova-mt-3">
+            <p><span class="nova-loading">SYSTEM READY</span></p>
+            <p style="font-size: 14px; opacity: 0.7;">NOVA RETRO UI v1.0 - MILITARY TERMINAL AESTHETIC</p>
+        </div>
+    </div>
+</body>
+</html>

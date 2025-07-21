@@ -1,0 +1,567 @@
+/* NOVA RETRO UI - Military Terminal Aesthetic */
+/* Core Design System - 90s Terminal meets Fallout Pip-Boy */
+
+/* Import pixel fonts */
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&family=IBM+Plex+Mono:wght@400;700&display=swap');
+
+/* CSS Variables */
+:root {
+    /* Core Colors */
+    --nova-bg: #8B9574;
+    --nova-primary: #2C3A28;
+    --nova-text-light: #8B9574;
+    --nova-text-dark: #2C3A28;
+    
+    /* System Colors */
+    --nova-success: #4A5C3A;
+    --nova-warning: #6B5D39;
+    --nova-danger: #5C3A3A;
+    --nova-info: #3A4A5C;
+    
+    /* Border Width */
+    --nova-border: 3px;
+    --nova-border-thick: 4px;
+    
+    /* Fonts */
+    --nova-font-primary: 'VT323', 'Courier New', monospace;
+    --nova-font-header: 'Press Start 2P', 'Courier New', monospace;
+    --nova-font-mono: 'IBM Plex Mono', 'Courier New', monospace;
+}
+
+/* Base Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Body */
+body {
+    font-family: var(--nova-font-primary);
+    background-color: var(--nova-bg);
+    color: var(--nova-text-dark);
+    font-size: 18px;
+    line-height: 1.4;
+    letter-spacing: 1px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--nova-font-header);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    color: var(--nova-primary);
+}
+
+h1 { font-size: 24px; }
+h2 { font-size: 20px; }
+h3 { font-size: 16px; }
+h4, h5, h6 { font-size: 14px; }
+
+p {
+    margin-bottom: 16px;
+    min-font-size: 14px;
+}
+
+/* Container */
+.nova-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Panel/Card */
+.nova-panel {
+    background-color: var(--nova-bg);
+    border: var(--nova-border-thick) solid var(--nova-primary);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.nova-panel-dark {
+    background-color: var(--nova-primary);
+    color: var(--nova-text-light);
+}
+
+/* Buttons */
+.nova-btn {
+    font-family: var(--nova-font-primary);
+    font-size: 16px;
+    padding: 12px 24px;
+    background-color: var(--nova-bg);
+    color: var(--nova-text-dark);
+    border: var(--nova-border) solid var(--nova-primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: none;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.nova-btn:hover {
+    background-color: var(--nova-primary);
+    color: var(--nova-text-light);
+}
+
+.nova-btn:active {
+    border-width: var(--nova-border-thick);
+    padding: 11px 23px;
+}
+
+.nova-btn-primary {
+    background-color: var(--nova-primary);
+    color: var(--nova-text-light);
+}
+
+.nova-btn-primary:hover {
+    background-color: var(--nova-bg);
+    color: var(--nova-text-dark);
+}
+
+.nova-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    border-style: dotted;
+}
+
+/* Input Fields */
+.nova-input,
+.nova-textarea,
+.nova-select {
+    font-family: var(--nova-font-mono);
+    font-size: 16px;
+    padding: 10px;
+    background-color: var(--nova-bg);
+    color: var(--nova-text-dark);
+    border: var(--nova-border) solid var(--nova-primary);
+    width: 100%;
+    letter-spacing: 1px;
+}
+
+.nova-input::placeholder,
+.nova-textarea::placeholder {
+    color: var(--nova-text-dark);
+    opacity: 0.5;
+    text-transform: uppercase;
+}
+
+.nova-input:focus,
+.nova-textarea:focus,
+.nova-select:focus {
+    outline: none;
+    border-width: var(--nova-border-thick);
+    padding: 9px;
+}
+
+.nova-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Labels */
+.nova-label {
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 14px;
+}
+
+/* Form Groups */
+.nova-form-group {
+    margin-bottom: 20px;
+}
+
+/* Checkboxes and Radio Buttons */
+.nova-checkbox,
+.nova-radio {
+    position: relative;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.nova-checkbox input,
+.nova-radio input {
+    position: absolute;
+    opacity: 0;
+}
+
+.nova-checkbox span,
+.nova-radio span {
+    position: relative;
+    padding-left: 30px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nova-checkbox span::before,
+.nova-radio span::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    border: var(--nova-border) solid var(--nova-primary);
+    background-color: var(--nova-bg);
+}
+
+.nova-radio span::before {
+    border-radius: 0; /* Keep square for terminal aesthetic */
+}
+
+.nova-checkbox input:checked + span::after,
+.nova-radio input:checked + span::after {
+    content: 'X';
+    position: absolute;
+    left: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: bold;
+    font-size: 18px;
+    color: var(--nova-primary);
+}
+
+/* Toggle Switch */
+.nova-toggle {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.nova-toggle input {
+    position: absolute;
+    opacity: 0;
+}
+
+.nova-toggle-slider {
+    display: flex;
+    background-color: var(--nova-primary);
+    border: var(--nova-border) solid var(--nova-primary);
+    height: 40px;
+    min-width: 200px;
+    position: relative;
+    transition: none;
+}
+
+.nova-toggle-slider span {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.nova-toggle-slider span:first-child {
+    background-color: var(--nova-bg);
+    color: var(--nova-text-dark);
+}
+
+.nova-toggle-slider span:last-child {
+    background-color: var(--nova-primary);
+    color: var(--nova-text-light);
+}
+
+.nova-toggle input:checked + .nova-toggle-slider span:first-child {
+    background-color: var(--nova-primary);
+    color: var(--nova-text-light);
+}
+
+.nova-toggle input:checked + .nova-toggle-slider span:last-child {
+    background-color: var(--nova-bg);
+    color: var(--nova-text-dark);
+}
+
+/* Tabs */
+.nova-tabs {
+    display: flex;
+    border-bottom: var(--nova-border) solid var(--nova-primary);
+    margin-bottom: 20px;
+}
+
+.nova-tab {
+    padding: 10px 20px;
+    background-color: transparent;
+    border: none;
+    border-bottom: var(--nova-border) dotted var(--nova-primary);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: var(--nova-font-primary);
+    font-size: 16px;
+    color: var(--nova-text-dark);
+    margin-right: 10px;
+}
+
+.nova-tab:hover {
+    background-color: var(--nova-primary);
+    color: var(--nova-text-light);
+}
+
+.nova-tab.active {
+    background-color: var(--nova-primary);
+    color: var(--nova-text-light);
+    border-bottom: var(--nova-border) solid var(--nova-primary);
+}
+
+/* Progress Bar */
+.nova-progress {
+    width: 100%;
+    height: 30px;
+    border: var(--nova-border) solid var(--nova-primary);
+    background-color: var(--nova-bg);
+    position: relative;
+    overflow: hidden;
+}
+
+.nova-progress-bar {
+    height: 100%;
+    background-color: var(--nova-primary);
+    transition: none;
+    position: relative;
+}
+
+.nova-progress-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(139, 149, 116, 0.2) 10px,
+        rgba(139, 149, 116, 0.2) 20px
+    );
+}
+
+/* Slider */
+.nova-slider {
+    width: 100%;
+    margin: 20px 0;
+}
+
+.nova-slider input[type="range"] {
+    width: 100%;
+    height: 10px;
+    background: transparent;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.nova-slider input[type="range"]::-webkit-slider-track {
+    width: 100%;
+    height: 10px;
+    border: var(--nova-border) solid var(--nova-primary);
+    background-image: repeating-linear-gradient(
+        90deg,
+        var(--nova-primary) 0,
+        var(--nova-primary) 2px,
+        transparent 2px,
+        transparent 10px
+    );
+}
+
+.nova-slider input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--nova-primary);
+    cursor: pointer;
+    border: none;
+}
+
+/* Tables */
+.nova-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.nova-table th,
+.nova-table td {
+    padding: 12px;
+    text-align: left;
+    border: var(--nova-border) solid var(--nova-primary);
+}
+
+.nova-table th {
+    background-color: var(--nova-primary);
+    color: var(--nova-text-light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.nova-table tr:hover {
+    background-color: rgba(44, 58, 40, 0.1);
+}
+
+/* Alerts */
+.nova-alert {
+    padding: 15px 20px;
+    border: var(--nova-border) solid var(--nova-primary);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.nova-alert-success {
+    background-color: var(--nova-success);
+    color: var(--nova-text-light);
+}
+
+.nova-alert-warning {
+    background-color: var(--nova-warning);
+    color: var(--nova-text-light);
+}
+
+.nova-alert-danger {
+    background-color: var(--nova-danger);
+    color: var(--nova-text-light);
+}
+
+.nova-alert-info {
+    background-color: var(--nova-info);
+    color: var(--nova-text-light);
+}
+
+/* Modal */
+.nova-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(44, 58, 40, 0.8);
+    z-index: 1000;
+}
+
+.nova-modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--nova-bg);
+    border: var(--nova-border-thick) solid var(--nova-primary);
+    padding: 30px;
+    min-width: 400px;
+    max-width: 90%;
+}
+
+.nova-modal-header {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: var(--nova-border) solid var(--nova-primary);
+}
+
+.nova-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--nova-primary);
+}
+
+/* Utility Classes */
+.nova-text-center { text-align: center; }
+.nova-text-left { text-align: left; }
+.nova-text-right { text-align: right; }
+.nova-mt-1 { margin-top: 10px; }
+.nova-mt-2 { margin-top: 20px; }
+.nova-mt-3 { margin-top: 30px; }
+.nova-mb-1 { margin-bottom: 10px; }
+.nova-mb-2 { margin-bottom: 20px; }
+.nova-mb-3 { margin-bottom: 30px; }
+.nova-p-1 { padding: 10px; }
+.nova-p-2 { padding: 20px; }
+.nova-p-3 { padding: 30px; }
+
+/* Grid System */
+.nova-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.nova-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.nova-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.nova-grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+@media (max-width: 768px) {
+    .nova-grid-2,
+    .nova-grid-3,
+    .nova-grid-4 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ASCII Art Container */
+.nova-ascii {
+    font-family: var(--nova-font-mono);
+    white-space: pre;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: center;
+    margin-bottom: 30px;
+    color: var(--nova-primary);
+}
+
+/* Loading Animation */
+.nova-loading {
+    display: inline-block;
+    font-family: var(--nova-font-mono);
+}
+
+.nova-loading::after {
+    content: '';
+    animation: nova-dots 1.5s steps(4, end) infinite;
+}
+
+@keyframes nova-dots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+    100% { content: ''; }
+}
+
+/* Scanlines Effect (optional) */
+.nova-scanlines::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(44, 58, 40, 0.03) 2px,
+        rgba(44, 58, 40, 0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+}

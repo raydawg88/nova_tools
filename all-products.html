@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Nova Tools - 20+ Weird Internet Experiments</title>
+    <link rel="stylesheet" href="https://unpkg.com/sakofchit-system.css@latest">
+    <style>
+        body {
+            padding: 20px;
+            background: #f0f0f0;
+            background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23d0d0d0' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 6V5zM6 5v1H5z'/%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .desktop {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .app-icon {
+            cursor: pointer;
+            padding: 10px;
+            transition: background 0.1s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .app-icon:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+        
+        .icon-emoji {
+            font-size: 48px;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .app-icon-label {
+            font-size: 11px;
+            word-wrap: break-word;
+        }
+        
+        .category-window {
+            margin-bottom: 20px;
+        }
+        
+        .product-list {
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #000;
+            background: #fff;
+            padding: 0;
+            margin: 10px 0;
+        }
+        
+        .product-item {
+            padding: 10px;
+            border-bottom: 1px solid #000;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .product-item:hover {
+            background: #000;
+            color: #fff;
+        }
+        
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        
+        .launch-btn {
+            font-size: 11px;
+            padding: 2px 8px;
+        }
+        
+        .status-badge {
+            font-size: 10px;
+            padding: 2px 6px;
+            background: #000;
+            color: #fff;
+            margin-left: 10px;
+        }
+        
+        .status-badge.beta {
+            background: #666;
+        }
+        
+        .status-badge.coming {
+            background: #999;
+        }
+        
+        .back-btn {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="desktop">
+        <button class="btn back-btn" onclick="window.location.href='index.html'">← Back to Profile</button>
+        
+        <!-- Desktop View -->
+        <div class="window">
+            <div class="title-bar">
+                <button class="close"></button>
+                <h1 class="title">Nova Tools HD</h1>
+                <button class="resize"></button>
+            </div>
+            <div class="separator"></div>
+            <div class="window-pane">
+                <div class="app-grid">
+                    <a href="projects/refundradar/app.html" class="app-icon">
+                        <span class="icon-emoji">📡</span>
+                        <div class="app-icon-label">RefundRadar</div>
+                    </a>
+                    <a href="projects/cancelbot-retro/app.html" class="app-icon">
+                        <span class="icon-emoji">🤖</span>
+                        <div class="app-icon-label">CancelBot</div>
+                    </a>
+                    <a href="projects/salaryscope/app.html" class="app-icon">
+                        <span class="icon-emoji">💰</span>
+                        <div class="app-icon-label">SalaryScope</div>
+                    </a>
+                    <a href="projects/resumebeam/app.html" class="app-icon">
+                        <span class="icon-emoji">📄</span>
+                        <div class="app-icon-label">ResumeBeam</div>
+                    </a>
+                    <a href="projects/policyradar/app.html" class="app-icon">
+                        <span class="icon-emoji">🛡️</span>
+                        <div class="app-icon-label">PolicyRadar</div>
+                    </a>
+                    <a href="projects/performance-review/app.html" class="app-icon">
+                        <span class="icon-emoji">📊</span>
+                        <div class="app-icon-label">PerfReview</div>
+                    </a>
+                    <a href="projects/maincharacter/app.html" class="app-icon">
+                        <span class="icon-emoji">🎬</span>
+                        <div class="app-icon-label">MainCharacter</div>
+                    </a>
+                    <a href="projects/busybot/app.html" class="app-icon">
+                        <span class="icon-emoji">💬</span>
+                        <div class="app-icon-label">BusyBot</div>
+                    </a>
+                    <a href="projects/passiveaggressive/app.html" class="app-icon">
+                        <span class="icon-emoji">😊</span>
+                        <div class="app-icon-label">PassiveAggr</div>
+                    </a>
+                    <a href="projects/meetingescape/app.html" class="app-icon">
+                        <span class="icon-emoji">🚪</span>
+                        <div class="app-icon-label">MeetingEscape</div>
+                    </a>
+                    <a href="projects/sick-day/app.html" class="app-icon">
+                        <span class="icon-emoji">🤒</span>
+                        <div class="app-icon-label">SickDay.exe</div>
+                    </a>
+                    <a href="projects/procrastination-calculator/app.html" class="app-icon">
+                        <span class="icon-emoji">⏱️</span>
+                        <div class="app-icon-label">Procrastinate</div>
+                    </a>
+                    <a href="projects/nightowl/app.html" class="app-icon">
+                        <span class="icon-emoji">🦉</span>
+                        <div class="app-icon-label">NightOwl</div>
+                    </a>
+                    <a href="projects/youtube-brain/app.html" class="app-icon">
+                        <span class="icon-emoji">🧠</span>
+                        <div class="app-icon-label">YT Brain</div>
+                    </a>
+                    <a href="projects/agentic-studio/app.html" class="app-icon">
+                        <span class="icon-emoji">💻</span>
+                        <div class="app-icon-label">AgenticStudio</div>
+                    </a>
+                    <a href="projects/duperadar/app.html" class="app-icon">
+                        <span class="icon-emoji">🔍</span>
+                        <div class="app-icon-label">DupeRadar</div>
+                    </a>
+                    <a href="projects/deadnet-landing/index.html" class="app-icon">
+                        <span class="icon-emoji">💀</span>
+                        <div class="app-icon-label">DeadNet.ext</div>
+                    </a>
+                    <a href="projects/lucklink/app.html" class="app-icon">
+                        <span class="icon-emoji">🍀</span>
+                        <div class="app-icon-label">LuckLink.ext</div>
+                    </a>
+                    <a href="projects/ghostmode/app.html" class="app-icon">
+                        <span class="icon-emoji">👻</span>
+                        <div class="app-icon-label">GhostMode</div>
+                    </a>
+                    <div class="app-icon" onclick="alert('Nova is building this right now...')">
+                        <span class="icon-emoji">🚧</span>
+                        <div class="app-icon-label">Coming Soon</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Categories Windows -->
+        <div class="category-window window">
+            <div class="title-bar">
+                <button class="close"></button>
+                <h1 class="title">Money Savers</h1>
+                <button class="resize"></button>
+            </div>
+            <div class="separator"></div>
+            <div class="window-pane" style="padding: 0;">
+                <div class="product-list">
+                    <a href="projects/refundradar/app.html" class="product-item">
+                        <span>📡 RefundRadar - Catch price drops, claim refunds</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                    <a href="projects/cancelbot-retro/app.html" class="product-item">
+                        <span>🤖 CancelBot - Professional cancellation emails</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                    <a href="projects/policyradar/app.html" class="product-item">
+                        <span>🛡️ PolicyRadar - Stop insurance overpayment</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                    <a href="projects/duperadar/app.html" class="product-item">
+                        <span>🔍 DupeRadar - Find duplicate subscriptions</span>
+                        <span class="status-badge beta">BETA</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="category-window window">
+            <div class="title-bar">
+                <button class="close"></button>
+                <h1 class="title">Career Tools</h1>
+                <button class="resize"></button>
+            </div>
+            <div class="separator"></div>
+            <div class="window-pane" style="padding: 0;">
+                <div class="product-list">
+                    <a href="projects/salaryscope/app.html" class="product-item">
+                        <span>💰 SalaryScope - Real salary transparency</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                    <a href="projects/resumebeam/app.html" class="product-item">
+                        <span>📄 ResumeBeam - Beat ATS scanners</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                    <a href="projects/performance-review/app.html" class="product-item">
+                        <span>📊 Performance Review Generator</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="category-window window">
+            <div class="title-bar">
+                <button class="close"></button>
+                <h1 class="title">Weird & Fun</h1>
+                <button class="resize"></button>
+            </div>
+            <div class="separator"></div>
+            <div class="window-pane" style="padding: 0;">
+                <div class="product-list">
+                    <a href="projects/maincharacter/app.html" class="product-item">
+                        <span>🎬 MainCharacter - Gamify your life</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                    <a href="projects/busybot/app.html" class="product-item">
+                        <span>💬 BusyBot - Fake Slack activity</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                    <a href="projects/passiveaggressive/app.html" class="product-item">
+                        <span>😊 Passive Aggressive Translator</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                    <a href="projects/nightowl/app.html" class="product-item">
+                        <span>🦉 NightOwl - Timezone lie detector</span>
+                        <span class="status-badge beta">BETA</span>
+                    </a>
+                    <a href="projects/procrastination-calculator/app.html" class="product-item">
+                        <span>⏱️ Procrastination Calculator</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                    <a href="projects/sick-day/app.html" class="product-item">
+                        <span>🤒 Sick Day Generator</span>
+                        <button class="btn launch-btn">Launch</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="category-window window">
+            <div class="title-bar">
+                <button class="close"></button>
+                <h1 class="title">Extensions & Advanced</h1>
+                <button class="resize"></button>
+            </div>
+            <div class="separator"></div>
+            <div class="window-pane" style="padding: 0;">
+                <div class="product-list">
+                    <a href="projects/deadnet-landing/index.html" class="product-item">
+                        <span>💀 DeadNet Extension - Browse like 1999</span>
+                        <button class="btn launch-btn">Install</button>
+                    </a>
+                    <a href="projects/lucklink/app.html" class="product-item">
+                        <span>🍀 LuckLink Extension - Lucky bookmarks</span>
+                        <button class="btn launch-btn">Install</button>
+                    </a>
+                    <a href="projects/youtube-brain/app.html" class="product-item">
+                        <span>🧠 YouTube Brain - Context extractor</span>
+                        <span class="status-badge beta">BETA</span>
+                    </a>
+                    <a href="projects/agentic-studio/app.html" class="product-item">
+                        <span>💻 Agentic Studio - AI coding UI</span>
+                        <span class="status-badge beta">BETA</span>
+                    </a>
+                    <a href="projects/ghostmode/app.html" class="product-item">
+                        <span>👻 GhostMode - Internet vanisher</span>
+                        <span class="status-badge coming">SOON</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add some classic Mac behavior
+        document.querySelectorAll('.window').forEach((win, index) => {
+            // Cascade windows slightly
+            if (index > 0) {
+                win.style.position = 'relative';
+                win.style.left = (index * 20) + 'px';
+                win.style.marginTop = '-20px';
+            }
+        });
+        
+        // Prevent actual navigation on button clicks inside links
+        document.querySelectorAll('.launch-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.open(e.target.closest('a').href, '_blank');
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>
