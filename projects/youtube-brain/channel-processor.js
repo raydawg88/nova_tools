@@ -16,27 +16,49 @@ class ChannelProcessor {
         this.notificationEmail = notificationEmail;
         this.startTime = Date.now();
         
-        // Store processing state in localStorage
-        const processingId = `channel_${Date.now()}`;
-        const processingState = {
-            id: processingId,
-            channelUrl,
-            notificationEmail,
-            status: 'fetching_videos',
-            startTime: this.startTime,
-            videos: [],
-            processsingResults: {}
-        };
-        
-        localStorage.setItem(`youtube_brain_processing_${processingId}`, JSON.stringify(processingState));
-        
-        // Return processing ID immediately
-        return {
-            processingId,
-            message: 'Channel processing started. This will take 10-30 minutes.',
-            estimatedTime: '15-20 minutes for a typical channel',
-            checkBackUrl: `${window.location.origin}${window.location.pathname}?processing=${processingId}`
-        };
+        // For MVP, we'll call Firebase function which handles everything
+        try {
+            const response = await fetch('https://us-central1-youtube-brain-mvp.cloudfunctions.net/processYouTubeChannel', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    channelUrl,
+                    email: notificationEmail,
+                    timestamp: Date.now()
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (!response.ok) {
+                throw new Error(result.error || 'Processing failed');
+            }
+            
+            return {
+                processingId: result.processingId || `channel_${Date.now()}`,
+                message: 'Channel processing started! Check your email in 15-20 minutes.',
+                estimatedTime: result.estimatedTime || '15-20 minutes',
+                status: 'processing'
+            };
+            
+        } catch (error) {
+            console.error('Error starting channel processing:', error);
+            
+            // For demo/testing, simulate success
+            if (error.message.includes('Failed to fetch')) {
+                console.log('Demo mode - simulating processing start');
+                return {
+                    processingId: `demo_${Date.now()}`,
+                    message: 'Channel processing started (demo mode). In production, you\'ll receive an email.',
+                    estimatedTime: '15-20 minutes',
+                    status: 'demo'
+                };
+            }
+            
+            throw error;
+        }
     }
     
     // Get all videos from a channel

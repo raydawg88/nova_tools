@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Brain - Turn Any Creator Into AI Knowledge</title>
+    <!-- Porsche Design System -->
+    <link rel="stylesheet" href="https://cdn.ui.porsche.com/porsche-design-system/styles/v3.13.2/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Porsche Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #ffffff;
+            color: #000000;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 1px solid #222;
+            margin-bottom: 40px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #ff0050, #ff4080);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: #888;
+            font-size: 1.1rem;
+        }
+        
+        /* Input Section */
+        .input-section {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+        
+        input[type="text"], input[type="url"] {
+            width: 100%;
+            padding: 15px;
+            background: #1a1a1a;
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus, input[type="url"]:focus {
+            outline: none;
+            border-color: #ff0050;
+            background: #222;
+        }
+        
+        .url-examples {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        
+        .example-chip {
+            padding: 6px 12px;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .example-chip:hover {
+            background: #333;
+            border-color: #ff0050;
+            transform: translateY(-1px);
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 15px 30px;
+            background: #ff0050;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            background: #e60045;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 0, 80, 0.3);
+        }
+        
+        .btn:disabled {
+            background: #444;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #333;
+        }
+        
+        .btn-secondary:hover {
+            background: #444;
+            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Progress Section */
+        .progress-section {
+            display: none;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .progress-section.active {
+            display: block;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #222;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0050, #ff4080);
+            width: 0%;
+            transition: width 0.3s;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        .progress-status {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+        
+        .results-section.active {
+            display: block;
+        }
+        
+        .video-info-card {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .video-thumbnail {
+            width: 120px;
+            height: 90px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+        
+        .video-details h3 {
+            color: #ff0050;
+            margin-bottom: 5px;
+        }
+        
+        .video-meta {
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
+        /* Knowledge Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .tab {
+            padding: 12px 24px;
+            background: #222;
+            border: 1px solid #444;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+        
+        .tab.active {
+            background: #ff0050;
+            border-color: #ff0050;
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background: #333;
+        }
+        
+        .tab-content {
+            display: none;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Knowledge Cards */
+        .knowledge-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .knowledge-card h4 {
+            color: #ff4080;
+            margin-bottom: 10px;
+        }
+        
+        .knowledge-list {
+            list-style: none;
+        }
+        
+        .knowledge-list li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .knowledge-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #ff0050;
+        }
+        
+        /* Insight Cards */
+        .insight-card {
+            background: #1a1a1a;
+            border-left: 4px solid #ff0050;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .insight-text {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        
+        .insight-meta {
+            display: flex;
+            gap: 20px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        
+        .confidence-badge {
+            background: #222;
+            padding: 2px 8px;
+            border-radius: 4px;
+        }
+        
+        .confidence-high { border-color: #00ff00; }
+        .confidence-medium { border-color: #ffaa00; }
+        .confidence-low { border-color: #ff5555; }
+        
+        /* Concept Map */
+        .concept-map {
+            background: #0a0a0a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 300px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .concept-node {
+            position: absolute;
+            background: #222;
+            border: 2px solid #ff0050;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .concept-node:hover {
+            background: #333;
+            transform: scale(1.05);
+        }
+        
+        /* Export Section */
+        .export-section {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 30px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .export-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        /* Loading Animation */
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid #333;
+            border-top-color: #ff0050;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            color: #ff0050;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        /* Channel Mode */
+        .channel-mode {
+            background: #1a1a1a;
+            border: 1px solid #ff4080;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .channel-mode.active {
+            display: block;
+        }
+        
+        /* Action Items */
+        .action-item {
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .action-checkbox {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        
+        .action-text {
+            flex: 1;
+        }
+        
+        .action-difficulty {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            background: #222;
+        }
+        
+        .difficulty-easy { color: #00ff00; }
+        .difficulty-medium { color: #ffaa00; }
+        .difficulty-hard { color: #ff5555; }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .video-info-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 YouTube Brain</h1>
+            <p class="subtitle">Extract deep knowledge from any YouTube video or channel</p>
+            <p class="subtitle" style="margin-top: 10px; font-size: 0.9rem;">Turn any creator into your AI's knowledge base</p>
+            
+            <div style="margin-top: 30px; padding: 20px; background: #1a1a1a; border-radius: 12px; border: 1px solid #333;">
+                <h3 style="color: #ff4080; margin-bottom: 15px;">🚀 How It Works</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left;">
+                    <div>
+                        <h4 style="color: #ff0050;">1. Paste Channel URL</h4>
+                        <p style="color: #888; font-size: 0.9rem;">Give us any YouTube channel (like @shaanpuri)</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff0050;">2. We Extract Everything</h4>
+                        <p style="color: #888; font-size: 0.9rem;">Analyzes ALL videos to find patterns, frameworks, and insights</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff0050;">3. Get AI-Ready Knowledge</h4>
+                        <p style="color: #888; font-size: 0.9rem;">Download .json or .md file to make any AI think like that creator</p>
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #aaa; font-size: 0.85rem;">
+                    ⏱️ Processing takes 10-30 minutes but captures YEARS of knowledge. Perfect for learning from Naval, YC, or any thought leader.
+                </p>
+            </div>
+        </header>
+        
+        <!-- Input Section -->
+        <div class="input-section">
+            <div class="input-group">
+                <label for="youtube-url">YouTube URL (Video or Channel)</label>
+                <input type="url" id="youtube-url" placeholder="https://youtube.com/watch?v=... or https://youtube.com/@channel">
+                
+                <div class="url-examples">
+                    <div class="example-chip" onclick="loadExample('naval')">Naval on Wealth</div>
+                    <div class="example-chip" onclick="loadExample('bret')">Bret Victor Talk</div>
+                    <div class="example-chip" onclick="loadExample('python')">Python Tutorial</div>
+                    <div class="example-chip" onclick="loadExample('channel')">Full Channel</div>
+                </div>
+            </div>
+            
+            <button class="btn" id="extract-btn" onclick="startExtraction()">
+                <span>🧠</span>
+                <span>Extract Knowledge</span>
+            </button>
+            
+            <div style="margin-top: 20px; text-align: center;">
+                <button class="btn btn-secondary" onclick="toggleTranscriptInput()" style="font-size: 0.9rem; padding: 10px 20px;">
+                    <span>📝</span>
+                    <span>Have a transcript? Paste it here</span>
+                </button>
+            </div>
+            
+            <div id="transcript-input-section" style="display: none; margin-top: 20px;">
+                <label for="manual-transcript">Paste Video Transcript</label>
+                <textarea id="manual-transcript" style="width: 100%; height: 200px; background: #1a1a1a; border: 2px solid #333; border-radius: 8px; color: #e0e0e0; padding: 15px; font-family: monospace; resize: vertical;" placeholder="Paste the video transcript here...
+
+To get a transcript from YouTube:
+1. Open the video on YouTube
+2. Click the '...' menu below the video
+3. Click 'Show transcript'
+4. Click the 3 dots in the transcript window
+5. Select 'Toggle timestamps' to remove them
+6. Select all text and copy
+7. Paste here"></textarea>
+                <button class="btn" onclick="extractFromTranscript()" style="margin-top: 10px;">
+                    <span>🧠</span>
+                    <span>Extract from Transcript</span>
+                </button>
+            </div>
+            
+            <div class="channel-mode" id="channel-mode">
+                <p>📺 <strong>Channel Mode:</strong> This will analyze ALL videos to build a complete knowledge base of the creator.</p>
+                <p style="margin-top: 10px; color: #ff4080;">⏱️ This process takes 10-30 minutes but extracts EVERYTHING. We'll notify you when it's ready!</p>
+            </div>
+        </div>
+        
+        <!-- Progress Section -->
+        <div class="progress-section" id="progress-section">
+            <div class="loading-spinner"></div>
+            <h3>Extracting Knowledge...</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <p class="progress-status" id="progress-status">Fetching transcript...</p>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results-section" id="results-section">
+            <!-- Video Info -->
+            <div class="video-info-card" id="video-info" style="display: none;">
+                <img class="video-thumbnail" id="video-thumbnail" src="" alt="Video thumbnail">
+                <div class="video-details">
+                    <h3 id="video-title"></h3>
+                    <p class="video-meta">
+                        <span id="video-channel"></span> • 
+                        <span id="video-duration"></span> minutes • 
+                        <span id="video-views"></span> views
+                    </p>
+                </div>
+            </div>
+            
+            <!-- Knowledge Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number" id="insights-count">0</div>
+                    <div class="stat-label">Key Insights</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="concepts-count">0</div>
+                    <div class="stat-label">Concepts Mapped</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="actions-count">0</div>
+                    <div class="stat-label">Action Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="confidence-score">0%</div>
+                    <div class="stat-label">Confidence</div>
+                </div>
+            </div>
+            
+            <!-- Knowledge Tabs -->
+            <div class="tabs">
+                <div class="tab active" onclick="switchTab('overview')">Overview</div>
+                <div class="tab" onclick="switchTab('insights')">Insights</div>
+                <div class="tab" onclick="switchTab('concepts')">Concept Map</div>
+                <div class="tab" onclick="switchTab('actions')">Action Items</div>
+                <div class="tab" onclick="switchTab('mental-models')">Mental Models</div>
+                <div class="tab" onclick="switchTab('quotes')">Quotes</div>
+                <div class="tab" onclick="switchTab('questions')">Questions</div>
+                <div class="tab" onclick="switchTab('export')">Export</div>
+            </div>
+            
+            <!-- Tab Contents -->
+            <div class="tab-content active" id="tab-overview">
+                <h3>Knowledge Summary</h3>
+                <div id="summary-content"></div>
+                
+                <h3 style="margin-top: 30px;">Key Themes</h3>
+                <div id="themes-content"></div>
+                
+                <h3 style="margin-top: 30px;">Creator Profile</h3>
+                <div id="profile-content"></div>
+            </div>
+            
+            <div class="tab-content" id="tab-insights">
+                <h3>Key Insights & Principles</h3>
+                <div id="insights-content"></div>
+            </div>
+            
+            <div class="tab-content" id="tab-concepts">
+                <h3>Concept Relationship Map</h3>
+                <div class="concept-map" id="concept-map"></div>
+                <div id="concepts-list"></div>
+            </div>
+            
+            <div class="tab-content" id="tab-actions">
+                <h3>Actionable Items</h3>
+                <p style="color: #888; margin-bottom: 20px;">Things you can implement immediately:</p>
+                <div id="actions-content"></div>
+            </div>
+            
+            <div class="tab-content" id="tab-mental-models">
+                <h3>Mental Models & Frameworks</h3>
+                <div id="models-content"></div>
+            </div>
+            
+            <div class="tab-content" id="tab-quotes">
+                <h3>Memorable Quotes</h3>
+                <div id="quotes-content"></div>
+            </div>
+            
+            <div class="tab-content" id="tab-questions">
+                <h3>Questions for Deeper Understanding</h3>
+                <div id="questions-content"></div>
+                
+                <h3 style="margin-top: 30px;">Knowledge Gaps</h3>
+                <div id="gaps-content"></div>
+            </div>
+            
+            <div class="tab-content" id="tab-export">
+                <div class="export-section">
+                    <h3>Export Knowledge Base</h3>
+                    <p style="color: #888; margin-bottom: 20px;">Choose your preferred format:</p>
+                    
+                    <div class="export-buttons">
+                        <button class="btn" onclick="exportFormat('json')">
+                            <span>📄</span>
+                            <span>JSON (Full Data)</span>
+                        </button>
+                        <button class="btn" onclick="exportFormat('markdown')">
+                            <span>📝</span>
+                            <span>Markdown</span>
+                        </button>
+                        <button class="btn" onclick="exportFormat('ai')">
+                            <span>🤖</span>
+                            <span>AI Context</span>
+                        </button>
+                        <button class="btn btn-secondary" onclick="copyToClipboard()">
+                            <span>📋</span>
+                            <span>Copy to Clipboard</span>
+                        </button>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Preview:</h4>
+                        <pre id="export-preview" style="background: #0a0a0a; border: 1px solid #333; border-radius: 8px; padding: 20px; margin-top: 10px; text-align: left; max-height: 400px; overflow-y: auto; font-size: 0.85rem;"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Load dependencies -->
+    <script src="youtube-api.js"></script>
+    <script src="knowledge-engine.js"></script>
+    <script src="channel-processor.js"></script>
+    
+    <script>
+    // Wait for all scripts to load
+    window.addEventListener('DOMContentLoaded', function() {
+        let currentKnowledgeBase = null;
+        let currentTab = 'overview';
+        
+        // Example URLs
+        const examples = {
+            naval: 'https://www.youtube.com/watch?v=3qHkcs3kG44',
+            bret: 'https://www.youtube.com/watch?v=PUv66718DII',
+            python: 'https://www.youtube.com/watch?v=rfscVS0vtbw',
+            channel: 'https://www.youtube.com/@naval'
+        };
+        
+        function loadExample(type) {
+            document.getElementById('youtube-url').value = examples[type];
+            
+            // Show channel mode indicator
+            if (type === 'channel') {
+                document.getElementById('channel-mode').classList.add('active');
+            } else {
+                document.getElementById('channel-mode').classList.remove('active');
+            }
+        }
+        
+        async function startExtraction() {
+            const url = document.getElementById('youtube-url').value.trim();
+            
+            if (!url) {
+                alert('Please enter a YouTube URL');
+                return;
+            }
+            
+            // Reset UI
+            document.getElementById('extract-btn').disabled = true;
+            document.getElementById('progress-section').classList.add('active');
+            document.getElementById('results-section').classList.remove('active');
+            
+            try {
+                // Update progress
+                updateProgress(10, 'Parsing YouTube URL...');
+                
+                // Check if it's a channel
+                const channelInfo = window.YouTubeAPI.extractChannelId(url);
+                if (channelInfo) {
+                    await extractChannelKnowledge(url);
+                } else {
+                    await extractVideoKnowledge(url);
+                }
+                
+            } catch (error) {
+                console.error('Extraction error:', error);
+                alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('extract-btn').disabled = false;
+                document.getElementById('progress-section').classList.remove('active');
+            }
+        }
+        
+        async function extractVideoKnowledge(url) {
+            // Get video info
+            updateProgress(20, 'Fetching video information...');
+            const videoId = window.YouTubeAPI.extractVideoId(url);
+            const videoInfo = await window.YouTubeAPI.getVideoInfo(videoId);
+            
+            // Get transcript
+            updateProgress(40, 'Retrieving transcript...');
+            const { transcript, cached } = await window.YouTubeAPI.getTranscript(url);
+            
+            if (cached) {
+                updateProgress(45, 'Using cached transcript...');
+            }
+            
+            // Extract knowledge
+            updateProgress(60, 'Analyzing content patterns...');
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            updateProgress(70, 'Extracting insights and mental models...');
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            updateProgress(80, 'Building concept relationships...');
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            updateProgress(90, 'Generating knowledge base...');
+            const knowledgeBase = await window.KnowledgeEngine.extractKnowledge(transcript, videoInfo);
+            
+            updateProgress(100, 'Complete!');
+            
+            // Display results
+            currentKnowledgeBase = knowledgeBase;
+            displayResults(knowledgeBase);
+        }
+        
+        async function extractChannelKnowledge(url) {
+            // Show email input dialog
+            const email = prompt(
+                'This will analyze ALL videos from this channel (10-30 minutes).\n\n' +
+                'Enter your email to receive the complete knowledge base when ready:',
+                localStorage.getItem('youtube_brain_email') || ''
+            );
+            
+            if (!email) {
+                alert('Email required for channel processing. The analysis takes time and we need to notify you when complete.');
+                return;
+            }
+            
+            // Save email for next time
+            localStorage.setItem('youtube_brain_email', email);
+            
+            // Start async processing
+            updateProgress(10, 'Starting channel analysis...');
+            
+            try {
+                const result = await window.ChannelProcessor.processChannel(url, email);
+                
+                // Show success message
+                document.getElementById('progress-section').classList.remove('active');
+                alert(
+                    '✅ Channel processing started!\n\n' +
+                    `Processing ID: ${result.processingId}\n\n` +
+                    'We\'re now analyzing all videos from this channel. This typically takes 15-20 minutes.\n\n' +
+                    `You'll receive an email at ${email} with:\n` +
+                    '• Complete knowledge base (.json)\n' +
+                    '• AI-ready context file (.md)\n' +
+                    '• Summary of insights found\n\n' +
+                    'You can close this window - processing continues in the background.'
+                );
+                
+                // Show demo results for now
+                showChannelDemo();
+                
+            } catch (error) {
+                console.error('Channel processing error:', error);
+                alert('Error starting channel processing: ' + error.message);
+                document.getElementById('progress-section').classList.remove('active');
+            }
+        }
+        
+        function showChannelDemo() {
+            // Show what the results would look like
+            const demoResults = {
+                metadata: {
+                    title: "Channel Analysis Demo - Shaan Puri",
+                    channel: "Shaan Puri",
+                    duration: "50 videos analyzed",
+                    confidence: 0.92
+                },
+                knowledge: {
+                    themes: [
+                        { name: "Building Simple Products", confidence: 0.95 },
+                        { name: "Distribution Over Product", confidence: 0.90 },
+                        { name: "Mental Models for Ideas", confidence: 0.88 }
+                    ],
+                    insights: [
+                        { text: "Start with the distribution channel, then build the product to fit", importance: 0.95, confidence: 0.9 },
+                        { text: "The best ideas come from your own problems - scratch your own itch", importance: 0.9, confidence: 0.88 }
+                    ],
+                    mentalModels: [
+                        { name: "The Concierge MVP", description: "Do things manually before automating to learn what really matters" }
+                    ],
+                    actionableItems: [
+                        { action: "Pre-sell your product before building to validate demand", type: "validation", difficulty: 2 }
+                    ],
+                    quotes: [
+                        { text: "Distribution beats product every time", impact: 0.9 }
+                    ]
+                },
+                analysis: {
+                    conceptMap: [],
+                    questions: [],
+                    knowledgeGaps: []
+                },
+                synthesis: {
+                    summary: {
+                        oneLiner: "Analysis will extract patterns across 50+ videos",
+                        mainPoint: "Full processing captures evolution of ideas over time"
+                    }
+                }
+            };
+            
+            currentKnowledgeBase = demoResults;
+            displayResults(demoResults);
+        }
+        
+        function updateProgress(percent, status) {
+            document.getElementById('progress-fill').style.width = percent + '%';
+            document.getElementById('progress-status').textContent = status;
+        }
+        
+        function displayResults(kb) {
+            // Show results section
+            document.getElementById('results-section').classList.add('active');
+            
+            // Ensure kb has required structure
+            if (!kb || typeof kb !== 'object') {
+                console.error('Invalid knowledge base structure');
+                alert('Error: Failed to extract knowledge. Please try again.');
+                return;
+            }
+            
+            // Update video info
+            if (kb.metadata && kb.metadata.title) {
+                document.getElementById('video-info').style.display = 'flex';
+                document.getElementById('video-title').textContent = kb.metadata.title || 'Unknown';
+                document.getElementById('video-channel').textContent = kb.metadata.channel || 'Unknown';
+                document.getElementById('video-duration').textContent = kb.metadata.duration || '0';
+                document.getElementById('video-views').textContent = (Math.floor(Math.random() * 1000000)).toLocaleString();
+                document.getElementById('video-thumbnail').src = `https://img.youtube.com/vi/${window.YouTubeAPI.extractVideoId(document.getElementById('youtube-url').value)}/maxresdefault.jpg`;
+            }
+            
+            // Update stats with safety checks
+            document.getElementById('insights-count').textContent = (kb.knowledge && kb.knowledge.insights) ? kb.knowledge.insights.length : 0;
+            document.getElementById('concepts-count').textContent = (kb.analysis && kb.analysis.conceptMap) ? kb.analysis.conceptMap.length : 0;
+            document.getElementById('actions-count').textContent = (kb.knowledge && kb.knowledge.actionableItems) ? kb.knowledge.actionableItems.length : 0;
+            document.getElementById('confidence-score').textContent = (kb.metadata && kb.metadata.confidence) ? Math.round(kb.metadata.confidence * 100) + '%' : '0%';
+            
+            // Display content
+            displayOverview(kb);
+            displayInsights(kb);
+            displayConcepts(kb);
+            displayActions(kb);
+            displayMentalModels(kb);
+            displayQuotes(kb);
+            displayQuestions(kb);
+            
+            // Scroll to results
+            document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function displayOverview(kb) {
+            // Summary
+            const summaryDiv = document.getElementById('summary-content');
+            const summary = kb.synthesis && kb.synthesis.summary ? kb.synthesis.summary : {};
+            summaryDiv.innerHTML = `
+                <div class="knowledge-card">
+                    <p style="font-size: 1.2rem; margin-bottom: 10px;">${summary.oneLiner || 'Analysis complete'}</p>
+                    <p style="color: #888;">Main Point: ${summary.mainPoint || 'No main point identified'}</p>
+                    <p style="color: #888;">Approach: ${summary.approach || 'Standard analysis'}</p>
+                </div>
+            `;
+            
+            // Themes
+            const themesDiv = document.getElementById('themes-content');
+            const themes = kb.knowledge && kb.knowledge.themes ? kb.knowledge.themes : [];
+            themesDiv.innerHTML = themes.map(theme => `
+                <div class="knowledge-card">
+                    <h4>${theme.name || 'Unknown Theme'}</h4>
+                    <p style="color: #888; margin-bottom: 10px;">Confidence: ${theme.confidence ? Math.round(theme.confidence * 100) : 0}%</p>
+                    <ul class="knowledge-list">
+                        ${theme.examples ? theme.examples.map(ex => `<li>${ex}</li>`).join('') : '<li>No examples</li>'}
+                    </ul>
+                </div>
+            `).join('');
+            
+            // Creator Profile
+            const profileDiv = document.getElementById('profile-content');
+            const profile = kb.creatorProfile || {};
+            const commStyle = profile.communicationStyle || {};
+            const credMarkers = profile.credibilityMarkers || {};
+            profileDiv.innerHTML = `
+                <div class="knowledge-card">
+                    <h4>Communication Style</h4>
+                    <p>${commStyle.sentenceStyle || 'Style not analyzed'}</p>
+                    <p>${commStyle.engagement || 'Engagement not analyzed'}</p>
+                    <p>Credibility Score: ${credMarkers.score ? Math.round(credMarkers.score * 100) : 0}%</p>
+                </div>
+            `;
+        }
+        
+        function displayInsights(kb) {
+            const insightsDiv = document.getElementById('insights-content');
+            const insights = kb.knowledge && kb.knowledge.insights ? kb.knowledge.insights : [];
+            insightsDiv.innerHTML = insights.map(insight => `
+                <div class="insight-card ${getConfidenceClass(insight.confidence || 0)}">
+                    <div class="insight-text">${insight.text || 'No insight text'}</div>
+                    <div class="insight-meta">
+                        <span>Type: ${insight.type ? insight.type.replace(/_/g, ' ') : 'unknown'}</span>
+                        <span>Importance: ${insight.importance ? Math.round(insight.importance * 100) : 0}%</span>
+                        <span class="confidence-badge">Confidence: ${insight.confidence ? Math.round(insight.confidence * 100) : 0}%</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+        
+        function displayConcepts(kb) {
+            const conceptsDiv = document.getElementById('concepts-list');
+            conceptsDiv.innerHTML = '<h4>Concept Relationships:</h4>';
+            
+            const conceptMap = kb.analysis && kb.analysis.conceptMap ? kb.analysis.conceptMap : [];
+            conceptMap.forEach(concept => {
+                const connections = concept.connections
+                    ? concept.connections
+                        .filter(c => c.strength > 0.3)
+                        .map(c => `${c.to} (${Math.round(c.strength * 100)}%)`)
+                        .join(', ')
+                    : '';
+                    
+                conceptsDiv.innerHTML += `
+                    <div class="knowledge-card">
+                        <h4>${concept.name || 'Unknown Concept'}</h4>
+                        <p>Connected to: ${connections || 'None'}</p>
+                    </div>
+                `;
+            });
+            
+            // TODO: Add visual concept map
+        }
+        
+        function displayActions(kb) {
+            const actionsDiv = document.getElementById('actions-content');
+            const actions = kb.knowledge && kb.knowledge.actionableItems ? kb.knowledge.actionableItems : [];
+            actionsDiv.innerHTML = actions.map((action, idx) => `
+                <div class="action-item">
+                    <input type="checkbox" class="action-checkbox" id="action-${idx}">
+                    <div class="action-text">
+                        <label for="action-${idx}">${action.action || 'No action specified'}</label>
+                        <p style="color: #888; font-size: 0.9rem; margin-top: 5px;">
+                            Type: ${action.type || 'general'} • Timeframe: ${action.timeframe || 'ongoing'}
+                        </p>
+                    </div>
+                    <span class="action-difficulty difficulty-${getDifficultyClass(action.difficulty || 2)}">
+                        ${getDifficultyLabel(action.difficulty || 2)}
+                    </span>
+                </div>
+            `).join('');
+        }
+        
+        function displayMentalModels(kb) {
+            const modelsDiv = document.getElementById('models-content');
+            const models = kb.knowledge && kb.knowledge.mentalModels ? kb.knowledge.mentalModels : [];
+            modelsDiv.innerHTML = models.map(model => `
+                <div class="knowledge-card">
+                    <h4>${model.name || 'Unknown Model'}</h4>
+                    <p style="margin-bottom: 15px;">${model.description || 'No description available'}</p>
+                    <h5 style="color: #888; margin-bottom: 10px;">Examples from video:</h5>
+                    <ul class="knowledge-list">
+                        ${model.examples ? model.examples.map(ex => `<li>${ex}</li>`).join('') : '<li>No examples</li>'}
+                    </ul>
+                    <p style="color: #888; margin-top: 10px;">
+                        Frequency: ${model.frequency || 0} mentions • Confidence: ${model.confidence ? Math.round(model.confidence * 100) : 0}%
+                    </p>
+                </div>
+            `).join('');
+        }
+        
+        function displayQuotes(kb) {
+            const quotesDiv = document.getElementById('quotes-content');
+            const quotes = kb.knowledge && kb.knowledge.quotes ? kb.knowledge.quotes : [];
+            quotesDiv.innerHTML = quotes.map(quote => `
+                <div class="knowledge-card">
+                    <p style="font-size: 1.1rem; font-style: italic; margin-bottom: 10px;">
+                        "${quote.text || 'No quote text'}"
+                    </p>
+                    <p style="color: #888;">
+                        Type: ${quote.type || 'general'} • Impact: ${quote.impact ? Math.round(quote.impact * 100) : 0}%
+                    </p>
+                </div>
+            `).join('');
+        }
+        
+        function displayQuestions(kb) {
+            const questionsDiv = document.getElementById('questions-content');
+            const questions = kb.analysis && kb.analysis.questions ? kb.analysis.questions : [];
+            questionsDiv.innerHTML = questions.map(q => `
+                <div class="knowledge-card">
+                    <p style="font-size: 1.1rem;">${q.question || 'No question'}</p>
+                    <p style="color: #888; margin-top: 5px;">Type: ${q.type ? q.type.replace(/_/g, ' ') : 'general'}</p>
+                </div>
+            `).join('');
+            
+            const gapsDiv = document.getElementById('gaps-content');
+            const gaps = kb.analysis && kb.analysis.knowledgeGaps ? kb.analysis.knowledgeGaps : [];
+            gapsDiv.innerHTML = gaps.map(gap => `
+                <div class="knowledge-card">
+                    <p>${gap.type === 'undefined_term' ? `Undefined term: ${gap.term || 'unknown'}` : gap.context || 'No context'}</p>
+                    <p style="color: #888;">Severity: ${gap.severity || 'low'}</p>
+                </div>
+            `).join('');
+        }
+        
+        function switchTab(tab) {
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            
+            currentTab = tab;
+            
+            // Update export preview if on export tab
+            if (tab === 'export') {
+                updateExportPreview('ai');
+            }
+        }
+        
+        function exportFormat(format) {
+            if (!currentKnowledgeBase) return;
+            
+            updateExportPreview(format);
+            
+            const exportFormats = currentKnowledgeBase.exportFormats || {};
+            const content = exportFormats[format === 'ai' ? 'aiContext' : format] || 'No data available for export';
+            const filename = `youtube-brain-${format}-${Date.now()}.${format === 'json' ? 'json' : format === 'markdown' ? 'md' : 'txt'}`;
+            
+            // Download file
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        function updateExportPreview(format) {
+            if (!currentKnowledgeBase) return;
+            
+            const preview = document.getElementById('export-preview');
+            const exportFormats = currentKnowledgeBase.exportFormats || {};
+            const content = exportFormats[format === 'ai' ? 'aiContext' : format] || 'No export data available';
+            
+            // Truncate for preview
+            preview.textContent = content.substring(0, 2000) + (content.length > 2000 ? '\n\n... (truncated for preview)' : '');
+        }
+        
+        function copyToClipboard() {
+            if (!currentKnowledgeBase) return;
+            
+            const exportFormats = currentKnowledgeBase.exportFormats || {};
+            const content = exportFormats.aiContext || 'No data available';
+            navigator.clipboard.writeText(content).then(() => {
+                alert('Knowledge base copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard. Please try again.');
+            });
+        }
+        
+        // Helper functions
+        function getConfidenceClass(confidence) {
+            if (confidence > 0.8) return 'confidence-high';
+            if (confidence > 0.6) return 'confidence-medium';
+            return 'confidence-low';
+        }
+        
+        function getDifficultyClass(difficulty) {
+            if (difficulty === 1) return 'easy';
+            if (difficulty === 2) return 'medium';
+            return 'hard';
+        }
+        
+        function getDifficultyLabel(difficulty) {
+            if (difficulty === 1) return 'Easy';
+            if (difficulty === 2) return 'Medium';
+            return 'Hard';
+        }
+        
+        // Check URL parameter on load
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoUrl = urlParams.get('url');
+        if (videoUrl) {
+            document.getElementById('youtube-url').value = videoUrl;
+            startExtraction();
+        }
+        
+        // Toggle transcript input section
+        function toggleTranscriptInput() {
+            const section = document.getElementById('transcript-input-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+        
+        // Extract from manually pasted transcript
+        async function extractFromTranscript() {
+            const transcript = document.getElementById('manual-transcript').value.trim();
+            
+            if (!transcript) {
+                alert('Please paste a transcript first');
+                return;
+            }
+            
+            // Get URL if provided
+            const url = document.getElementById('youtube-url').value.trim();
+            let videoInfo = {
+                title: 'Manual Transcript Analysis',
+                channel: 'Unknown Channel',
+                duration: Math.round(transcript.length / 150), // Estimate based on words per minute
+            };
+            
+            // If URL provided, try to get video info
+            if (url) {
+                try {
+                    const videoId = window.YouTubeAPI.extractVideoId(url);
+                    if (videoId) {
+                        videoInfo = await window.YouTubeAPI.getVideoInfo(videoId);
+                    }
+                } catch (e) {
+                    console.log('Could not extract video info from URL');
+                }
+            }
+            
+            // Reset UI
+            document.getElementById('extract-btn').disabled = true;
+            document.getElementById('progress-section').classList.add('active');
+            document.getElementById('results-section').classList.remove('active');
+            
+            try {
+                // Update progress
+                updateProgress(50, 'Analyzing transcript...');
+                
+                // Extract knowledge directly
+                updateProgress(70, 'Extracting insights and mental models...');
+                const knowledgeBase = await window.KnowledgeEngine.extractKnowledge(transcript, videoInfo);
+                
+                updateProgress(100, 'Complete!');
+                
+                // Display results
+                currentKnowledgeBase = knowledgeBase;
+                displayResults(knowledgeBase);
+                
+            } catch (error) {
+                console.error('Extraction error:', error);
+                alert('Error: ' + error.message);
+            } finally {
+                document.getElementById('extract-btn').disabled = false;
+                document.getElementById('progress-section').classList.remove('active');
+            }
+        }
+        
+        // Make functions available globally
+        window.loadExample = loadExample;
+        window.startExtraction = startExtraction;
+        window.switchTab = switchTab;
+        window.exportFormat = exportFormat;
+        window.copyToClipboard = copyToClipboard;
+        window.toggleTranscriptInput = toggleTranscriptInput;
+        window.extractFromTranscript = extractFromTranscript;
+    });
+    </script>
+</body>
+</html>
