@@ -18,7 +18,7 @@ class ChannelProcessor {
         
         // For MVP, we'll call Firebase function which handles everything
         try {
-            const response = await fetch('https://us-central1-youtube-brain-mvp.cloudfunctions.net/processYouTubeChannel', {
+            const response = await fetch('https://us-central1-yt-extractor-bf591.cloudfunctions.net/processYouTubeChannel', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
