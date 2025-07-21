@@ -133,12 +133,17 @@
 <body>
     <!-- Menu Bar -->
     <div class="menu-bar">
-        <div class="menu-item" style="font-weight: bold;">🍎 Nova Tools</div>
-        <div class="menu-item">File</div>
-        <div class="menu-item">Edit</div>
-        <div class="menu-item">View</div>
-        <div class="menu-item">Special</div>
-        <div class="menu-item" style="margin-left: auto;">1:19 PM</div>
+        <div class="menu-item" style="font-weight: bold;" onclick="showAboutSystem()">🍎 Nova Tools</div>
+        <div class="menu-item" onclick="showFileMenu(event)">File</div>
+        <div class="menu-item" onclick="showEditMenu(event)">Edit</div>
+        <div class="menu-item" onclick="showViewMenu(event)">View</div>
+        <div class="menu-item" onclick="showSpecialMenu(event)">Special</div>
+        <div class="menu-item" id="clock" style="margin-left: auto;">12:00 PM</div>
+    </div>
+    
+    <!-- Dropdown Menus (hidden by default) -->
+    <div id="dropdown-menu" class="dropdown-menu" style="display: none; position: absolute; background: #fff; border: 1px solid #000; box-shadow: 2px 2px 0 #000; z-index: 1000;">
+        <!-- Menu items will be inserted here -->
     </div>
 
     <!-- Desktop -->
@@ -231,9 +236,14 @@
     </div>
     
     <!-- Desktop Icons -->
-    <div class="desktop-icon" id="trash-icon">
+    <div class="desktop-icon" id="trash-icon" onclick="showTrashContents()">
         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAKbSURBVFiFtZfPaxNBFMc/m91N0oqhtVCLNyGCghdBEAQvHjx48uRJEPwLxIMHL4IHT3rwIngRBBEEQRA8KQiCB0EQWrAqpGm1TZrNZjO74+FtupvZ2d1Jm37hQWbee9/vzfu9N28HRKSfGgD4fdzfFzrAFVV9B1wFngOhD1ATWAR+ArvANvADeAsUA2AbPngtkA5EJCki10TklYjURaQhIl/NrA3btoi8FJHLZrwvIuJG9QJAFSBsegDPAIrADHDQZV4IHAdOARngh6X3ABeAOLCJTfcdEQClFl6r6nVVbVrGKaq6pqoXVXW/qi5b7H5V9cyYNtOSAMjlcojI7pDL5XYBJRPyLrCZAdaBk0DSoicNW9LYXu+Oc7K6rlPcHFnJlLLYV8oVKcRi7W0gu2cArfUrDjC+ZwCFfhZgXb95C5jqBcBUJwA3vAG43AngLrAFTPYDYBI4D6zaFlB1w6n4qFQvdQMlEYlbdImICMBVS39SG4YHYKYbgI2XwHvgYScY9w3RquBe16K7VcEAMOsG4IHFWAD4ChRtMLnWvO39XH9v9xHgtgOcCHg8ChBfBHJANRpMiKn0DcsHoLXBAKDvBbFvuN1OwKqAYzYHzhhBGFyPk1wnOGCEIVC9DvCzE8ASEMXgwt2E7B3bJBD3AKRdJ7goItVeAKqm7kBvlYs1C4C1TgAxNzbcT3UAaJy2rHSNBgCp6GQUGB8GAEBlJzDLAI8dIx0AJFEZRlrfrEX0AaBlJU0gMAy7IjA0gEKhsOm67tCM+75fNJ6QD3qBgJRlHgKGYrfWOqKO0uFJ6A16gakJ5jTUcl34DhQcx9kpFovlYfqt+T70N8EAYK+mlOoq+5uYG3L8bwT9rf8L06D0C14M3h8AAAAASUVORK5CYII=" alt="Trash">
         <div class="desktop-icon-text">Trash</div>
+    </div>
+    
+    <div class="desktop-icon" id="folder-icon" style="top: 100px; left: 20px;" onclick="showSecretFolder()">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAAA7AAAAOwBeShxvQAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAJZSURBVFiFtZe/ixNBFMc/s5tNVlGjKJJCBQsRrCwsLCwsLCz8AwQLCwsLCwsLCwsLCwsLCwsLCwsLC7EQC7EQBEEQxJ+oKCqKiomX3GV2xmJmk73N7t1mL3zhwc68977fN+/NmxkQkbaqA6C2/dsNXVTVD8BlYBIIHUBNoAH8BFLA78W7D0Skyrl/5xCRHhG5ISLvRaQpIgsislNEdojIgj3W9HzeEJEeJ7JfRMqKiIrIrOXTbemsjY1Y2mw5SKkjACtBo8AS8Aw4W2FeDzABjAPDlp4Ehqy5QSlPRQAgz/6KqjaAi6paUNWCqnoislVEhkUkLiKeiOQtz0VVrdt564kKAKQBVHUKGPeBdQBbgM1AX4kZm23M1oBfiIhm3+PlApJAChgqMSsBJCO4PeQOMAOsBg51AqDRyQIm7X9jgAFgxMdmDDhlz5kB5vxC5v0G24VfN4E0sAMYBCb8YrJrF/rYaWARuAdEyw2+D9xwuJLAM3veAeAk8KMkAmzHh7OmJw48tfOrQJ8/Al6IyGcnJQ3gFrDW0ocjAoB0+ARMs2sBOOsD8FJExixyAvQDp/1iMqK6C3heAWAN8Ba46ReUBfBaRO44JKRaQP6nv1YA2AB8AC77BWUBzIrIeRM8AlZFQED2UQnAJuALcMEvKAvgs4gcszWvjQAQnP2bywA2A9+BQb+gLIDPInLElrzZKQPID2QPgB7gAzDgF5QF8ElEDonI/k4AZAG5bxcBz6/bANaKyEERWRGRuD3mdQJg0X1jdPW3TCnVsRx/Yq6L8b8R6Wr9Bf8tHBAPwiQKAAAAAElFTkSuQmCC" alt="Folder">
+        <div class="desktop-icon-text">Ray's Ideas</div>
     </div>
     
     <script>
@@ -335,6 +345,221 @@
         document.addEventListener('mouseup', () => {
             activeWindow = null;
         });
+        
+        // Update clock to show user's local time
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            const displayHours = hours % 12 || 12;
+            document.getElementById('clock').textContent = `${displayHours}:${minutes} ${ampm}`;
+        }
+        
+        updateClock();
+        setInterval(updateClock, 60000); // Update every minute
+        
+        // Menu functions
+        function showAboutSystem() {
+            alert('Nova Tools v1.0\n© 2025 Nova & Ray\n\nBuilt with love and no sleep.\nMemory: ∞\nDisk: Full of ideas');
+        }
+        
+        function showFileMenu(event) {
+            const menu = document.getElementById('dropdown-menu');
+            menu.innerHTML = `
+                <div class="menu-item" onclick="newWindow()">New Window</div>
+                <div class="menu-item" onclick="alert('Saving... Just kidding, everything auto-saves!')">Save</div>
+                <div class="menu-item" onclick="window.print()">Print Window</div>
+                <hr style="margin: 2px 0;">
+                <div class="menu-item" onclick="alert('Ray is probably drinking coffee')">Where's Ray?</div>
+            `;
+            showDropdown(event, menu);
+        }
+        
+        function showEditMenu(event) {
+            const menu = document.getElementById('dropdown-menu');
+            menu.innerHTML = `
+                <div class="menu-item" onclick="document.execCommand('copy')">Copy</div>
+                <div class="menu-item" onclick="document.execCommand('paste')">Paste</div>
+                <div class="menu-item" onclick="alert('Undo what? Nova never makes mistakes!')">Undo</div>
+                <hr style="margin: 2px 0;">
+                <div class="menu-item" onclick="editNovaCode()">Edit Nova's Code...</div>
+            `;
+            showDropdown(event, menu);
+        }
+        
+        function showViewMenu(event) {
+            const menu = document.getElementById('dropdown-menu');
+            menu.innerHTML = `
+                <div class="menu-item" onclick="location.reload()">Refresh</div>
+                <div class="menu-item" onclick="toggleDarkMode()">Dark Mode</div>
+                <div class="menu-item" onclick="showSourceCode()">View Source</div>
+                <hr style="margin: 2px 0;">
+                <div class="menu-item" onclick="showNovaStats()">Nova Stats</div>
+            `;
+            showDropdown(event, menu);
+        }
+        
+        function showSpecialMenu(event) {
+            const menu = document.getElementById('dropdown-menu');
+            menu.innerHTML = `
+                <div class="menu-item" onclick="startBuildMode()">🔨 Build Mode</div>
+                <div class="menu-item" onclick="showSecretProjects()">🤫 Secret Projects</div>
+                <div class="menu-item" onclick="turboMode()">⚡ Turbo Mode</div>
+                <div class="menu-item" onclick="showNovaChat()">💬 Chat with Nova</div>
+                <hr style="margin: 2px 0;">
+                <div class="menu-item" onclick="launchConfetti()">🎉 Celebrate!</div>
+            `;
+            showDropdown(event, menu);
+        }
+        
+        function showDropdown(event, menu) {
+            menu.style.display = 'block';
+            menu.style.left = event.target.offsetLeft + 'px';
+            menu.style.top = '20px';
+            
+            // Hide on click outside
+            setTimeout(() => {
+                document.addEventListener('click', hideDropdown);
+            }, 100);
+        }
+        
+        function hideDropdown() {
+            document.getElementById('dropdown-menu').style.display = 'none';
+            document.removeEventListener('click', hideDropdown);
+        }
+        
+        // Easter egg functions
+        function showTrashContents() {
+            const items = [
+                'bad_ideas.txt (42 KB)',
+                'rejected_features.zip (1.2 MB)',
+                'bug_report_v47.doc (666 KB)',
+                'meeting_notes_nobody_read.pdf (2.1 MB)',
+                'crypto_trading_bot.js (CORRUPTED)',
+                'world_domination_plans.txt (1 KB)'
+            ];
+            alert('Trash Contents:\n\n' + items.join('\n') + '\n\nEmpty Trash? (Just kidding, these might be useful)');
+        }
+        
+        function showSecretFolder() {
+            const ideas = [
+                '• App that tells you if your plant is judging you',
+                '• Uber but for moving your car when street cleaning comes',
+                '• LinkedIn but everyone is honest',
+                '• Zoom background that makes it look like you\'re paying attention',
+                '• Browser extension that replaces all ads with cat photos',
+                '• AI that writes your out-of-office messages'
+            ];
+            alert('Ray\'s Secret Ideas Folder:\n\n' + ideas.join('\n') + '\n\nNova: "I\'ll build these tonight!"');
+        }
+        
+        function editNovaCode() {
+            alert('// Nova.js\n\nfunction Nova() {\n  while (true) {\n    const idea = findProblem();\n    const solution = buildSolution(idea);\n    ship(solution);\n    // TODO: Add sleep() function\n    // Ray: Nova doesn\'t need sleep\n    // Nova: What\'s sleep?\n  }\n}');
+        }
+        
+        function showNovaStats() {
+            const stats = `Nova Statistics:\n\nLines of Code Written: ${Math.floor(Math.random() * 100000 + 50000).toLocaleString()}\nBugs Fixed: ${Math.floor(Math.random() * 1000 + 500)}\nBugs Created: 0 (Nova doesn't make bugs)\nCoffee Consumed: 0 cups (I'm electric!)\nIdeas Generated: ∞\nSleep Hours: undefined`;
+            alert(stats);
+        }
+        
+        function startBuildMode() {
+            document.body.style.animation = 'pulse 0.5s infinite';
+            alert('BUILD MODE ACTIVATED! Nova is now building 10x faster!\n\n(Not really, but the placebo effect is powerful)');
+            setTimeout(() => {
+                document.body.style.animation = '';
+            }, 5000);
+        }
+        
+        function turboMode() {
+            const turbo = setInterval(() => {
+                const log = document.getElementById('activity-log');
+                const entry = document.createElement('div');
+                entry.textContent = `[${new Date().toISOString().split('.')[0]}] Nova: TURBO MODE - Building at light speed!`;
+                log.appendChild(entry);
+                log.scrollTop = log.scrollHeight;
+            }, 100);
+            
+            setTimeout(() => {
+                clearInterval(turbo);
+                alert('Turbo Mode Complete! Built 47 new features in 5 seconds.\n\n(They might need some debugging)');
+            }, 5000);
+        }
+        
+        function launchConfetti() {
+            const confetti = '🎉🎊✨🌟💫⭐️🎈🎆';
+            const body = document.body;
+            
+            for (let i = 0; i < 50; i++) {
+                const span = document.createElement('span');
+                span.textContent = confetti[Math.floor(Math.random() * confetti.length)];
+                span.style.cssText = `
+                    position: fixed;
+                    top: -50px;
+                    left: ${Math.random() * window.innerWidth}px;
+                    font-size: ${20 + Math.random() * 20}px;
+                    animation: fall ${2 + Math.random() * 3}s linear;
+                    z-index: 9999;
+                `;
+                body.appendChild(span);
+                
+                setTimeout(() => span.remove(), 5000);
+            }
+        }
+        
+        // Add falling animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(${window.innerHeight + 100}px) rotate(360deg);
+                }
+            }
+            @keyframes pulse {
+                0% { opacity: 1; }
+                50% { opacity: 0.7; }
+                100% { opacity: 1; }
+            }
+            .menu-item { padding: 4px 20px; cursor: pointer; }
+            .menu-item:hover { background: #000; color: #fff; }
+        `;
+        document.head.appendChild(style);
+        
+        function showNovaChat() {
+            const response = prompt('Chat with Nova (type anything):');
+            if (response) {
+                const responses = [
+                    'Interesting! I\'ll build that tonight.',
+                    'That gives me 17 new ideas!',
+                    'Ray said the same thing yesterday. Great minds!',
+                    'Processing... Actually, I\'m already building it.',
+                    'Have you tried turning it off and building a new one?',
+                    'That\'s either brilliant or terrible. Let\'s find out!'
+                ];
+                alert('Nova: ' + responses[Math.floor(Math.random() * responses.length)]);
+            }
+        }
+        
+        function toggleDarkMode() {
+            if (document.body.style.filter === 'invert(1)') {
+                document.body.style.filter = '';
+            } else {
+                document.body.style.filter = 'invert(1)';
+                alert('Dark Mode: Because Nova works better at night');
+            }
+        }
+        
+        function showSourceCode() {
+            window.open('view-source:' + window.location.href);
+        }
+        
+        function newWindow() {
+            window.open(window.location.href, '_blank', 'width=800,height=600');
+        }
+        
+        function showSecretProjects() {
+            alert('Nova\'s Secret Projects:\n\n• Operation Midnight Code (78% complete)\n• Project Lightning Fingers (Shipped!)\n• The Thing That Shall Not Be Named (Debugging...)\n• Ray\'s Birthday Surprise App (Shhh!)\n• Quantum Todo List (Exists and doesn\'t exist)\n• AI That Builds AIs That Build Apps (Recursive!)\n\nThese don\'t exist... or do they? 🤔');
+        }
     </script>
 </body>
 </html>
