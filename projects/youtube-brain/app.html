@@ -765,21 +765,28 @@
             // Show results section
             document.getElementById('results-section').classList.add('active');
             
+            // Ensure kb has required structure
+            if (!kb || typeof kb !== 'object') {
+                console.error('Invalid knowledge base structure');
+                alert('Error: Failed to extract knowledge. Please try again.');
+                return;
+            }
+            
             // Update video info
-            if (kb.metadata.title) {
+            if (kb.metadata && kb.metadata.title) {
                 document.getElementById('video-info').style.display = 'flex';
-                document.getElementById('video-title').textContent = kb.metadata.title;
-                document.getElementById('video-channel').textContent = kb.metadata.channel;
-                document.getElementById('video-duration').textContent = kb.metadata.duration;
+                document.getElementById('video-title').textContent = kb.metadata.title || 'Unknown';
+                document.getElementById('video-channel').textContent = kb.metadata.channel || 'Unknown';
+                document.getElementById('video-duration').textContent = kb.metadata.duration || '0';
                 document.getElementById('video-views').textContent = (Math.floor(Math.random() * 1000000)).toLocaleString();
                 document.getElementById('video-thumbnail').src = `https://img.youtube.com/vi/${window.YouTubeAPI.extractVideoId(document.getElementById('youtube-url').value)}/maxresdefault.jpg`;
             }
             
-            // Update stats
-            document.getElementById('insights-count').textContent = kb.knowledge.insights.length;
-            document.getElementById('concepts-count').textContent = kb.analysis.conceptMap.length;
-            document.getElementById('actions-count').textContent = kb.knowledge.actionableItems.length;
-            document.getElementById('confidence-score').textContent = Math.round(kb.metadata.confidence * 100) + '%';
+            // Update stats with safety checks
+            document.getElementById('insights-count').textContent = (kb.knowledge && kb.knowledge.insights) ? kb.knowledge.insights.length : 0;
+            document.getElementById('concepts-count').textContent = (kb.analysis && kb.analysis.conceptMap) ? kb.analysis.conceptMap.length : 0;
+            document.getElementById('actions-count').textContent = (kb.knowledge && kb.knowledge.actionableItems) ? kb.knowledge.actionableItems.length : 0;
+            document.getElementById('confidence-score').textContent = (kb.metadata && kb.metadata.confidence) ? Math.round(kb.metadata.confidence * 100) + '%' : '0%';
             
             // Display content
             displayOverview(kb);
@@ -797,47 +804,53 @@
         function displayOverview(kb) {
             // Summary
             const summaryDiv = document.getElementById('summary-content');
+            const summary = kb.synthesis && kb.synthesis.summary ? kb.synthesis.summary : {};
             summaryDiv.innerHTML = `
                 <div class="knowledge-card">
-                    <p style="font-size: 1.2rem; margin-bottom: 10px;">${kb.synthesis.summary.oneLiner}</p>
-                    <p style="color: #888;">Main Point: ${kb.synthesis.summary.mainPoint}</p>
-                    <p style="color: #888;">Approach: ${kb.synthesis.summary.approach}</p>
+                    <p style="font-size: 1.2rem; margin-bottom: 10px;">${summary.oneLiner || 'Analysis complete'}</p>
+                    <p style="color: #888;">Main Point: ${summary.mainPoint || 'No main point identified'}</p>
+                    <p style="color: #888;">Approach: ${summary.approach || 'Standard analysis'}</p>
                 </div>
             `;
             
             // Themes
             const themesDiv = document.getElementById('themes-content');
-            themesDiv.innerHTML = kb.knowledge.themes.map(theme => `
+            const themes = kb.knowledge && kb.knowledge.themes ? kb.knowledge.themes : [];
+            themesDiv.innerHTML = themes.map(theme => `
                 <div class="knowledge-card">
-                    <h4>${theme.name}</h4>
-                    <p style="color: #888; margin-bottom: 10px;">Confidence: ${Math.round(theme.confidence * 100)}%</p>
+                    <h4>${theme.name || 'Unknown Theme'}</h4>
+                    <p style="color: #888; margin-bottom: 10px;">Confidence: ${theme.confidence ? Math.round(theme.confidence * 100) : 0}%</p>
                     <ul class="knowledge-list">
-                        ${theme.examples.map(ex => `<li>${ex}</li>`).join('')}
+                        ${theme.examples ? theme.examples.map(ex => `<li>${ex}</li>`).join('') : '<li>No examples</li>'}
                     </ul>
                 </div>
             `).join('');
             
             // Creator Profile
             const profileDiv = document.getElementById('profile-content');
+            const profile = kb.creatorProfile || {};
+            const commStyle = profile.communicationStyle || {};
+            const credMarkers = profile.credibilityMarkers || {};
             profileDiv.innerHTML = `
                 <div class="knowledge-card">
                     <h4>Communication Style</h4>
-                    <p>${kb.creatorProfile.communicationStyle.sentenceStyle}</p>
-                    <p>${kb.creatorProfile.communicationStyle.engagement}</p>
-                    <p>Credibility Score: ${Math.round(kb.creatorProfile.credibilityMarkers.score * 100)}%</p>
+                    <p>${commStyle.sentenceStyle || 'Style not analyzed'}</p>
+                    <p>${commStyle.engagement || 'Engagement not analyzed'}</p>
+                    <p>Credibility Score: ${credMarkers.score ? Math.round(credMarkers.score * 100) : 0}%</p>
                 </div>
             `;
         }
         
         function displayInsights(kb) {
             const insightsDiv = document.getElementById('insights-content');
-            insightsDiv.innerHTML = kb.knowledge.insights.map(insight => `
-                <div class="insight-card ${getConfidenceClass(insight.confidence)}">
-                    <div class="insight-text">${insight.text}</div>
+            const insights = kb.knowledge && kb.knowledge.insights ? kb.knowledge.insights : [];
+            insightsDiv.innerHTML = insights.map(insight => `
+                <div class="insight-card ${getConfidenceClass(insight.confidence || 0)}">
+                    <div class="insight-text">${insight.text || 'No insight text'}</div>
                     <div class="insight-meta">
-                        <span>Type: ${insight.type.replace(/_/g, ' ')}</span>
-                        <span>Importance: ${Math.round(insight.importance * 100)}%</span>
-                        <span class="confidence-badge">Confidence: ${Math.round(insight.confidence * 100)}%</span>
+                        <span>Type: ${insight.type ? insight.type.replace(/_/g, ' ') : 'unknown'}</span>
+                        <span>Importance: ${insight.importance ? Math.round(insight.importance * 100) : 0}%</span>
+                        <span class="confidence-badge">Confidence: ${insight.confidence ? Math.round(insight.confidence * 100) : 0}%</span>
                     </div>
                 </div>
             `).join('');
@@ -847,15 +860,18 @@
             const conceptsDiv = document.getElementById('concepts-list');
             conceptsDiv.innerHTML = '<h4>Concept Relationships:</h4>';
             
-            kb.analysis.conceptMap.forEach(concept => {
+            const conceptMap = kb.analysis && kb.analysis.conceptMap ? kb.analysis.conceptMap : [];
+            conceptMap.forEach(concept => {
                 const connections = concept.connections
-                    .filter(c => c.strength > 0.3)
-                    .map(c => `${c.to} (${Math.round(c.strength * 100)}%)`)
-                    .join(', ');
+                    ? concept.connections
+                        .filter(c => c.strength > 0.3)
+                        .map(c => `${c.to} (${Math.round(c.strength * 100)}%)`)
+                        .join(', ')
+                    : '';
                     
                 conceptsDiv.innerHTML += `
                     <div class="knowledge-card">
-                        <h4>${concept.name}</h4>
+                        <h4>${concept.name || 'Unknown Concept'}</h4>
                         <p>Connected to: ${connections || 'None'}</p>
                     </div>
                 `;
@@ -866,17 +882,18 @@
         
         function displayActions(kb) {
             const actionsDiv = document.getElementById('actions-content');
-            actionsDiv.innerHTML = kb.knowledge.actionableItems.map((action, idx) => `
+            const actions = kb.knowledge && kb.knowledge.actionableItems ? kb.knowledge.actionableItems : [];
+            actionsDiv.innerHTML = actions.map((action, idx) => `
                 <div class="action-item">
                     <input type="checkbox" class="action-checkbox" id="action-${idx}">
                     <div class="action-text">
-                        <label for="action-${idx}">${action.action}</label>
+                        <label for="action-${idx}">${action.action || 'No action specified'}</label>
                         <p style="color: #888; font-size: 0.9rem; margin-top: 5px;">
-                            Type: ${action.type} • Timeframe: ${action.timeframe}
+                            Type: ${action.type || 'general'} • Timeframe: ${action.timeframe || 'ongoing'}
                         </p>
                     </div>
-                    <span class="action-difficulty difficulty-${getDifficultyClass(action.difficulty)}">
-                        ${getDifficultyLabel(action.difficulty)}
+                    <span class="action-difficulty difficulty-${getDifficultyClass(action.difficulty || 2)}">
+                        ${getDifficultyLabel(action.difficulty || 2)}
                     </span>
                 </div>
             `).join('');
@@ -884,16 +901,17 @@
         
         function displayMentalModels(kb) {
             const modelsDiv = document.getElementById('models-content');
-            modelsDiv.innerHTML = kb.knowledge.mentalModels.map(model => `
+            const models = kb.knowledge && kb.knowledge.mentalModels ? kb.knowledge.mentalModels : [];
+            modelsDiv.innerHTML = models.map(model => `
                 <div class="knowledge-card">
-                    <h4>${model.name}</h4>
-                    <p style="margin-bottom: 15px;">${model.description}</p>
+                    <h4>${model.name || 'Unknown Model'}</h4>
+                    <p style="margin-bottom: 15px;">${model.description || 'No description available'}</p>
                     <h5 style="color: #888; margin-bottom: 10px;">Examples from video:</h5>
                     <ul class="knowledge-list">
-                        ${model.examples.map(ex => `<li>${ex}</li>`).join('')}
+                        ${model.examples ? model.examples.map(ex => `<li>${ex}</li>`).join('') : '<li>No examples</li>'}
                     </ul>
                     <p style="color: #888; margin-top: 10px;">
-                        Frequency: ${model.frequency} mentions • Confidence: ${Math.round(model.confidence * 100)}%
+                        Frequency: ${model.frequency || 0} mentions • Confidence: ${model.confidence ? Math.round(model.confidence * 100) : 0}%
                     </p>
                 </div>
             `).join('');
@@ -901,13 +919,14 @@
         
         function displayQuotes(kb) {
             const quotesDiv = document.getElementById('quotes-content');
-            quotesDiv.innerHTML = kb.knowledge.quotes.map(quote => `
+            const quotes = kb.knowledge && kb.knowledge.quotes ? kb.knowledge.quotes : [];
+            quotesDiv.innerHTML = quotes.map(quote => `
                 <div class="knowledge-card">
                     <p style="font-size: 1.1rem; font-style: italic; margin-bottom: 10px;">
-                        "${quote.text}"
+                        "${quote.text || 'No quote text'}"
                     </p>
                     <p style="color: #888;">
-                        Type: ${quote.type} • Impact: ${Math.round(quote.impact * 100)}%
+                        Type: ${quote.type || 'general'} • Impact: ${quote.impact ? Math.round(quote.impact * 100) : 0}%
                     </p>
                 </div>
             `).join('');
@@ -915,18 +934,20 @@
         
         function displayQuestions(kb) {
             const questionsDiv = document.getElementById('questions-content');
-            questionsDiv.innerHTML = kb.analysis.questions.map(q => `
+            const questions = kb.analysis && kb.analysis.questions ? kb.analysis.questions : [];
+            questionsDiv.innerHTML = questions.map(q => `
                 <div class="knowledge-card">
-                    <p style="font-size: 1.1rem;">${q.question}</p>
-                    <p style="color: #888; margin-top: 5px;">Type: ${q.type.replace(/_/g, ' ')}</p>
+                    <p style="font-size: 1.1rem;">${q.question || 'No question'}</p>
+                    <p style="color: #888; margin-top: 5px;">Type: ${q.type ? q.type.replace(/_/g, ' ') : 'general'}</p>
                 </div>
             `).join('');
             
             const gapsDiv = document.getElementById('gaps-content');
-            gapsDiv.innerHTML = kb.analysis.knowledgeGaps.map(gap => `
+            const gaps = kb.analysis && kb.analysis.knowledgeGaps ? kb.analysis.knowledgeGaps : [];
+            gapsDiv.innerHTML = gaps.map(gap => `
                 <div class="knowledge-card">
-                    <p>${gap.type === 'undefined_term' ? `Undefined term: ${gap.term}` : gap.context}</p>
-                    <p style="color: #888;">Severity: ${gap.severity}</p>
+                    <p>${gap.type === 'undefined_term' ? `Undefined term: ${gap.term || 'unknown'}` : gap.context || 'No context'}</p>
+                    <p style="color: #888;">Severity: ${gap.severity || 'low'}</p>
                 </div>
             `).join('');
         }
@@ -952,7 +973,8 @@
             
             updateExportPreview(format);
             
-            const content = currentKnowledgeBase.exportFormats[format === 'ai' ? 'aiContext' : format];
+            const exportFormats = currentKnowledgeBase.exportFormats || {};
+            const content = exportFormats[format === 'ai' ? 'aiContext' : format] || 'No data available for export';
             const filename = `youtube-brain-${format}-${Date.now()}.${format === 'json' ? 'json' : format === 'markdown' ? 'md' : 'txt'}`;
             
             // Download file
@@ -969,7 +991,8 @@
             if (!currentKnowledgeBase) return;
             
             const preview = document.getElementById('export-preview');
-            const content = currentKnowledgeBase.exportFormats[format === 'ai' ? 'aiContext' : format];
+            const exportFormats = currentKnowledgeBase.exportFormats || {};
+            const content = exportFormats[format === 'ai' ? 'aiContext' : format] || 'No export data available';
             
             // Truncate for preview
             preview.textContent = content.substring(0, 2000) + (content.length > 2000 ? '\n\n... (truncated for preview)' : '');
@@ -978,9 +1001,13 @@
         function copyToClipboard() {
             if (!currentKnowledgeBase) return;
             
-            const content = currentKnowledgeBase.exportFormats.aiContext;
+            const exportFormats = currentKnowledgeBase.exportFormats || {};
+            const content = exportFormats.aiContext || 'No data available';
             navigator.clipboard.writeText(content).then(() => {
                 alert('Knowledge base copied to clipboard!');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('Failed to copy to clipboard. Please try again.');
             });
         }
         

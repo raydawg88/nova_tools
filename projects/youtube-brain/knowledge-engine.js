@@ -1151,28 +1151,35 @@ ${(knowledge.quotes || []).map(q => `> "${q.text}"`).join('\n\n')}
     }
     
     generateAIContext(data) {
-        const { metadata, creatorProfile, knowledge, synthesis } = data;
+        const { metadata = {}, creatorProfile = {}, knowledge = {}, synthesis = {} } = data;
         
-        return `# Knowledge Context from ${metadata.title}
+        const commStyle = creatorProfile.communicationStyle || {};
+        const expertiseAreas = creatorProfile.expertiseAreas || [];
+        const themes = knowledge.themes || [];
+        const insights = knowledge.insights || [];
+        const mentalModels = knowledge.mentalModels || [];
+        const uniquePerspectives = creatorProfile.uniquePerspectives || [];
+        
+        return `# Knowledge Context from ${metadata.title || 'YouTube Video'}
 
 You are to incorporate the following knowledge and perspectives into your responses:
 
 ## Creator Profile
-- Communication Style: ${JSON.stringify(creatorProfile.communicationStyle)}
-- Expertise Areas: ${creatorProfile.expertiseAreas.join(', ')}
+- Communication Style: ${JSON.stringify(commStyle)}
+- Expertise Areas: ${expertiseAreas.join(', ') || 'Not specified'}
 
 ## Core Knowledge
 ### Themes
-${knowledge.themes.map(t => `- ${t.name}: ${t.examples[0] || 'Core theme'}`).join('\n')}
+${themes.map(t => `- ${t.name || 'Unknown'}: ${t.examples && t.examples[0] ? t.examples[0] : 'Core theme'}`).join('\n') || '- No themes identified'}
 
 ### Key Insights
-${knowledge.insights.slice(0, 5).map(i => `- ${i.text} (importance: ${i.importance})`).join('\n')}
+${insights.slice(0, 5).map(i => `- ${i.text || 'No text'} (importance: ${i.importance || 0})`).join('\n') || '- No insights found'}
 
 ### Mental Models to Apply
-${knowledge.mentalModels.map(m => `- ${m.name}: ${m.description}`).join('\n')}
+${mentalModels.map(m => `- ${m.name || 'Unknown'}: ${m.description || 'No description'}`).join('\n') || '- No mental models identified'}
 
 ## Unique Perspectives
-${creatorProfile.uniquePerspectives.slice(0, 3).join('\n')}
+${uniquePerspectives.slice(0, 3).join('\n') || 'No unique perspectives identified'}
 
 ## When responding:
 1. Apply these mental models where relevant
@@ -1180,7 +1187,7 @@ ${creatorProfile.uniquePerspectives.slice(0, 3).join('\n')}
 3. Maintain awareness of the knowledge gaps identified
 4. Use similar communication patterns when explaining concepts
 
-Remember: This knowledge comes from ${metadata.channel} and represents their specific viewpoint and expertise.`;
+Remember: This knowledge comes from ${metadata.channel || 'Unknown Channel'} and represents their specific viewpoint and expertise.`;
     }
 }
 
