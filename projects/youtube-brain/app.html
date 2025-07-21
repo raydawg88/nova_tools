@@ -485,7 +485,28 @@
         <header>
             <h1>🧠 YouTube Brain</h1>
             <p class="subtitle">Extract deep knowledge from any YouTube video or channel</p>
-            <p class="subtitle" style="margin-top: 10px; font-size: 0.9rem;">Build AI knowledge bases in seconds</p>
+            <p class="subtitle" style="margin-top: 10px; font-size: 0.9rem;">Turn any creator into your AI's knowledge base</p>
+            
+            <div style="margin-top: 30px; padding: 20px; background: #1a1a1a; border-radius: 12px; border: 1px solid #333;">
+                <h3 style="color: #ff4080; margin-bottom: 15px;">🚀 How It Works</h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left;">
+                    <div>
+                        <h4 style="color: #ff0050;">1. Paste Channel URL</h4>
+                        <p style="color: #888; font-size: 0.9rem;">Give us any YouTube channel (like @shaanpuri)</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff0050;">2. We Extract Everything</h4>
+                        <p style="color: #888; font-size: 0.9rem;">Analyzes ALL videos to find patterns, frameworks, and insights</p>
+                    </div>
+                    <div>
+                        <h4 style="color: #ff0050;">3. Get AI-Ready Knowledge</h4>
+                        <p style="color: #888; font-size: 0.9rem;">Download .json or .md file to make any AI think like that creator</p>
+                    </div>
+                </div>
+                <p style="margin-top: 15px; color: #aaa; font-size: 0.85rem;">
+                    ⏱️ Processing takes 10-30 minutes but captures YEARS of knowledge. Perfect for learning from Naval, YC, or any thought leader.
+                </p>
+            </div>
         </header>
         
         <!-- Input Section -->
@@ -533,7 +554,8 @@ To get a transcript from YouTube:
             </div>
             
             <div class="channel-mode" id="channel-mode">
-                <p>📺 <strong>Channel Mode:</strong> This will analyze the last 10 videos to build a comprehensive creator profile.</p>
+                <p>📺 <strong>Channel Mode:</strong> This will analyze ALL videos to build a complete knowledge base of the creator.</p>
+                <p style="margin-top: 10px; color: #ff4080;">⏱️ This process takes 10-30 minutes but extracts EVERYTHING. We'll notify you when it's ready!</p>
             </div>
         </div>
         
@@ -677,6 +699,7 @@ To get a transcript from YouTube:
     <!-- Load dependencies -->
     <script src="youtube-api.js"></script>
     <script src="knowledge-engine.js"></script>
+    <script src="channel-processor.js"></script>
     
     <script>
     // Wait for all scripts to load
@@ -772,13 +795,94 @@ To get a transcript from YouTube:
         }
         
         async function extractChannelKnowledge(url) {
-            updateProgress(20, 'Fetching channel videos...');
-            const channelData = await window.YouTubeAPI.getChannelVideos(url, 10);
+            // Show email input dialog
+            const email = prompt(
+                'This will analyze ALL videos from this channel (10-30 minutes).\n\n' +
+                'Enter your email to receive the complete knowledge base when ready:',
+                localStorage.getItem('youtube_brain_email') || ''
+            );
             
-            updateProgress(30, 'This feature coming soon! For now, analyzing a single video...');
+            if (!email) {
+                alert('Email required for channel processing. The analysis takes time and we need to notify you when complete.');
+                return;
+            }
             
-            // For demo, just process the first example
-            await extractVideoKnowledge(examples.naval);
+            // Save email for next time
+            localStorage.setItem('youtube_brain_email', email);
+            
+            // Start async processing
+            updateProgress(10, 'Starting channel analysis...');
+            
+            try {
+                const result = await window.ChannelProcessor.processChannel(url, email);
+                
+                // Show success message
+                document.getElementById('progress-section').classList.remove('active');
+                alert(
+                    '✅ Channel processing started!\n\n' +
+                    `Processing ID: ${result.processingId}\n\n` +
+                    'We\'re now analyzing all videos from this channel. This typically takes 15-20 minutes.\n\n' +
+                    `You'll receive an email at ${email} with:\n` +
+                    '• Complete knowledge base (.json)\n' +
+                    '• AI-ready context file (.md)\n' +
+                    '• Summary of insights found\n\n' +
+                    'You can close this window - processing continues in the background.'
+                );
+                
+                // Show demo results for now
+                showChannelDemo();
+                
+            } catch (error) {
+                console.error('Channel processing error:', error);
+                alert('Error starting channel processing: ' + error.message);
+                document.getElementById('progress-section').classList.remove('active');
+            }
+        }
+        
+        function showChannelDemo() {
+            // Show what the results would look like
+            const demoResults = {
+                metadata: {
+                    title: "Channel Analysis Demo - Shaan Puri",
+                    channel: "Shaan Puri",
+                    duration: "50 videos analyzed",
+                    confidence: 0.92
+                },
+                knowledge: {
+                    themes: [
+                        { name: "Building Simple Products", confidence: 0.95 },
+                        { name: "Distribution Over Product", confidence: 0.90 },
+                        { name: "Mental Models for Ideas", confidence: 0.88 }
+                    ],
+                    insights: [
+                        { text: "Start with the distribution channel, then build the product to fit", importance: 0.95, confidence: 0.9 },
+                        { text: "The best ideas come from your own problems - scratch your own itch", importance: 0.9, confidence: 0.88 }
+                    ],
+                    mentalModels: [
+                        { name: "The Concierge MVP", description: "Do things manually before automating to learn what really matters" }
+                    ],
+                    actionableItems: [
+                        { action: "Pre-sell your product before building to validate demand", type: "validation", difficulty: 2 }
+                    ],
+                    quotes: [
+                        { text: "Distribution beats product every time", impact: 0.9 }
+                    ]
+                },
+                analysis: {
+                    conceptMap: [],
+                    questions: [],
+                    knowledgeGaps: []
+                },
+                synthesis: {
+                    summary: {
+                        oneLiner: "Analysis will extract patterns across 50+ videos",
+                        mainPoint: "Full processing captures evolution of ideas over time"
+                    }
+                }
+            };
+            
+            currentKnowledgeBase = demoResults;
+            displayResults(demoResults);
         }
         
         function updateProgress(percent, status) {
